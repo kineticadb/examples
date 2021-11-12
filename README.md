@@ -1,5 +1,19 @@
 <img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo" width="300"/>
 
+# Todos
+
+1. Create a install/up and running with Kinetica section or wrap this into getting started
+2. Expand the getting started section to include Reveal stuff
+3. Create a TOC that links to catalog
+4. Set the basic guidelines for a workbook read me (the stuff that goes into each folder)
+    1. Title
+    2. Description. Why is this valuable.. what use case etc.
+    3. Images (if any)
+    4. Any non-generic setup related information
+    5. Links out to the doc site wherever appropriate
+    6. Attribution and references (if any public resources were used)
+    7. Upstream or downstream dependencies that might break the demo
+
 # Kinetica Example Workbooks 
 A catalog of runnable Workbooks for the Kinetica Workbench. 
 
