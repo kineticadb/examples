@@ -2,9 +2,9 @@
 
 # Todos
 
-1. Create a install/up and running with Kinetica section or wrap this into getting started
-2. Expand the getting started section to include Reveal stuff
-3. Create a TOC that links to catalog
+1. README: Create install/up and running with Kinetica section or wrap this into getting started
+2. README: Expand the getting started section to include Reveal stuff
+3. README: Create a TOC that links to catalog
 4. Set the basic guidelines for a workbook read me (the stuff that goes into each folder)
     1. Title
     2. Description. Why is this valuable.. what use case etc.
