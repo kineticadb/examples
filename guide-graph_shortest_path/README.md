@@ -4,4 +4,4 @@ This guide shows how to create a graph representation of Seattle's road network 
 # How to run this guide
 Follow the [install guide](add) to install Kinetica.
 
-Import the workbook into Kinetica.
+[Import the workbook](https://github.com/kineticadb/kinetica-workbooks#importing-workbooks) into Kinetica.
