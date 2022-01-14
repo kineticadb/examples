@@ -1,26 +1,33 @@
 <img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo" width="300"/>
 
-# Todos
+# Welcome
+This repo contains three types of content - 
+1. Demos: Solve real world challenges with real world data.
+2. Guides: Explore specific features of Kinetica using real or fake data.
+3. Labs: Learn concepts and features through labs
 
-1. README: Create install/up and running with Kinetica section or wrap this into getting started
-2. README: Expand the getting started section to include Reveal stuff
-3. README: Create a TOC that links to catalog
-4. Set the basic guidelines for a workbook read me (the stuff that goes into each folder)
-    1. Title
-    2. Description. Why is this valuable.. what use case etc.
-    3. Images (if any)
-    4. Any non-generic setup related information
-    5. Links out to the doc site wherever appropriate
-    6. Attribution and references (if any public resources were used)
-    7. Upstream or downstream dependencies that might break the demo
+All the content is meant to be fully reproducible so that anyone who wants to replicate can do so using Kinetica.
+
+# Getting started with Kinetica
+### Installation
+If this is your first time using Kinetica use our [install guide](url) to install Kinetica.
+
+### Importing workbooks
+To load a workbook, download any of the JSON files in this repository, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) and select Import Workbook JSON.
+
+### Guidance on posting issues
+Issues related to a specific piece of content - for instance, a broken link or an incorrect workbook etc. - can be posted as an issue in this repo. 
+
+Conceptual questions or clarifications can be posted either on stackoverflow under the kinetica tag or on our [community slack channel](https://kinetica-community.slack.com/).
+
 
 # Kinetica Example Workbooks 
 A catalog of runnable Workbooks for the Kinetica Workbench. 
 
 ### Getting Started
-To load a workbook, download any of the JSON files in this repository, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) and select Import Workbook JSON.
 
-## Catalog
+
+# Catalog
 
 ### 1. Quick Start Workbook
 Start your journey with a guided tour of Kinetica's analytics and visualization. Create data sources, ingest data from Amazon S3 and Kafka, then perform location analytics and visualize results on a map. Follow-along with Kinetica's [Quick Start Workbook](https://docs.kinetica.com/7.1/azure/guides/quick-start-workbook/) guide on available on Kinetica's documentation site.
