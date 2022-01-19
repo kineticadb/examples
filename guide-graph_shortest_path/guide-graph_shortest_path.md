@@ -216,7 +216,7 @@ select * from ki_home.GRAPH_S_ONE_MANY_SOLVED
 ![](imgs/one_many.png)
 
 ### Many to many
-The third example illustrates a shortest path solve from two source nodes to four destination nodes. For this example, there are two starting points `(POINT(-122.1792501 47.2113606)` and `POINT(-122.375180125237 47.8122103214264))` and paths will be calculated from the first source to two different destinations and from the second source to two other destinations. When many source nodes and many destination nodes are provided, the graph solver pairs the source and destination node by list index and calculate a shortest path solve for each pair. So the first point in the solver list is paired with the first in the desination so on and so forth. 
+The third example illustrates a shortest path solve from two source nodes to four destination nodes. For this example, there are two starting points `(POINT(-122.1792501 47.2113606)` and `POINT(-122.375180125237 47.8122103214264))` and paths will be calculated from the first source to two different destinations and from the second source to two other destinations. When many source nodes and many destination nodes are provided, the graph solver pairs the source and destination node by list index and calculate a shortest path solve for each pair. So the first point in the solver list is paired with the first in the destination so on and so forth.
 
 Let's add these additional values to the source table. Note that we don't need to update the destination table since it already contains the 4 destination nodes.
 
@@ -255,4 +255,3 @@ select * from ki_home.GRAPH_S_MANY_MANY_SOLVED
 
 ![](imgs/many_many.png)
 
-## Summary
