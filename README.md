@@ -2,34 +2,44 @@
 
 # 🚀 Welcome
 This repo contains three types of content - 
-1. Demos: Solve real world challenges with real world data.
-2. Guides: Explore specific features of Kinetica using real or fake data.
+1. Guides: Explore specific features of Kinetica using demo data.
+2. Demos: Solve real world challenges with real world data.
 3. Labs: Learn concepts and features through labs
 
-All the content in this repo is fully reproducible using Kinetica.
+[All the content in this repo is fully reproducible using Kinetica. Use the [catalog](https://github.com/kineticadb/kinetica-workbooks#-catalog) below to view a short description of each workbook and to access it.
 
-# 🏎 Getting started with Kinetica
-### Installation
+# 🏎 Get started with Kinetica
+### Install
 If this is your first time using Kinetica use our [install guide](url) to install Kinetica.
 
-### Importing workbooks
+### Import workbooks
 Each folder in this repo contains a workbook file that is in the JSON format. You can load any of these into Kinetica with the following steps. 
 
 To load a workbook, download any of the JSON files in this repository, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) and select Import Workbook JSON.
 
-# Guidance on posting issues
+# Help
+Please join our [community slack channel](https://kinetica-community.slack.com/) to post any conceptual questions, clarifications with any of the content in this repo. Questions or clarifications can also be posted on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag.
+
 Issues related to reproducing a specific piece of content - for instance, a broken link, installation failures, bugs etc. - can be posted as an issue in this repo. Please reference the relevant piece of content in the title.
-
-Conceptual questions or clarifications can be posted either on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag or on our [community slack channel](https://kinetica-community.slack.com/).
-
 
 # 📖 Catalog
 
-### 1. Quick Start Workbook
+## Guides
+Explore specific features of Kinetica using demo data.
+### [Quick Start Workbook](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-quickstart)
 Start your journey with a guided tour of Kinetica's analytics and visualization. Create data sources, ingest data from Amazon S3 and Kafka, then perform location analytics and visualize results on a map. Follow-along with Kinetica's [Quick Start Workbook](https://docs.kinetica.com/7.1/azure/guides/quick-start-workbook/) guide on available on Kinetica's documentation site.
 
-### 2. Windmill Optimization
+### [Shortest Path](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-graph_shortest_path)
+This guide shows how to create a graph and then use the shortest path solver to find routes that take the least amount of time to traverse between - a single source to single destination, a single source to many destinations and many sources to many destinations.
+
+
+## Demos
+Solve real world challenges with real world data.
+### [Windmill Optimization](https://github.com/kineticadb/kinetica-workbooks/tree/master/demo-windmill_optmization)
 Use Kinetica's UDF capability to predict the power output of windmills in North America. Create data sources, ingest data from Azure Blob and Kafka, create and run a Python-based linear regression UDF, then visualize the power output on a map.
+
+## Labs
+Coming soon
 
 ## More Information
 

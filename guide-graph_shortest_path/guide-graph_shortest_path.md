@@ -133,69 +133,126 @@ There are three different route combinations that we would like to solve.
 
 Let's take each one at a time.
 
+### Set the source and destination points
+For our first route combination we start with one source - `POINT(-122.1792501 47.2113606)` - to one destination point - `POINT(-122.2221 47.5707)`. We will create two tables to store these source and desination points.
+
+
+```
+CREATE OR REPLACE TABLE seattle_sources (wkt WKT NOT NULL);
+
+INSERT INTO ki_home.seattle_sources 
+VALUES ('POINT(-122.1792501 47.2113606)');
+
+CREATE OR REPLACE TABLE seattle_dest (wkt WKT NOT NULL);
+
+INSERT INTO ki_home.seattle_dest
+VALUES ('POINT(-122.2221 47.5707)')
+```
+
 ### One to one
 Kinetica supports the creation and [execution](https://docs.kinetica.com/7.1/sql/udf/#sql-execute-function) of User Defined Functions in SQL. [`SOLVE_GRAPH`](https://docs.kinetica.com/7.1/sql/graph/#sql-graph-solve) is a function that can be executed either within a SELECT statement as a table function or within an EXECUTE FUNCTION call. We will use the latter.
 
-Our source point is `POINT(-122.1792501 47.2113606)` and our destination point is `POINT(-122.2221 47.5707)`.
 ```
 EXECUTE FUNCTION SOLVE_GRAPH(
     GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT('POINT(-122.1792501 47.2113606)') AS NODE_WKTPOINT),
-    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT('POINT(-122.2221 47.5707)') AS NODE_WKTPOINT),
-    SOLUTION_TABLE => 'TABLE_GRAPH_S_SPSOLVED',
-    OPTIONS => KV_PAIRS(
-    'export_solve_results' = 'true'
-  )
+    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_sources),
+    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_dest),
+    SOLUTION_TABLE => 'GRAPH_S_ONE_ONE_SOLVED'
 )
 ```
 
-The results look like below.
+The solutions table provides the route for the shortest path and its associated costs.
+
+```
+select * from ki_home.GRAPH_S_ONE_ONE_SOLVED
+```
+| SOLVERS_NODE_ID | SOLVERS_NODE_COSTS | wktroute                                                                                |
+|-----------------|--------------------|-----------------------------------------------------------------------------------------|
+| 123191          | 2437.28491         | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...) |
+
+
+You can easily visualize the route on workbench as shown below.
 
 ![](imgs/one_one.png)
 
+
 ### One to many
-Next we want to find the shortest path from a same source point to multiple desination points as shown below.
+Next we want to find the shortest path from the same source point to multiple desination points. Let's update the destination table to add these additional points.
+
+```
+INSERT INTO ki_home.seattle_dest
+VALUES
+('POINT(-122.541017 47.809121)'), 
+('POINT(-122.520440 47.624725)'),
+('POINT(-122.467915 47.427280)')
+```
+
+The only change we need to make to our previous code, now is the name of the solution table.
 
 ```
 EXECUTE FUNCTION SOLVE_GRAPH(
     GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT('POINT(-122.1792501 47.2113606)') AS NODE_WKTPOINT),
-    DESTINATION_NODES => INPUT_TABLES(
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.2221 47.5707)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.541017 47.809121)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.520440 47.624725)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.467915 47.427280)') AS NODE_WKTPOINT)
-        ),
+    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_sources),
+    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_dest),
     SOLUTION_TABLE => 'GRAPH_S_ONE_MANY_SOLVED'
 )
 ```
 
-![](imgs/many_many.png)
+The solution table lists each route from the source point to the 4 destination points.
+```
+select * from ki_home.GRAPH_S_ONE_MANY_SOLVED
+```
+
+| SOLVERS_NODE_ID | SOLVERS_NODE_COSTS | wktroute                                                                                |
+|-----------------|--------------------|-----------------------------------------------------------------------------------------|
+| 123191          | 2437.28491         | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...) |
+| 394364          | 5420.33936         | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...) |
+| 84273           | 4786.78809         | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...) |
+| 285636          | 4144.87793         | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...) |
+
+
+![](imgs/one_many.png)
 
 ### Many to many
-The third example illustrates a shortest path solve from a many source nodes to many destination nodes. First, the source node and destination nodes are defined. If many source node and many destination nodes are provided, the graph solver will pair the source and destination node by list index and calculate a shortest path solve for each pair. For this example, there are two starting points `(POINT(-122.1792501 47.2113606)` and `POINT(-122.375180125237 47.8122103214264))` and paths will be calculated from the first source to two different destinations and from the second source to two other destinations.
+The third example illustrates a shortest path solve from two source nodes to four destination nodes. For this example, there are two starting points `(POINT(-122.1792501 47.2113606)` and `POINT(-122.375180125237 47.8122103214264))` and paths will be calculated from the first source to two different destinations and from the second source to two other destinations. When many source nodes and many destination nodes are provided, the graph solver pairs the source and destination node by list index and calculate a shortest path solve for each pair. So the first point in the solver list is paired with the first in the desination so on and so forth. 
 
+Let's add these additional values to the source table. Note that we don't need to update the destination table since it already contains the 4 destination nodes.
 
+```
+INSERT INTO ki_home.seattle_sources 
+VALUES
+('POINT(-122.1792501 47.2113606)'), 
+('POINT(-122.375180125237 47.8122103214264)'),
+('POINT(-122.375180125237 47.8122103214264)');
+```
+
+The only thing to update in our solver function is the name of the solution table.
 ```
 EXECUTE FUNCTION SOLVE_GRAPH(
     GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLES(
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.1792501 47.2113606)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.1792501 47.2113606)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.375180125237 47.8122103214264)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.375180125237 47.8122103214264)') AS NODE_WKTPOINT)
-        ),
-    DESTINATION_NODES => INPUT_TABLES(
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.2221 47.5707)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.541017 47.809121)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.520440 47.624725)') AS NODE_WKTPOINT),
-        (SELECT ST_GEOMFROMTEXT('POINT(-122.467915 47.427280)') AS NODE_WKTPOINT)
-        ),
+    SOURCE_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_sources)),
+    DESTINATION_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_dest)),
     SOLUTION_TABLE => 'GRAPH_S_MANY_MANY_SOLVED'
 )
 ```
+
+Table shows the 4 routes from the two source points to two different destinations and the associated costs.
+
+```
+select * from ki_home.GRAPH_S_MANY_MANY_SOLVED
+```
+
+| INDEX | SOURCE                                     | TARGET                                     | COST       | PATH                                                                                     |
+|-------|--------------------------------------------|--------------------------------------------|------------|------------------------------------------------------------------------------------------|
+| 2     | POINT (-122.375180125237 47.8122103214264) | POINT (-122.520979642868 47.6248607039452) | 3066.91699 | LINESTRING (-122.375180125237 47.8122103214264, -122.375818490982 47.8124490380287, ...) |
+| 3     | POINT (-122.375180125237 47.8122103214264) | POINT (-122.471138834953 47.4291801452637) | 3642.271   | LINESTRING (-122.375180125237 47.8122103214264, -122.375818490982 47.8124490380287, ...) |
+| 0     | POINT (-122.179250121117 47.2113606333733) | POINT (-122.221578061581 47.5709509849548) | 2440.33984 | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...)  |
+| 1     | POINT (-122.179250121117 47.2113606333733) | POINT (-122.541549503803 47.8095200657845) | 5418.5498  | LINESTRING (-122.179250121117 47.2113606333733, -122.178909480572 47.210411131382, ...)  |
+
+
+![](imgs/many_many.png)
 
 ## Summary
