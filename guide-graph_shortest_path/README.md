@@ -1,7 +1,9 @@
 # Shortest path with Kinetica
-This guide shows how to create a graph representation of Seattle's road network and then uses the shortest path solver to find routes that take the least amount of time between differnt points on the network. The guide shows how to do this for - single source to single destination, a single source to many destinations and many sources to many destinations.
+This guide shows how to create a graph and then use the shortest path solver to find routes that take the least amount of time to traverse between - a single source to single destination, a single source to many destinations and many sources to many destinations.
+
+The guide uses Seattle's road network.
 
 ## How to run this guide
-Follow the [install guide](add) to install Kinetica and then [import the workbook](https://github.com/kineticadb/kinetica-workbooks#importing-workbooks) into Kinetica to access the guide.
+Follow the [getting started section](https://github.com/kineticadb/kinetica-workbooks#-getting-started-with-kinetica) to install Kinetica and import the workbook for this guide.
 
-If you only want to simply reference the code the read guides file or go the guides section on Kinetica documentation website.
+If you want to reference the code then read [guides file](https://github.com/kineticadb/kinetica-workbooks/blob/master/guide-graph_shortest_path/guide-graph_shortest_path.md) or go the guides section on Kinetica documentation website.

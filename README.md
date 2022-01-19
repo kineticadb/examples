@@ -6,16 +6,18 @@ This repo contains three types of content -
 2. Guides: Explore specific features of Kinetica using real or fake data.
 3. Labs: Learn concepts and features through labs
 
-All the content in this repo is fully reproducible using Kinetica. 
+All the content in this repo is fully reproducible using Kinetica.
 
 # 🏎 Getting started with Kinetica
 ### Installation
 If this is your first time using Kinetica use our [install guide](url) to install Kinetica.
 
 ### Importing workbooks
+Each folder in this repo contains a workbook file that is in the JSON format. You can load any of these into Kinetica with the following steps. 
+
 To load a workbook, download any of the JSON files in this repository, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) and select Import Workbook JSON.
 
-### Guidance on posting issues
+# Guidance on posting issues
 Issues related to reproducing a specific piece of content - for instance, a broken link, installation failures, bugs etc. - can be posted as an issue in this repo. Please reference the relevant piece of content in the title.
 
 Conceptual questions or clarifications can be posted either on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag or on our [community slack channel](https://kinetica-community.slack.com/).
