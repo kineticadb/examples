@@ -1,7 +1,7 @@
 <img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo" width="300"/>
 
 # 🚀 Welcome
-This repo contains three types of content - 
+This project contains fully reproducible examples of using Kinetica. There are three types of content - 
 1. Guides: Explore specific features of Kinetica using demo data.
 2. Demos: Solve real world challenges with real world data.
 3. Labs: Learn concepts and features through labs
