@@ -6,7 +6,7 @@ This project contains fully reproducible examples of using Kinetica. There are t
 2. Demos: Solve real world challenges with real world data.
 3. Labs: Learn concepts and features through labs
 
-[All the content in this repo is fully reproducible using Kinetica. Use the [catalog](https://github.com/kineticadb/kinetica-workbooks#-catalog) below to view a short description of each workbook and to access it.
+Use the [catalog](https://github.com/kineticadb/kinetica-workbooks#-catalog) below to view a short description of each example and to access them.
 
 # 🏎 Get started with Kinetica
 ### Install
