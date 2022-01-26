@@ -26,16 +26,16 @@ Issues related to reproducing a specific piece of content - for instance, a brok
 
 ## Guides
 Explore specific features of Kinetica using demo data.
-### [Quick Start Workbook](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-quickstart)
+#### [Quick Start Workbook](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-quickstart)
 Start your journey with a guided tour of Kinetica's analytics and visualization. Create data sources, ingest data from Amazon S3 and Kafka, then perform location analytics and visualize results on a map. Follow-along with Kinetica's [Quick Start Workbook](https://docs.kinetica.com/7.1/azure/guides/quick-start-workbook/) guide on available on Kinetica's documentation site.
 
-### [Shortest Path](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-graph_shortest_path)
+#### [Shortest Path](https://github.com/kineticadb/kinetica-workbooks/tree/master/guide-graph_shortest_path)
 This guide shows how to create a graph and then use the shortest path solver to find routes that take the least amount of time to traverse between - a single source to single destination, a single source to many destinations and many sources to many destinations.
 
 
 ## Demos
 Solve real world challenges with real world data.
-### [Windmill Optimization](https://github.com/kineticadb/kinetica-workbooks/tree/master/demo-windmill_optmization)
+#### [Windmill Optimization](https://github.com/kineticadb/kinetica-workbooks/tree/master/demo-windmill_optmization)
 Use Kinetica's UDF capability to predict the power output of windmills in North America. Create data sources, ingest data from Azure Blob and Kafka, create and run a Python-based linear regression UDF, then visualize the power output on a map.
 
 ## Labs
