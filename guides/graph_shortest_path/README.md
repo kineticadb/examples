@@ -1,8 +1,5 @@
 # Shortest path with Kinetica
-This guide shows how to use Kinetica's graph API to the shortest routes between different points in Seattle. The entire exercise is done using SQL. There are three types of routes that we solve:
-- single source to single destination, 
-- a single source to many destinations and 
-- many sources to many destinations.
+This guide shows how to use Kinetica's graph API to the shortest routes between different points in Seattle. The entire exercise is done using SQL. There are three types of routes that we solve - single source to single destination, a single source to many destinations and many sources to many destinations.
 
 The instructions are provided within the workbook itself. So the fastest way to try this out would be to download the workbook json file (guide-graph_shortest_path.json) and import it into Kinetica.
 
@@ -11,7 +8,7 @@ If you are unfamiliar with Kinetica's graph API you can learn more about it [her
 
 If you don't have Kinetica installed and running, please follow the [Getting Started](https://github.com/kineticadb/kinetica-workbooks#-getting-started-with-kinetica) section to get everything setup to run this guide
 
-## Step 1 - Load data into Kinetica
+## Step 1 - Get the data into Kinetica
 In this section we will load the seattle road network data into Kinetica.
 
 ### Create the data source
@@ -27,7 +24,7 @@ WITH OPTIONS (
 )
 ```
 
-### Start the ingest
+### Load the data into Kinetica
 Once a data source is defined we can start loading data from the data source into Kinetica.
 
 This guide uses the seattle_roads csv file. The road weights data provides information on the time taken to travel different road segments in Seattle. We will use this information to compute the shortest path between different points in terms of travel time.
@@ -61,7 +58,7 @@ LIMIT 5
 | 884148400428   | 0      | LINESTRING (-122.142798900604 47.5890210270882, -122.142839133739 47.5885891914368) | 2.88676238 |
 
 
-The network is broken into road segments with the following information for each segment. Each LINESTRING in the table above corresponds to a road segment. The column descriptions are below
+The network is broken into small road segments with the following information for each segment. Each LINESTRING in the table above corresponds to a small road segment. The column descriptions are below
 1. OriginalEdgeID - Unique identifier for each road segment
 2. TwoWay - 0 indicates one way and 1 indicates a two way edge
 3. WKTLINE - The WKT Linestring that represents each road segment geo spatially.
@@ -133,13 +130,14 @@ CREATE OR REPLACE DIRECTED GRAPH GRAPH_S (
 ## Step 4 - Solve the graph
 There are three different route combinations that we would like to solve.
 1. One source to one destination
-2. One source to many destinations
+2. One souurce to many destinations
 3. Many sources to many destination.
 
 Let's take each one at a time.
 
 ### Set the source and destination points
 For our first route combination we start with one source - `POINT(-122.1792501 47.2113606)` - to one destination point - `POINT(-122.2221 47.5707)`. We will create two tables to store these source and desination points.
+
 
 ```
 CREATE OR REPLACE TABLE seattle_sources (wkt WKT NOT NULL);
@@ -259,5 +257,3 @@ select * from ki_home.GRAPH_S_MANY_MANY_SOLVED
 
 ![](imgs/many_many.png)
 
-## Further reading
-This brings us to the end of this guide.  Visit the [graph overview page](https://docs.kinetica.com/7.1/graph_solver/) for more on what is possible with Kinetica's powerful graph API.

@@ -24,12 +24,12 @@ WITH OPTIONS (
 /*
 Load road weights data into Kinetica
 Once a data source is defined we can start loading data from it into Kinetica.
-We will be using the road_weights file for this guide. The road weights data provides information on the time taken to travel different road segments in Seattle. We will use this information to compute the shortest path between different points in terms of travel time.
+We will be using the seattle_roads file for this guide. The road weights data provides information on the time taken to travel different road segments in Seattle. We will use this information to compute the shortest path between different points in terms of travel time.
 */
 
 
-LOAD DATA INTO road_weights
-FROM FILE PATHS 'road_weights.csv'
+LOAD DATA INTO seattle_roads
+FROM FILE PATHS 'seattle_roads.csv'
 FORMAT TEXT 
 WITH OPTIONS(
     DATA SOURCE = 'guides_data'
@@ -40,7 +40,7 @@ WITH OPTIONS(
 /* --------------------------- */
 
 SELECT * 
-FROM ki_home.road_weights
+FROM ki_home.seattle_roads
 LIMIT 5;
 
 /*
@@ -92,7 +92,7 @@ CREATE OR REPLACE DIRECTED GRAPH GRAPH_S (
             WKTLINE AS EDGE_WKTLINE,
             TwoWay AS EDGE_DIRECTION
         FROM
-            ki_home.road_weights
+            ki_home.seattle_roads
     ),
     WEIGHTS => INPUT_TABLE(
         SELECT
@@ -100,7 +100,7 @@ CREATE OR REPLACE DIRECTED GRAPH GRAPH_S (
             TwoWay AS WEIGHTS_EDGE_DIRECTION,
             time AS WEIGHTS_VALUESPECIFIED
         FROM
-            ki_home.road_weights
+            ki_home.seattle_roads
     ),
     OPTIONS => KV_PAIRS(
         'recreate' = 'true',
