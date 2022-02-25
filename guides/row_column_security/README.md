@@ -1,4 +1,5 @@
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XopOOMaruuU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[![Column row security in Kinetica](https://img.youtube.com/vi/XopOOMaruuU/0.jpg)](https://www.youtube.com/watch?v=XopOOMaruuU)
 
 # Security with Kinetica - Introduction
 Database administers often need to restrict access to particular fields in your data based on who is accessing a table. For instance, you might want a customer service representative to only see the last 4 digits of sensitive information like say a credit card number. Or you might want to restrict access to salaries of employees to members of the HR department. Tasks like these require you to obfuscate, mask, or restrict access to certain rows and columns of your data.
