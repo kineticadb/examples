@@ -1,5 +1,5 @@
 # Python developer guide
-This guide provides step-by-step instructions to get started writing Python applications using Kinetica. This guide demonstrates only a small set of the available API. A detailed description of the complete interface is available under [Python API Reference](https://docs.kinetica.com/7.1/api/python/).
+This guide provides step-by-step instructions to get started writing Python applications using Kinetica. It only demonstrates only a small set of the available API. A more detailed description of the complete interface is available under [Python API Reference](https://docs.kinetica.com/7.1/api/python/).
 ## Prerequisites
 You will need an installation of Kinetica to run this guide. Follow the instructions [here](https://www.kinetica.com/try/) to install Kinetica.
 
