@@ -4,4 +4,7 @@ This guide provides step-by-step instructions to get started writing Python appl
 You will need an installation of Kinetica to run this guide. Follow the instructions [here](https://www.kinetica.com/try/) to install Kinetica.
 
 ## Run the guide
-<p>Click here <a href="https://deepnote.com/project/Kinetica-Developers-Guide-NQTcms-UTHm6N9MZQjvrIA/%2Fpython_dev_guide.ipynb" target="_blank"><img src="https://deepnote.com/buttons/launch-in-deepnote-white.svg" alt="Launch in Deepnote"></a> to launch an interactive notebook that walks you through the guide.  </p>
+Click on the link below to launch an interactive notebook that walks you through the guide. 
+<div align="center">
+<a href="https://deepnote.com/project/Kinetica-Developers-Guide-NQTcms-UTHm6N9MZQjvrIA/%2Fpython_dev_guide.ipynb" target="_blank"><img src="https://deepnote.com/buttons/launch-in-deepnote-white.svg" alt="Launch in Deepnote"></a>
+</div>
