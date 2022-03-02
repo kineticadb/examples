@@ -23,7 +23,7 @@ There are three types of content here -
 3. Labs (coming soon): Learn concepts through labs
 
 # How to run these examples
-You will need an instance of Kinetica to run each example (see [below](https://github.com/kineticadb/examples#install-kinetica) for guidance on installation). Each folder contains a fully reproducible example that uses either SQL or some other supported language.
+You will need an instance of Kinetica to run each example (see [below](https://github.com/kineticadb/examples#install-kinetica) for guidance on installation). Each folder in this repo contains a fully reproducible example that uses either SQL or some other supported language.
 
 ### SQL examples
 Examples that use SQL will typically include a JSON workbook file and a SQL file. There are two ways to run these.
