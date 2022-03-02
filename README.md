@@ -25,7 +25,17 @@ There are three types of content here -
 Use the [catalog](https://github.com/kineticadb/kinetica-workbooks#-catalog) below to view a short description of each example and to access them.
 
 # Getting started
+## Ways to interact with Kinetica
+There are primarily two modes. 
+1. We provide an interactive SQL notebook environment called the workbench that is custom built to showcase the unique ANSI SQL and data visualization capabilities of Kinetica. 
+2. Using a third party client: Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages that can be used to connect to a Kinetica database server using a third party client.
+There are several options for installing Kinetica, these are listed below.
+## Launch Kinetica as a service on Azure
+Kinetica is available as a managed service on Azure. Most of the examples in this repo showcase the workbench which is currently only available on Azure. 
+
 ## Install the free developer edition
+Kinetica offers a free developer edition that can be installed on Windows or Mac/Linux operating systems. Dev edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions here: https://www.kinetica.com/try/ to download and install the developer edition.
+
 
 ### ❶ Download
 For Mac/Linux
