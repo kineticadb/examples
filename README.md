@@ -20,62 +20,28 @@ This project contains fully reproducible examples of using Kinetica. Kinetica is
 There are three types of content here -
 1. Guides: Explore specific features of Kinetica using demo data.
 2. Demos: Show how to use Kinetica to solve real world challenges. These typically contain several different features of Kinetica.
-3. Labs: Learn concepts through labs
+3. Labs (coming soon): Learn concepts through labs
 
-Use the [catalog](https://github.com/kineticadb/kinetica-workbooks#-catalog) below to view a short description of each example and to access them.
+# How to run these examples
+You will need an instance of Kinetica to run each example (see below for guidance on installation). Each folder contains a fully reproducible example that uses either SQL or some other supported language.
 
-# Getting started
-## Ways to interact with Kinetica
-There are primarily two modes. 
-1. We provide an interactive SQL notebook environment called the workbench that is custom built to showcase the unique ANSI SQL and data visualization capabilities of Kinetica. 
-2. Using a third party client: Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages that can be used to connect to a Kinetica database server using a third party client.
+### SQL examples
+Examples that use SQL will typically include a JSON workbook file and a SQL file. There are two ways to run these.
+- Workbench: Workbench is an interactive SQL notebook environment that is custom built to showcase the unique ANSI SQL and data visualization capabilities of Kinetica. Workbench is currently only available on cloud offerings of Kinetica (see section below for more details). For examples that use SQL, download the workbook JSON file, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) in Kinetica and select Import Workbook JSON.
+- GAdmin: GAdmin is an administration application for Kinetica that is by default available on port 8080. It is still the only native interface for querying the database if you use the developer edition or the on premise version of Kinetica. GAdmin however, will eventually be phased out in favour of Workbench. For examples that use SQL you can use the SQL file that is available in each example to run SQL queries on GAdmin.
+### Other languages
+Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client.
+
+# Install Kinetica
 There are several options for installing Kinetica, these are listed below.
-## Launch Kinetica as a service on Azure
-Kinetica is available as a managed service on Azure. Most of the examples in this repo showcase the workbench which is currently only available on Azure. 
+### Launch Kinetica as a service on the cloud
+There are free versions of Kinetica that can be provisioned as a managed service on Azure or AWS (coming soon). You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://docs.kinetica.com/7.1/azure/provision/installation/) on the cloud.
 
-## Install the free developer edition
+### Install the free developer edition
 Kinetica offers a free developer edition that can be installed on Windows or Mac/Linux operating systems. Dev edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions here: https://www.kinetica.com/try/ to download and install the developer edition.
 
-
-### ❶ Download
-For Mac/Linux
-
-```shell
-curl https://files.kinetica.com/install/kinetica.sh -o kinetica && chmod u+x kinetica && ./kinetica start
-```
-
-For Windows
-
-```shell
-curl https://files.kinetica.com/install/kinetica.bat -o kinetica.bat && .\kinetica.bat start
-```
-
-### ❷ Manage
-The kinetica shell script manages your installation, starts, and stops the database.
-
-Start Kinetica:
-```shell
-./kinetica start
-```
-Stop Kinetica:
-```shell
-./kinetica stop
-```
-For more commands and configuration options:
-```shell
-./kinetica --help
-```
-### ❸ Open admin portal
-Administer Kinetica Developer Edition through the Kinetica Management interface. This should be available at localhost:8080/gadmin
-
-## Provision Kinetica on the cloud
-There are free versions of Kinetica that can be provisioned on Azure and/or AWS. You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://docs.kinetica.com/7.1/azure/provision/installation/)
-
-## Load and analyze data
-Broadly speaking, there are two ways to use Kinetica -
-
-1. Interactive workbooks - Workbooks are interactive SQL notebooks with really cool data visualization and mapping capabilities. Loading a workbook into Kinetica is really easy - simply go to the example folder that you would like to try out, download the workbook JSON file, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) in Kinetica and select Import Workbook JSON.
-2. Using our [APIs](https://docs.kinetica.com/7.1/api/)
+### Install the on-premise version of Kinetica
+You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.1/install/installation-options/). 
 
 # Support
 If you found a bug please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
@@ -84,25 +50,6 @@ To get community support, you can:
 1. Ask a question in our [community slack channel](https://join.slack.com/t/kinetica-community/shared_invite/zt-12vqzfkqo-fPi760XCuL0Ub1fxCzRIWQ) 
 2. Post on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag.
 
-
-# 📖 Catalog
-
-## Guides
-Explore specific features of Kinetica using demo data.
-#### [Quick Start Workbook](https://github.com/kineticadb/kinetica-workbooks/tree/master/quickstart)
-Start your journey with a guided tour of Kinetica's analytics and visualization. Create data sources, ingest data from Amazon S3 and Kafka, then perform location analytics and visualize results on a map. Follow-along with Kinetica's [Quick Start Workbook](https://docs.kinetica.com/7.1/azure/guides/quick-start-workbook/) guide on available on Kinetica's documentation site.
-
-#### [Shortest Path](https://github.com/kineticadb/kinetica-workbooks/tree/master/graph_shortest_path)
-This guide shows how to create a graph and then use the shortest path solver to find routes that take the least amount of time to traverse between - a single source to single destination, a single source to many destinations and many sources to many destinations.
-
-
-## Demos
-Solve real world challenges with real world data.
-#### [Windmill Optimization](https://github.com/kineticadb/kinetica-workbooks/tree/master/windmill_optmization)
-Use Kinetica's UDF capability to predict the power output of windmills in North America. Create data sources, ingest data from Azure Blob and Kafka, create and run a Python-based linear regression UDF, then visualize the power output on a map.
-
-## Labs
-Coming soon
 
 ## More Information
 
