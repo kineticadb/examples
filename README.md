@@ -10,7 +10,8 @@
     <span> | </span>
     <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
     <span> | </span>
-    <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-12vqzfkqo-fPi760XCuL0Ub1fxCzRIWQ">Community Slack</a>
+    <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-13ynqf304-bxuI_JKd9bW1BXny~Ze1QQ">Community Slack</a>
+    
 </h3>
 
 ----------------------------------------
