@@ -5,16 +5,6 @@ The instructions are provided within the workbook itself. So the fastest way to 
 
 ## Getting started
 
-<iframe
-  src="https://app.getreprise.com/launch/m6Ed20y/"
-  title="Product Tour by Reprise"
-  name="Reprise test"
-  height="720px"
-  width="1280px"
-  allow="clipboard-write"
-  style="border: 0"
-></iframe>
-
 If you are unfamiliar with Kinetica's graph API you can learn more about it [here](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD)
 
 If you don't have Kinetica installed and running, please follow the [Getting Started](https://github.com/kineticadb/kinetica-workbooks#-getting-started-with-kinetica) section to get everything setup to run this guide
