@@ -4,6 +4,7 @@ This guide shows how to use Kinetica's graph API to the shortest routes between 
 The instructions are provided within the workbook itself. So the fastest way to try this out would be to download the workbook json file (guide-graph_shortest_path.json) and import it into Kinetica.
 
 ## Getting started
+Click below👇🏼 for a quick walkthrough on how to import a workbook into Kinetica.
 
 [![A Quick Walkthrough](https://app.getreprise.com/a/resource/7nkWE9n/fc5f3e76f4a35a734c3c9e9e7fe92aa40f6d5e782af5e1ac4c721b57e8b84db4.png)](https://app.getreprise.com/launch/m6Ed20y/)
 
