@@ -1,6 +1,6 @@
-```
+---
 version: 7.1.4
-```
+---
 
 # Security with Kinetica
 ## Demo video
