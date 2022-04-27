@@ -13,7 +13,7 @@
     
 </h3>
 
-----------------------------------------
+
 
 This project contains fully reproducible examples of using Kinetica. Kinetica is a really fast, scalable cloud database for real-time analysis on large and streaming datasets. The developer edition of Kinetica is free and there are free tiers available on Azure and AWS as well.
 
