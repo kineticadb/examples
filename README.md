@@ -1,8 +1,10 @@
 <h3 align="center">
     <img width="300" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
 </h3>
-
-
+<h2 align="center">The database for time and space</h2>
+<h3 align="center">
+<img sr="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2021/12/comcast-logo-white-150x63.png"/>
+</h3>
 <h3 align="center">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
