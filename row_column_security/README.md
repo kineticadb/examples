@@ -1,20 +1,7 @@
-<!--
-title: Column and Row Security with Kinetica
-subtitle: Control access to columns and rows in a table in Kinetica based on user roles
-slug: column-row-security
-aliases:
-thumbnail: https://img.youtube.com/vi/XopOOMaruuU/0.jpg
-featured: true
-time: 20 MIN
-weight: -200
-{{$ offering_preDash $}}guide-tags:
-- security
-- RBAC
--->
-
 # Security with Kinetica
 ## Demo video
 [![Column row security in Kinetica](https://img.youtube.com/vi/XopOOMaruuU/0.jpg)](https://www.youtube.com/watch?v=XopOOMaruuU)
+
 
 
 ## Introduction
