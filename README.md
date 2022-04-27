@@ -3,9 +3,6 @@
 </h3>
 <h2 align="center">The database for time and space</h2>
 <h3 align="center">
-<img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2022/02/modern_architecture_04.gif"></img>
-</h3>
-<h3 align="center">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
     <a href="https://docs.kinetica.com/7.1/">Docs</a>
@@ -15,9 +12,9 @@
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-13ynqf304-bxuI_JKd9bW1BXny~Ze1QQ">Community Slack</a>
     
 </h3>
-
-
-
+<h3 align="center">
+<img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2022/02/modern_architecture_04.gif"></img>
+</h3>
 This project contains fully reproducible examples of using Kinetica. Kinetica is a really fast, scalable cloud database for real-time analysis on large and streaming datasets. The developer edition of Kinetica is free and there are free tiers available on Azure and AWS as well.
 
 There are three types of content here -
