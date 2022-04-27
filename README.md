@@ -17,11 +17,6 @@
 </h3>
 This project contains fully reproducible examples of using Kinetica. Kinetica is a really fast, scalable cloud database for real-time analysis on large and streaming datasets. The developer edition of Kinetica is free and there are free tiers available on Azure and AWS as well.
 
-There are three types of content here -
-1. Guides: Explore specific features of Kinetica using demo data.
-2. Demos: Show how to use Kinetica to solve real world challenges. These typically contain several different features of Kinetica.
-3. Labs (coming soon): Learn concepts through labs
-
 # How to run these examples
 You will need an instance of Kinetica to run each example (see [below](https://github.com/kineticadb/examples#install-kinetica) for guidance on installation). Each folder in this repo contains a fully reproducible example that uses either SQL or some other supported language.
 
