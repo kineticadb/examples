@@ -1,15 +1,22 @@
-# Security with Kinetica
-## Demo video
+<h1 align = "center">
+Column and row security with Kinetica
+<br>
+<img src="https://img.shields.io/badge/ver.-%3E=v7.1.1-green"></img>  <img src="https://img.shields.io/badge/time-45 mins-blue"></img>
+</h1>
+<h3 align="left">
+
+</h3>
+<h6 align="center">Demo Video 👇🏼</h6>
+<h3 align="center">
+
 [![Column row security in Kinetica](https://img.youtube.com/vi/XopOOMaruuU/0.jpg)](https://www.youtube.com/watch?v=XopOOMaruuU)
+</h3>
 
-
-
-## Introduction
-Database administers often need to restrict access to particular fields in your data based on who is accessing a table. For instance, you might want a customer service representative to only see the last 4 digits of sensitive information like say a credit card number. Or you might want to restrict access to salaries of employees to members of the HR department. Tasks like these require you to obfuscate, mask, or restrict access to certain rows and columns of your data.
+Database administrators often need to restrict access to particular fields in your data based on who is accessing a table. For instance, you might want a customer service representative to only see the last 4 digits of sensitive information like say a credit card number. Or you might want to restrict access to salaries of employees to members of the HR department. Tasks like these require you to obfuscate, mask, or restrict access to certain rows and columns of your data.
 
 This guide walks you through the basics of implementing row and column level security using role based access controls using the fictional example of a company called OurCo.
 
-Watch the demo video above for a full walkthrough for this guide.
+📺 Watch the demo video above 👆🏻 for a full walkthrough for this guide.
 
 ## To get started immediately
 If you already have an instance of Kinetica, then you can simply upload the json file for the workbook (row_column_security.json) that is available. The demo, shows you how to implement security using both SQL and the UI. The workbook will show you how to do that with just some easy SQL code.
