@@ -296,7 +296,7 @@ Load the "NYC Taxi" Reveal dashboard from Kinetica's Github account and then nav
 
 /* SQL Block Start */
 LOAD DASHBOARD "NYC Taxi"
-FROM FILE PATH 'https://github.com/kineticadb/examples/raw/master/guides/quickstart/nyctaxi.db';
+FROM FILE PATH 'https://github.com/kineticadb/examples/raw/master/quickstart/nyctaxi.db';
 /* SQL Block End */
 
 
