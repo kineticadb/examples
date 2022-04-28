@@ -15,7 +15,7 @@
 <h3 align="center">
 <img src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2022/02/modern_architecture_04.gif"></img>
 </h3>
-This project contains ** fully reproducible examples ** of using Kinetica. Kinetica is a really fast, scalable cloud database for real-time analysis on large and streaming datasets. The developer edition of Kinetica is free and there are free tiers available on Azure and AWS as well.
+This project contains **fully reproducible examples** of using Kinetica. Kinetica is a really fast, scalable cloud database for real-time analysis on large and streaming datasets. The developer edition of Kinetica is free and there are free tiers available on Azure and AWS as well.
 
 # How to run these examples
 You will need an instance of Kinetica to run each example (see [below](https://github.com/kineticadb/examples#install-kinetica) for guidance on installation). Each folder in this repo contains a fully reproducible example that uses either SQL or other supported languages (Python, Java, Javascript etc.).
