@@ -14,7 +14,7 @@ Real time IoT monitoring system for transit trucks
 
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year.
 <h3 align="center">
-   <img src="https://assets.website-files.com/5e997655a5b30c6a2ba6626c/5e9982df64d694568de7cebd_5cda5d509462d99c4643f3a0_Food%2520waste-p-1600.jpeg"></img>
+   <img src="https://assets.website-files.com/5e997655a5b30c6a2ba6626c/5e9982df64d694568de7cebd_5cda5d509462d99c4643f3a0_Food%2520waste-p-1600.jpeg" max-width="600px"></img>
 
 </h3>
 
