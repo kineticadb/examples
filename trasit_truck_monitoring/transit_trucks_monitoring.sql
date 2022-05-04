@@ -398,7 +398,7 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 
 
 /* SQL Block Start */
--- CREATE OR REPLACE DATA SINK transit_truck_alerts
+-- CREATE OR REPLACE DATA SINK transit_truck_alerts_sink
 -- LOCATION = '<kafka cluster address>'
 -- WITH OPTIONS 
 -- (
@@ -409,12 +409,12 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 
 
 /* SQL Block Start */
--- CREATE STREAM portfolio_alert_stream on 
--- TABLE fin_risk.portfolio_alert
+-- CREATE STREAM transit_truck_alerts_stream on 
+-- TABLE transit_trucks.realtime_vehicle_analytics
 -- WITH OPTIONS 
 -- (
 --     event = 'insert', 
---     datasink_name = 'transit_truck_alerts'
+--     datasink_name = 'transit_truck_alerts_sink'
 -- );
 /* SQL Block End */
 
@@ -422,7 +422,9 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 /* TEXT Block Start */
 /*
 SETUP A DASHBOARD APP WITH REVEAL OR A THIRD PARTY WEB APP
-The Along with alerts we can also setup a realtime dashboard using either Kinetica's data visualization tool Reveal or a third party application like tableau. You can find more information
+Finally, you can also build a dashboard app that provides a comprehensive view of the transit truck metrics. There are two paths for this. You can either use Kinetica's built in dashboard app Reveal or you can use a third party application like Tableau. For information on this please see the links below for more details:
+1. Reveal: https://docs.kinetica.com/7.1/azure/bi/reveal/
+2. Tableau: https://docs.kinetica.com/7.1/azure/bi/tableau/
 */
 /* TEXT Block End */
 
