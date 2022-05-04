@@ -1,5 +1,5 @@
 <h1 align = "center">
-Transit truck monitoring
+Real time IoT monitoring system for transit trucks
 <br>
 <img src="https://img.shields.io/badge/tested-%3E=v7.1.6-green"></img>  <img src="https://img.shields.io/badge/time-30 mins-blue"></img>
 </h1>
