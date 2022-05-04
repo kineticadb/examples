@@ -14,7 +14,8 @@ Transit truck monitoring
 
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year.
 <h3 align="center">
-   ![Food waste](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.logmore.com%2Fpost%2Ffood-spoilage-is-a-bigger-problem-than-you-think&psig=AOvVaw2MYs1QhxCpjhEyvQliKGdd&ust=1651767642667000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCMjPzI-gxvcCFQAAAAAdAAAAABAD)
+   <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.logmore.com%2Fpost%2Ffood-spoilage-is-a-bigger-problem-than-you-think&psig=AOvVaw2MYs1QhxCpjhEyvQliKGdd&ust=1651767642667000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCMjPzI-gxvcCFQAAAAAdAAAAABAD"></img>
+
 </h3>
 
 It is therefore important to monitor the conditions inside the truck at all times so that any shift from ideal storage conditions can be immediately flagged and corrected. But this is easier said than done.
