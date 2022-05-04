@@ -217,7 +217,7 @@ that column names in the table that is being used to render the tracks be the fo
 /* TEXT Block Start */
 /*
 EXPLORE THE VEHICLE METRICS DATA
-Let's
+Let's see the number of records for the vehicle metrics table.
 */
 /* TEXT Block End */
 
