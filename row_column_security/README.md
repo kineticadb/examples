@@ -1,7 +1,7 @@
 <h1 align = "center">
 Column and row security with Kinetica
 <br>
-<img src="https://img.shields.io/badge/ver.-%3E=v7.1.1-green"></img>  <img src="https://img.shields.io/badge/time-45 mins-blue"></img>
+<img src="https://img.shields.io/badge/tested -%3E=v7.1.1-green"></img>  <img src="https://img.shields.io/badge/time-45 mins-blue"></img>
 </h1>
 <h3 align="left">
 

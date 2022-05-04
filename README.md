@@ -47,5 +47,4 @@ To get community support, you can:
 
 
 ## More Information
-
-See the [Documentation](http://docs.kinetica.com/7.1/azure) for more information about workbooks and the Kinetica workbench.
+See our [Documentation](http://docs.kinetica.com/7.1/azure) for more information about workbooks and the Kinetica workbench.

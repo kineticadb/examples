@@ -1,7 +1,7 @@
 <h1 align = "center">
 Transit truck monitoring
 <br>
-<img src="https://img.shields.io/badge/ver.-%3E=v7.1.1-green"></img>  <img src="https://img.shields.io/badge/time-30 mins-blue"></img>
+<img src="https://img.shields.io/badge/tested-%3E=v7.1.6-green"></img>  <img src="https://img.shields.io/badge/time-30 mins-blue"></img>
 </h1>
 <h3 align="left">
 
@@ -36,9 +36,12 @@ FROM
       ON vl.TRACKID = vm.id 
       AND vl.TIMESTAMP = vm.ts
 ```
-With just a single SQL statement we get an always on up to date view of cold storage metrics for different transit trucks. This view is then plugged into downstream alerting and decisioning systems. 
+With just a single SQL statement we get an always on up to date view of cold storage metrics for different transit trucks. This view is then plugged into downstream alerting and decisioning systems.
 
 ## How to get started
 If you already have an instance of Kinetica, you can simply upload the json file for the workbook in this folder into Kinetica. The demo, shows you how to implement security using both SQL and the UI. The workbook will show you how to do that with just some easy SQL code.
 
 Follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) if you do not have an instance of Kinetica.
+
+## For Help
+Join our [community slack channel](https://join.slack.com/t/kinetica-community/shared_invite/zt-12vqzfkqo-fPi760XCuL0Ub1fxCzRIWQ) or search our [documentation](https://docs.kinetica.com/7.1/azure/)
