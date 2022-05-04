@@ -29,11 +29,11 @@ Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different la
 
 # Install Kinetica
 There are several options for installing Kinetica, these are listed below.
-### Launch Kinetica as a service on the cloud
-There are free versions of Kinetica that can be provisioned as a managed service on Azure or AWS (coming soon). You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://docs.kinetica.com/7.1/azure/provision/installation/) on the cloud.
+### [Launch Kinetica as a service on the cloud](https://www.kinetica.com/platform/cloud/)
+There are free versions of Kinetica that can be provisioned as a managed service on Azure or AWS (coming soon). You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://www.kinetica.com/platform/cloud/) on the cloud.
 
-### Install the free developer edition
-Kinetica offers a free developer edition that can be installed on Windows or Mac/Linux operating systems. Dev edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions here: https://www.kinetica.com/try/ to download and install the developer edition.
+### [Install the free developer edition](https://www.kinetica.com/try/)
+Kinetica offers a free developer edition that can be installed on Windows or Mac/Linux operating systems. Dev edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions [here](https://www.kinetica.com/try/) to download and install the developer edition.
 
 ### Install the on-premise version of Kinetica
 You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.1/install/installation-options/). 
