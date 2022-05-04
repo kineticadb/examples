@@ -1,5 +1,5 @@
 <h1 align = "center">
-Transit truck monitoring
+Real time IoT monitoring system for transit trucks
 <br>
 <img src="https://img.shields.io/badge/tested-%3E=v7.1.6-green"></img>  <img src="https://img.shields.io/badge/time-30 mins-blue"></img>
 </h1>
@@ -13,6 +13,10 @@ Transit truck monitoring
 </h3>
 
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year.
+<h3 align="center">
+   <img src="https://assets.website-files.com/5e997655a5b30c6a2ba6626c/5e9982df64d694568de7cebd_5cda5d509462d99c4643f3a0_Food%2520waste-p-1600.jpeg"></img>
+
+</h3>
 
 It is therefore important to monitor the conditions inside the truck at all times so that any shift from ideal storage conditions can be immediately flagged and corrected. But this is easier said than done.
 
