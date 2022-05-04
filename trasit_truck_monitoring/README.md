@@ -14,7 +14,7 @@ Transit truck monitoring
 
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year.
 <h3 align="center">
-   <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.logmore.com%2Fpost%2Ffood-spoilage-is-a-bigger-problem-than-you-think&psig=AOvVaw2MYs1QhxCpjhEyvQliKGdd&ust=1651767642667000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCMjPzI-gxvcCFQAAAAAdAAAAABAD"></img>
+   <img src="https://assets.website-files.com/5e997655a5b30c6a2ba6626c/5e9982df64d694568de7cebd_5cda5d509462d99c4643f3a0_Food%2520waste-p-1600.jpeg"></img>
 
 </h3>
 
