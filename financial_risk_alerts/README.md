@@ -1,8 +1,20 @@
-# Real-time Financial Risk Alerting
+<h1 align = "center">
+Real time financial risk alerting system
+<br>
+<img src="https://img.shields.io/badge/tested -%3E=v7.1.1-green"></img>  <img src="https://img.shields.io/badge/time-25 mins-blue"></img>
+</h1>
+<h3 align="left">
+
+</h3>
+<h6 align="center">Demo Video 👇🏼</h6>
+<h3 align="center">
+
+[![Financial risk alerting with Kinetica](https://img.youtube.com/vi/YQ7lpxwjlPY/0.jpg)](https://www.youtube.com/watch?v=YQ7lpxwjlPY)
+
+</h3>
+
 This demo uses Kinetica to combine a real time stream of stock prices via a Kafka topic with information on porfolio holdings information from Amazon S3 to create alerts whenenver over portfolio values drop below a certain threshold.
 
-## Demo Video
-[![Financial risk alerting with Kinetica](https://img.youtube.com/vi/YQ7lpxwjlPY/0.jpg)](https://www.youtube.com/watch?v=YQ7lpxwjlPY)
 
 ## Background
 Many of the world's storied investors are Hedge Funds. Unlike mutual funds, to which most people have access to, hedge funds cater to institutions and wealthy investors. Fortunately, four times a year, we get a peek into this secretive world by way of regulatory filings. Hedge funds holdings give us a unique view into their thinking c/o the bets they are making.
