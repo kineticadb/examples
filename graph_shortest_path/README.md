@@ -4,10 +4,6 @@ This guide shows how to use Kinetica's graph API to the shortest routes between 
 The instructions are provided within the workbook itself. So the fastest way to try this out would be to download the workbook json file (guide-graph_shortest_path.json) and import it into Kinetica.
 
 ## Getting started
-Click below👇🏼 for a quick walkthrough on how to import a workbook into Kinetica.
-
-[![A Quick Walkthrough](https://app.getreprise.com/a/resource/7nkWE9n/fc5f3e76f4a35a734c3c9e9e7fe92aa40f6d5e782af5e1ac4c721b57e8b84db4.png)](https://app.getreprise.com/launch/m6Ed20y/)
-
 If you are unfamiliar with Kinetica's graph API you can learn more about it [here](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD)
 
 If you don't have Kinetica installed and running, please follow the [Getting Started](https://github.com/kineticadb/kinetica-workbooks#-getting-started-with-kinetica) section to get everything setup to run this guide
