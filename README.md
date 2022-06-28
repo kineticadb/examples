@@ -25,7 +25,13 @@ You will need an instance of Kinetica to run each example (see [below](https://g
 Examples that use SQL will typically include a JSON workbook file and a SQL file. There are two ways to run these.
 - Workbench: Workbench is an interactive SQL notebook environment that is custom built to showcase the unique ANSI SQL and data visualization capabilities of Kinetica. Workbench is currently only available on cloud offerings of Kinetica (see section below for more details). For examples that use SQL, download the workbook JSON file, then click the plus "+" icon in the [Workbook Explorer](https://docs.kinetica.com/7.1/azure/admin/workbench/ui/explorer/workbooks/) in Kinetica and select Import Workbook JSON.
 - GAdmin: GAdmin is an administration application for Kinetica that is by default available on port 8080. It is still the only native interface for querying the database if you use the developer edition or the on premise version of Kinetica. GAdmin however, will eventually be phased out in favour of Workbench. For examples that use SQL you can use the SQL file that is available in each example to run SQL queries on GAdmin.
+
+### How to load a workbook without having to download the entire repo
+The easiest way to download a workbook without the entire repo is to access the raw file and then right click and save as.
+![](/workbook_dl.png)
+
 ### Other languages
+
 Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client.
 
 # Install Kinetica
