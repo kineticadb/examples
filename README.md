@@ -27,8 +27,11 @@ Examples that use SQL will typically include a JSON workbook file and a SQL file
 - GAdmin: GAdmin is an administration application for Kinetica that is by default available on port 8080. It is still the only native interface for querying the database if you use the developer edition or the on premise version of Kinetica. GAdmin however, will eventually be phased out in favour of Workbench. For examples that use SQL you can use the SQL file that is available in each example to run SQL queries on GAdmin.
 
 ### How to load a workbook without having to download the entire repo
-The easiest way to download a workbook without the entire repo is to access the raw file and then right click and save as.
+The easiest way to download a workbook without the entire repo is to access the raw file and then right click to save as a JSON file on your machine.
 ![](/workbook_dl.png)
+
+You can then import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
+![](/worbook_import.png)
 
 ### Other languages
 
