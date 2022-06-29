@@ -9,7 +9,7 @@ Real time IoT monitoring system for transit trucks
 <h6 align="center">Demo Video 👇🏼</h6>
 <h3 align="center">
 
-[![Column row security in Kinetica](https://img.youtube.com/vi/eA7YcRD1UVI/0.jpg)](https://www.youtube.com/watch?v=eA7YcRD1UVI)
+[![Transit truck monitoring](https://img.youtube.com/vi/eA7YcRD1UVI/0.jpg)](https://www.youtube.com/watch?v=eA7YcRD1UVI)
 </h3>
 
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year.
