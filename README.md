@@ -39,7 +39,7 @@ Import the workbook to your instance of Kinetica using the plus icon on the work
 
 ### Other languages
 
-Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client.
+Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client. The language specific instructions are included with each example.
 
 # Install Kinetica
 The easiest way to get started is with the free developer edition of Kinetica.
@@ -61,5 +61,5 @@ To get community support, you can:
 1. Ask a question in our [community slack channel](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) 
 2. Post on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag.
 
-## More Information
+# More Information
 See our [Documentation](http://docs.kinetica.com/7.1/azure) for more information about workbooks and the Kinetica workbench.
