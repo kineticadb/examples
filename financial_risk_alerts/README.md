@@ -25,7 +25,7 @@ Finally, we see stark differences in viewpoints -- a number of very successful i
 ## Get started
 You will need an instance of Kinetica to get started. 
 
-If you are using workbench then you can simply upload the workbook json file (fin_risk.json) to get started.
+If you are using workbench then you can simply [upload the workbook json file](https://github.com/kineticadb/examples#how-to-load-a-workbook-without-having-to-download-the-entire-repo) (fin_risk.json) to get started.
 
 If you are on a version of Kinetica that does not include the workbench then you can use the SQL code (fin_risk.sql) along with the query functionality on [GAdmin](https://docs.kinetica.com/7.1/admin/gadmin/) to implement this demo.
 
