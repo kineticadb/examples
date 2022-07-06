@@ -26,10 +26,12 @@ This project contains **fully reproducible examples** of using Kinetica. Kinetic
 Each folder in this repo contains a fully reproducible example that uses either SQL or other supported languages (Python, Java, Javascript etc.).
 
 ### SQL workbooks
-A majority of the examples in this repo use interactive SQL workbooks. The easiest way to download a workbook without the entire repo is to access the raw file and then right click to save as a JSON file on your machine.
+A majority of the examples in this repo use interactive SQL workbooks. The easiest way to download a workbook (without the entire repo) is as follows. 
+
+Access the raw file and then right click to save as a JSON file on your machine.
 ![](/workbook_dl.png)
 
-You can then import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
+Import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
 ![](/worbook_import.png)
 
 
