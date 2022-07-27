@@ -89,22 +89,13 @@ The nodes for the graph are implicitly derived from the edges (as the starting a
 CREATE OR REPLACE DIRECTED GRAPH GRAPH_S (
     EDGES => INPUT_TABLE(
         SELECT
-            WKTLINE AS EDGE_WKTLINE,
-            TwoWay AS EDGE_DIRECTION
-        FROM
-            ki_home.seattle_roads
-    ),
-    WEIGHTS => INPUT_TABLE(
-        SELECT
-            WKTLINE AS WEIGHTS_EDGE_WKTLINE,
-            TwoWay AS WEIGHTS_EDGE_DIRECTION,
-            time AS WEIGHTS_VALUESPECIFIED
+            WKTLINE AS WKTLINE,
+            TwoWay AS DIRECTION,
+            time AS WEIGHT_VALUESPECIFIED
         FROM
             ki_home.seattle_roads
     ),
     OPTIONS => KV_PAIRS(
-        'recreate' = 'true',
-        'enable_graph_draw' = 'true',
         'graph_table' = 'seattle_graph_debug'
     )
 );
