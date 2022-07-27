@@ -4,7 +4,7 @@ Modeling and solving the traveling salesman problem as an MSDO
 <img src="https://img.shields.io/badge/tested-%3E=v7.7.1-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
 </h1>
 
-This workbook demonstrates how to run the travelling salesmen problem in batches - using the MSDO solver. In order to cast the problem into MSDO context, we need to assume each salesmen as a supply side with one truck each and the capacity of the truck equal to the number of deliveries. Likewise, the stop locations will be assumed to be the demand size with the demands size of eactly one in each. Steps involved:
+This workbook demonstrates how to run the travelling salesmen problem in batches - using the MSDO solver. In order to cast the problem into MSDO context, we need to assume each salesmen as a supply side with one truck each and the capacity of the truck equal to the number of deliveries. Likewise, the stop locations will be assumed to be the demand site with a demand size of exactly one. Steps involved:
 
 1. Read Graph Road Network raw data from S3 bucket
 2. Create Supply and Demand tables with the note above in mind s.t., the total supplies matches total demand size exactly.
