@@ -21,10 +21,10 @@ This example illustrates the first use case described above. Our data input for 
 We are interested in knowing when a particular vehicle (vehicle 5) is inside a certain zone of interest in downtown Washington DC. For illustration purposes, we will stream the alerts to a webhook but you can alternatively set these up to be registered via kafka or any other custom application like Slack (via webhooks).
 
 ## Try it yourself
-If you don't have Kinetica installed and running, please follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) to get everything setup to run this guide.
+**Install Kinetica**: If you don't have Kinetica installed and running, please follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) to get everything setup to run this guide.
 
-Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this example out on your own.
+**Import the workbook**: Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this example out on your own.
 
-You can find more information on Kinetica's geospatial capabilities from our [documentation website](https://docs.kinetica.com/7.1/location_intelligence/). We also have a [playlist on youtube](https://www.youtube.com/playlist?list=PLtLChx8K0ZZWxcmK4tD058UWWh0HJX2hQ) that provides an overview of Kinetica's geospatial capabilities.
+**More information**: You can find more information on Kinetica's geospatial capabilities from our [documentation website](https://docs.kinetica.com/7.1/location_intelligence/). We also have a [playlist on youtube](https://www.youtube.com/playlist?list=PLtLChx8K0ZZWxcmK4tD058UWWh0HJX2hQ) that provides an overview of Kinetica's geospatial capabilities.
 
-If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) and we will get back to you immediately.
+**For Help**: If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) and we will get back to you immediately.
