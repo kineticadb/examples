@@ -21,7 +21,7 @@ This example illustrates the first use case described above. Our data input for 
 ## Try it yourself
 If you don't have Kinetica installed and running, please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica) section to get everything setup to run this guide.
 
-Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook and try this demo out on your own.
+Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this demo out on your own.
 
 You can find more information about Kinetica's geospatial capabilities from our [documentation website](https://docs.kinetica.com/7.1/location_intelligence/)
 

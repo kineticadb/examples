@@ -24,4 +24,4 @@ The entire analysis is done with SQL on a small instance of Kinetica on Azure. W
 All you need to get started is an instance of Kinetica and the workbook file. Open the raw json workbook file in a tab and save it on to your desktop. You can then easily import them into your instance of Kinetica. 
 
 Kinetica is available via Azure and AWS as a managed service, it can also be installed and run on your local machine as a Docker container. Follow the instructions [here](https://www.kinetica.com/try/) to install Kinetica.
-If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-13ynqf304-bxuI_JKd9bW1BXny~Ze1QQ) and we will get back to you immediately.
+If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) and we will get back to you immediately.

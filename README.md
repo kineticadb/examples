@@ -32,11 +32,11 @@ A majority of the examples in this repo use interactive SQL workbooks. The easie
 
 Access the raw file and then right click to save as a JSON file on your machine.
 
-![](/workbook_dl.png)
+![](_imgs/workbook_dl.png)
 
 Import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
 
-![](/worbook_import.png)
+![](_imgs/worbook_import.png)
 
 
 ### Other languages

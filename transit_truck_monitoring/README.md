@@ -48,4 +48,4 @@ If you already have an instance of Kinetica, you can simply upload the json file
 Follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) if you do not have an instance of Kinetica.
 
 ## For Help
-Join our [community slack channel](https://join.slack.com/t/kinetica-community/shared_invite/zt-12vqzfkqo-fPi760XCuL0Ub1fxCzRIWQ) or search our [documentation](https://docs.kinetica.com/7.1/azure/)
+Join our [community slack channel](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) or search our [documentation](https://docs.kinetica.com/7.1/azure/)
