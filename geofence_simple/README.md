@@ -21,7 +21,7 @@ This example illustrates the first use case described above. Our data input for 
 We are interested in knowing when a particular vehicle (vehicle 5) is inside a certain zone of interest in downtown Washington DC. For illustration purposes, we will stream the alerts to a webhook but you can alternatively set these up to be registered via kafka or any other custom application like Slack (via webhooks).
 
 ## Try it yourself
-If you don't have Kinetica installed and running, please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica) section to get everything setup to run this guide.
+If you don't have Kinetica installed and running, please follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) to get everything setup to run this guide.
 
 Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this demo out on your own.
 
