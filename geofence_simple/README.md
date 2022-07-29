@@ -23,8 +23,8 @@ We are interested in knowing when a particular vehicle (vehicle 5) is inside a c
 ## Try it yourself
 If you don't have Kinetica installed and running, please follow the instructions [here](https://github.com/kineticadb/examples#install-kinetica) to get everything setup to run this guide.
 
-Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this demo out on your own.
+Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to import the workbook in this repo and try this example out on your own.
 
-You can find more information about Kinetica's geospatial capabilities from our [documentation website](https://docs.kinetica.com/7.1/location_intelligence/)
+You can find more information on Kinetica's geospatial capabilities from our [documentation website](https://docs.kinetica.com/7.1/location_intelligence/). We also have a [playlist on youtube](https://www.youtube.com/playlist?list=PLtLChx8K0ZZWxcmK4tD058UWWh0HJX2hQ) that provides an overview of Kinetica's geospatial capabilities.
 
 If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) and we will get back to you immediately.
