@@ -1,7 +1,7 @@
-<h5 align="center" style="margin:0px">
+<h3 align="center" style="margin:0px">
     <img width="200" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
-</h5>
-<h5 align="center" style="margin:0px">The database for time and space</h5>
+</h3>
+<h4 align="center" style="margin:0px">The database for time and space</h4>
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
