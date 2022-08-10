@@ -1,32 +1,29 @@
-/* Workbook: 13F Real time Financial Risk */
-/* Workbook Description: This demo creates a real time system for monitoring financial risk. */
+/* Workbook: Real-Time Financial Risk */
+/* Workbook Description: In this demo, we set up a real-time risk monitoring system with Kinetica that alerts investors as and when portfolio values fall below certain thresholds. This is a really simple demo that solves a challenging problem. The steps broadly are the following.
+1. Plug into streaming and static data sources and load the data into relational tables in Kinetica
+2. Setup a continuously updated risk monitoring view that combines portfolio holdings data with real time stock prices
+3. Setup up alerts via webhooks and/or sink the data to a Kafka topic
+All of this is done with just a few simple SQL statements and relational tables. */
 
 
-/* Worksheet: 1. Load the data */
-/* Worksheet Description: Description for Sheet 1 */
-
-
-/* TEXT Block Start */
-/*
-Versioning
-This workbook was made and tested using kinetica version 7.1.5.8.
-*/
-/* TEXT Block End */
+/* Worksheet: About this demo */
+/* Worksheet Description: Description
+ */
 
 
 /* TEXT Block Start */
 /*
-Peeking Real-Time into the World's Top Investors
+PEEKING REAL-TIME INTO THE WORLD'S TOP INVESTORS
 Many of the world's storied investors are Hedge Funds. Unlike mutual funds, to which most people have access to, hedge funds cater to institutions and wealthy investors. Fortunately, four times a year, we get a peek into this secretive world by way of regulatory filings. Hedge funds holdings give us a unique view into their thinking c/o the bets they are making.
 While holdings are published only quarterly, we have real-time information on the value of their known holdings -- so we can walk-forward the value of their holdings. This has traditionally been an academic curiosity, but with recent hedge fund blow-ups, this is now a practical exercise as well.
-Finally, we see stark differences in viewpoints -- a number of very successful investors are bullish while others are highly bearish. We see the heated debates on Twitter -- but the below analysis shows how their actual holdings are playing out.
+In this demo, we show how Kinetica can be used to set up a risk monitoring system that automatically triggers alerts based on shifts in portfolio values.
 */
 /* TEXT Block End */
 
 
 /* TEXT Block Start */
 /*
-Datasets
+DATASETS
 We will be using three datasets to drive our optimizations:
 Two are static files, both hosted in an S3 bucket on AWS:
 - SEC 13-F filings (up to Q1 - 2021)
@@ -34,6 +31,10 @@ Two are static files, both hosted in an S3 bucket on AWS:
 The final dataset is a 24-7 real-time stream of real exchange prices that simulates market movements. This is available as a Kafka topic that can be consumed directly from Confluent Cloud.
 */
 /* TEXT Block End */
+
+
+/* Worksheet: 1. Load the data */
+/* Worksheet Description: Description for Sheet 1 */
 
 
 /* TEXT Block Start */
@@ -145,7 +146,7 @@ Both the static datasets are available via a public S3 bucket - guidesdatapublic
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE static_13F
+CREATE OR REPLACE DATA SOURCE fin_risk.static_13F
 LOCATION = 'S3' 
 WITH OPTIONS (
     ANONYMOUS = 'true',
@@ -164,7 +165,7 @@ The real time exchange rate data is maintained as a Kafka topic on Confluent clo
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL confluent_cred
+CREATE OR REPLACE CREDENTIAL fin_risk.confluent_cred
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
@@ -178,12 +179,12 @@ WITH OPTIONS (
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE streaming_13F
+CREATE OR REPLACE DATA SOURCE fin_risk.streaming_13F
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'px-equities-trades',
-    credential = 'confluent_cred'
+    credential = 'fin_risk.confluent_cred'
 );
 /* SQL Block End */
 
@@ -201,7 +202,7 @@ LOAD DATA INTO fin_risk.filings_quarterly
 FROM FILE PATHS '13F/consolidated.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'static_13F'
+    DATA SOURCE = 'fin_risk.static_13F'
 );
 /* SQL Block End */
 
@@ -211,7 +212,7 @@ LOAD DATA INTO fin_risk.px_eod
 FROM FILE PATHS '13F/pxeod.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'static_13F'
+    DATA SOURCE = 'fin_risk.static_13F'
 );
 /* SQL Block End */
 
@@ -228,7 +229,7 @@ LOAD DATA INTO fin_risk.px_streaming_quotes
 FROM FILE PATHS ''  /* not mandatory */
 FORMAT JSON 
 WITH OPTIONS (
-    data source = 'streaming_13F',
+    data source = 'fin_risk.streaming_13F',
     kafka_group_id = 'BH_90210', /* not mandatory*/
     subscribe = TRUE,
     type_inference_mode = 'speed'
@@ -352,7 +353,7 @@ CREATE STREAM alert_webhook_fin_risk
 ON TABLE fin_risk.portfolio_alert
 WITH OPTIONS 
 (
-    DESTINATION = 'https://webhook.site/0bf1d616-7fb2-4ccf-9a94-a33287d9c09c' -- 'Paste Webhook URL'
+    DESTINATION = 'https://webhook.site/8d4b9080-0760-4793-8d96-49c4e1b1bcd5' -- 'Paste Webhook URL'
 );
 /* SQL Block End */
 
@@ -366,12 +367,12 @@ The pattern above can be used to setup slack alerts as well. You can follow the 
 
 
 /* SQL Block Start */
-CREATE STREAM alert_slack_fin_risk
-ON TABLE fin_risk.portfolio_alert
-WITH OPTIONS 
-(
-    DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>'
-);
+-- CREATE STREAM alert_slack_fin_risk
+-- ON TABLE fin_risk.portfolio_alert
+-- WITH OPTIONS 
+-- (
+--     DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>'
+-- );
 /* SQL Block End */
 
 
