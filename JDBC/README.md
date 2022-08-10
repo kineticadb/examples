@@ -10,9 +10,9 @@
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>
-<h1 align = "center">
+<p align = "center">
  <img src="https://img.shields.io/badge/tested-%3E=v7.7.3-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
-</h1>
+</p>
 <h1>
 Connect to data sources using JDBC
 </h1>
