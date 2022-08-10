@@ -16,6 +16,7 @@
 <h1>
 Connect to data sources using JDBC
 </h1>
+
 Kinetica supports the use of Java DataBase Connectivity (JDBC) to ingress and egress data from data sources.
 
 You can either load a JDBC driver directly into a Kinetica cluster. Or you could point to a JDBC driver that is managed by CData, which is a data connectivity platform that provides and maintains JDBC drivers for hundreds of databases and applications. 
