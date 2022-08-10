@@ -1,8 +1,7 @@
-<h3 align="center">
-    <img width="300" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
+<h3 align="center" style="margin:0px">
+    <img width="200" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
 </h3>
-<h2 align="center">The database for time and space</h2>
-<h3 align="center">
+<h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
     <a href="https://docs.kinetica.com/7.1/">Docs</a>
@@ -10,13 +9,14 @@
     <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
-</h3>
-
-<h1 align = "center">
+</h5>
+<p align = "center">
+ <img src="https://img.shields.io/badge/tested-%3E=v7.7.1-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
+</p>
+<h1>
 Multiple Supply Demand Chain Optimization (MSDO) Graph Solver
-<br>
-<img src="https://img.shields.io/badge/tested-%3E=v7.7.1-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
 </h1>
+
 This workbook demonstrates the application of Kinetica's Multiple Supply Demand Chain Optimization (MSDO) solver to optimize a scenario with two supply depots with 12 trucks that need to service multiple demand destination that are spread around Washington DC.
 
 ## Background
@@ -26,11 +26,11 @@ Matching supply chain logistics to demand based routing is a daily, non-trivial 
 For instance, a depot can have  many vehicles with a variety of truck capacities to deliver varying amounts of  goods at each customer location spread across a vast geography as seen below. The ultimate goal is to find the ‘optimal’ routing and scheduling for each truck individually such that the total transportation cost is minimized.
 
 ### Try it yourself
-If you don't have Kinetica installed and running, please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica) section to get everything setup to run this guide.
+All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
 
-The instructions are provided within the workbook itself. Follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to try this demo out on your own.
+Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
-If you are unfamiliar with Kinetica's graph API you can learn more about it [here](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
+You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
 
 # Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
