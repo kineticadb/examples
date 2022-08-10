@@ -25,7 +25,7 @@ You will need an installation of Kinetica to run this guide. Follow the instruct
 Click on the link below to launch an interactive notebook that walks you through the guide.
 
 <div align="center">
-<a href="https://deepnote.com/project/Kinetica-Developers-Guide-NQTcms-UTHm6N9MZQjvrIA/%2Fpython_dev_guide.ipynb" target="_blank"><img src="https://deepnote.com/buttons/launch-in-deepnote-white.svg" alt="Launch in Deepnote"></a>
+<a href="https://deepnote.com/@hari-subhash-a4ca/Kinetica-Developers-Guide-3504dc9a-cf94-4c79-ba37-d319423beb20" target="_blank"><img src="https://deepnote.com/buttons/launch-in-deepnote-white.svg" alt="Launch in Deepnote"></a>
 </div>
 
 Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
