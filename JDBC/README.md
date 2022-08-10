@@ -1,8 +1,8 @@
-<h3 align="center">
-    <img width="300" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
-</h3>
-<h2 align="center">The database for time and space</h2>
-<h3 align="center">
+<h5 align="center">
+    <img width="200" src="https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kinetica_logo.svg" alt="Kinetica Logo"/>
+</h5>
+<h5 align="center">The database for time and space</h5>
+<h5 align="center">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
     <a href="https://docs.kinetica.com/7.1/">Docs</a>
@@ -10,8 +10,8 @@
     <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
-</h3>
-<h1 align = "left">
+</h5>
+<h1 align = "center">
 Connect to data sources using JDBC
 <br>
 <img src="https://img.shields.io/badge/tested-%3E=v7.7.3-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
