@@ -25,19 +25,19 @@ Matching supply chain logistics to demand based routing is a daily, non-trivial 
 
 For instance, a depot can have  many vehicles with a variety of truck capacities to deliver varying amounts of  goods at each customer location spread across a vast geography as seen below. The ultimate goal is to find the ‘optimal’ routing and scheduling for each truck individually such that the total transportation cost is minimized.
 
-### Try it yourself
+## Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
 
 Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
 You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
 
-# Support
+## Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
 
 For support your can post on [stackoverflow](https://stackoverflow.com/questions/tagged/kinetica) under the kinetica tag or [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg).
 
-# Contact Us
+## Contact Us
 * Ask a question on slack: [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg)
 * Follow on Github: <a class="github-button" href="https://github.com/kineticadb" data-size="large" aria-label="Follow @kineticadb on GitHub">Follow @kineticadb</a> 
 * Email us: [support@kinetica.com](mailto:support@kinetica.com)
