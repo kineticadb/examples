@@ -63,6 +63,6 @@ For support your can post on [stackoverflow](https://stackoverflow.com/questions
 
 # Contact Us
 * Ask a question on slack: [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg)
-* Follow on Github: <input type="submit" name="commit" value="Follow" class="btn" title="Follow kineticadb" aria-label="Follow kineticadb" data-hydro-click="{&quot;event_type&quot;:&quot;user_profile.click&quot;,&quot;payload&quot;:{&quot;profile_user_id&quot;:16707508,&quot;target&quot;:&quot;FOLLOW_BUTTON&quot;,&quot;user_id&quot;:11877225,&quot;originating_url&quot;:&quot;https://github.com/kineticadb&quot;}}" data-hydro-click-hmac="88691dcdd6ff252deb3aa8b794ea96a62997ee19c6f3bf39bdd3dfbd2a0fcdbf" data-disable-with="Follow">
+* Follow on Github: <a href="https://github.com/kineticadb%22%7D%7D" target="_blank">Follow @kineticadb</a>
 * Email us: [support@kinetica.com](mailto:support@kinetica.com)
 * Visit: [https://www.kinetica.com/contact/](https://www.kinetica.com/contact/)
