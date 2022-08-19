@@ -63,6 +63,6 @@ For support your can post on [stackoverflow](https://stackoverflow.com/questions
 
 # Contact Us
 * Ask a question on slack: [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg)
-* Follow on Github: <a href="https://github.com/kineticadb" target="_blank">Follow @kineticadb</a>
+* Follow on Github: [Follow @kineticadb](https://github.com/kineticadb)
 * Email us: [support@kinetica.com](mailto:support@kinetica.com)
 * Visit: [https://www.kinetica.com/contact/](https://www.kinetica.com/contact/)
