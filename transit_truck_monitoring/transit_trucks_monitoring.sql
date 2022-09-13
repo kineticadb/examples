@@ -1,5 +1,21 @@
-/* Workbook: Real time transit truck monitoring */
-/* Workbook Description: Monitor the temperature of cold storage transit trucks in real time. */
+/* Workbook: Real-Time Truck Monitoring */
+/* Workbook Description: This demo sets up a monitoring system for cold transit trucks using Kinetica. There are two streaming data inputs of interest – GPS location and refrigeration metrics. The key challenge is that we need to combine the two streaming inputs (location and metrics) that are recorded using sensors that transmit the information at different timestamps. We solve this by performing an inexact ASOF join that is kept updated in real time using a materialized view. */
+
+
+/* Worksheet: About this demo */
+/* Worksheet Description: Description for sheet 6 */
+
+
+/* TEXT Block Start */
+/*
+COLD TRANSIT TRUCK MONITORING SYSTEM WITH KINETICA
+Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year. Maintaining the correct temperature in transit is THE challenge in cold chain logistics.
+The temperature inside a delivery truck can vary a lot based on the number of times it is opened for deliveries, the weather outside or due to malfunctioning equipment. It is therefore important to monitor the conditions inside the truck at all times so that any shift from ideal storage conditions can be immediately flagged and corrected.
+A real time monitoring system for cold transit requires you to combine different streaming data sources that record things like GPS, pressure, temperature etc. But the challenge  is that this information is often coming from different sensors which record and send this information out at different points in time.  So combining them is not a straightforward task.
+In this demo, we use Kinetica's ASOF join and materialized view capabilities to perform an inexact join between vehicle location data and metrics that is continuously updated as new data streams in.
+So let's get started!
+*/
+/* TEXT Block End */
 
 
 /* Worksheet: 1. Data setup (DDL) */
@@ -8,36 +24,6 @@
 
 /* TEXT Block Start */
 /*
-Cold transit truck monitoring system with Kinetica
-Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year. Maintaining the correct temperature in transit is THE challenge in cold chain logistics.
-The temperature inside a delivery truck can vary a lot based on the number of times it is opened for deliveries, the weather outside or due to malfunctioning equipment. It is therefore important to monitor the conditions inside the truck at all times so that any shift from ideal storage conditions can be immediately flagged and corrected.
-A real time monitoring system for cold transit requires you to combine different streaming data sources that record things like GPS, pressure, temperature etc. But the challenge  is that this information is often coming from different sensors which record and send this information out at different points in time.  So combining them is not a straightforward task.
-In this demo, we use Kinetica's ASOF join and materialized view capabilities to perform an inexact join between vehicle location data and metrics that is continuously updated as new data streams in.
-So let's get started!
-⚠️ WARNING
-: Make sure to pause the Kafka stream ingest after you are done with the demo (see the cleanup sheet) so that your tables don't get too large.
-*/
-/* TEXT Block End */
-
-
-/* TEXT Block Start */
-/*
-Reduce the kafka batch size
-The default batch size when ingesting data from kafka is 1000 records. While this is good for most purposes, we will reduce that to 10 for this demo. This is because we want to generate a smooth visualization for the location of the transit trucks.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
--- Reducing the default batch size for kafka so that tracks appear smooth. Larger batch sizes will render as big jumps when visualizing tracks.
-ALTER SYSTEM SET PROPERTIES ('kafka_batch_size' = '10');
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-CREATE THE SCHEMA AND TABLES
-Kinetica uses schema's to organize tables. It is good practice to have a schema defined for each project. Tables that are created without an explicit schema assignment are placed in the default schema ki_home.
 ABOUT THE TABLES
 We will be working with two streaming data tables
 with fake data
@@ -47,12 +33,7 @@ with fake data
 
 
 /* SQL Block Start */
-CREATE SCHEMA IF NOT EXISTS transit_trucks;
-/* SQL Block End */
-
-
-/* SQL Block Start */
-CREATE OR REPLACE TABLE transit_trucks.vehicle_locations
+CREATE OR REPLACE TABLE vehicle_locations
 (
     x float,
     y float,
@@ -66,7 +47,7 @@ CREATE OR REPLACE TABLE transit_trucks.vehicle_locations
 
 
 /* SQL Block Start */
-CREATE OR REPLACE TABLE transit_trucks.vehicle_metrics
+CREATE OR REPLACE TABLE vehicle_metrics
 (
     ID integer,
     "cycle" int,
@@ -110,7 +91,7 @@ It's usually best practice to specify credentials separately so that they can be
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL transit_trucks.confluent_creds
+CREATE OR REPLACE CREDENTIAL confluent_creds
 TYPE = 'kafka'
 WITH OPTIONS (
     'security.protocol' = 'SASL_SSL',
@@ -122,21 +103,21 @@ WITH OPTIONS (
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE transit_trucks.vehicle_metrics_source
+CREATE OR REPLACE DATA SOURCE vehicle_metrics_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_metrics',
-    credential = 'transit_trucks.confluent_creds'
+    credential = 'confluent_creds'
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE transit_trucks.vehicle_locations_source
+CREATE OR REPLACE DATA SOURCE vehicle_locations_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_locations',
-    credential = 'transit_trucks.confluent_creds'
+    credential = 'confluent_creds'
 );
 /* SQL Block End */
 
@@ -145,34 +126,35 @@ WITH OPTIONS (
 /*
 LOAD THE DATA FROM THE DATA SOURCES
 Now that the data sources are registered, we can start loading data from them into the tables that we defined earlier.
+⚠️ WARNING
+: Make sure to pause the Kafka stream ingest after you are done with the demo (see the cleanup sheet) so that your tables don't get too large.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-LOAD DATA INTO transit_trucks.vehicle_locations
-FROM FILE PATH ''
+LOAD DATA INTO vehicle_locations
 FORMAT JSON
 WITH OPTIONS (
-    DATA SOURCE = 'transit_trucks.vehicle_locations_source',
-    KAFKA_GROUP_ID = 'BH_90210',
+    DATA SOURCE = 'vehicle_locations_source',
     SUBSCRIBE = TRUE,
-    TYPE_INFERENCE_MODE = 'speed'
+    TYPE_INFERENCE_MODE = 'speed',
+    ERROR_HANDLING = 'permissive',
+    POLL_INTERVAL = '5 seconds'
 
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
-LOAD DATA INTO transit_trucks.vehicle_metrics
-FROM FILE PATH ''
+LOAD DATA INTO vehicle_metrics
 FORMAT JSON
 WITH OPTIONS (
-    DATA SOURCE = 'transit_trucks.vehicle_metrics_source',
-    KAFKA_GROUP_ID = 'BH_90210',
+    DATA SOURCE = 'vehicle_metrics_source',
     SUBSCRIBE = TRUE,
-    TYPE_INFERENCE_MODE = 'speed'
-
+    TYPE_INFERENCE_MODE = 'speed',
+    ERROR_HANDLING = 'permissive',
+    POLL_INTERVAL = '5 seconds'
 );
 /* SQL Block End */
 
@@ -196,20 +178,32 @@ Note
 
 /* SQL Block Start */
 SELECT TRACKID, COUNT(*) 
-FROM transit_trucks.vehicle_locations
+FROM vehicle_locations
 GROUP BY TRACKID;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+-- A Materialized view that only shows the last 10 minutes of locations so that the map does not look too filled up
+CREATE OR REPLACE MATERIALIZED VIEW location_10mins
+REFRESH EVERY 5 SECONDS
+AS 
+(
+    SELECT * FROM vehicle_locations
+    WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 10
+);
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-A MAP SHOWING THE MOVEMENT OF TRUCKS
+A MAP SHOWING THE MOVEMENT OF TRUCKS (USING THE VIEW CREATED ABOVE)
 Kinetica provides geospatial object called tracks that represents the path an object takes across the map. A track is a combination of an id, timestamp and a point (lat and lon).  We can use this feature to represent moving objects on a map.
 We have currently set the auto refresh option to 5 seconds. So the map will refresh every 5 seconds to show the movement of trucks over time as new data streams in from the kafka topics. You can use the configure modal to play around with the different options for the map block.
 ✎ Note
 : The tracks interface on Kinetica (as of version 7.1.6.9)
 requires
-that column names in the table that is being used to render the tracks be the following TRACKID, TIMESTAMP, x, y. The tracks currently will not render correctly if the columns are not named as above. Future versions of Kinetica will relax these restrictions.
+that column names in the table that is being used to render the tracks be the following TRACKID, TIMESTAMP, x, y. The tracks currently will not render correctly if the columns are not named as above. Future versions of Kinetica relax these restrictions.
 */
 /* TEXT Block End */
 
@@ -224,7 +218,7 @@ Let's see the number of records for the vehicle metrics table.
 
 /* SQL Block Start */
 SELECT ID as truck_id, COUNT(*) as count
-FROM transit_trucks.vehicle_metrics
+FROM vehicle_metrics
 GROUP BY ID;
 /* SQL Block End */
 
@@ -241,7 +235,7 @@ The visualization will be sparse initially (most likely a single point) the firs
 
 /* SQL Block Start */
 SELECT id, HOUR(ts) as ts_hour, max(temp) as max_temp
-FROM transit_trucks.vehicle_metrics
+FROM vehicle_metrics
 GROUP BY id, HOUR(ts);
 /* SQL Block End */
 
@@ -262,19 +256,19 @@ The vehicle location and metrics data share an id column and timestamp. A simple
 
 /* SQL Block Start */
 -- Create a materialized view that joins the two tables using id and timestamps
-CREATE OR REPLACE MATERIALIZED VIEW transit_trucks.vehicle_analytics
+CREATE OR REPLACE MATERIALIZED VIEW vehicle_analytics
 REFRESH EVERY 5 SECONDS
 AS
 SELECT vl.TRACKID AS vehicle_id, DATETIME(vm.ts) as DATETIME, vm.pressure
 FROM 
-transit_trucks.vehicle_locations vl 
-INNER JOIN transit_trucks.vehicle_metrics vm ON vl.TRACKID = vm.id AND vl.TIMESTAMP = vm.ts;
+vehicle_locations vl 
+INNER JOIN vehicle_metrics vm ON vl.TRACKID = vm.id AND vl.TIMESTAMP = vm.ts;
 /* SQL Block End */
 
 
 /* SQL Block Start */
 -- We don't get that many hits with this
-SELECT COUNT(*) FROM transit_trucks.vehicle_analytics;
+SELECT COUNT(*) FROM vehicle_analytics;
 /* SQL Block End */
 
 
@@ -299,7 +293,7 @@ The great thing about using a materialized view here is that all of the calculat
 
 
 /* SQL Block Start */
-CREATE OR REPLACE MATERIALIZED VIEW transit_trucks.realtime_vehicle_analytics
+CREATE OR REPLACE MATERIALIZED VIEW realtime_vehicle_analytics
 REFRESH EVERY 5 SECONDS 
 AS 
 SELECT
@@ -311,9 +305,9 @@ vl.y,
 (vm.pressure/100) as pressure,
 (vm."compression"/20) as avg_compression,
 (vm.temp/1000) as temperature
-FROM transit_trucks.vehicle_locations vl 
+FROM vehicle_locations vl 
 INNER JOIN
-transit_trucks.vehicle_metrics vm
+vehicle_metrics vm
 ON vl.TRACKID = vm.id AND
 ASOF(vl.TIMESTAMP, vm.ts, INTERVAL '0' SECONDS, INTERVAL '10' SECONDS, MIN);
 /* SQL Block End */
@@ -330,7 +324,7 @@ Since we are using an ASOF join to establish a window within which to search for
 /* SQL Block Start */
 SELECT COUNT(*) 
 FROM 
-transit_trucks.realtime_vehicle_analytics;
+realtime_vehicle_analytics;
 /* SQL Block End */
 
 
@@ -358,12 +352,13 @@ For this demo, we recommend using the website: https://webhook.site/ to generate
 
 
 /* SQL Block Start */
+-- This query will not run as is. Update the URL below to make it work.
 CREATE STREAM alert_webhook
-ON TABLE transit_trucks.realtime_vehicle_analytics
+ON TABLE realtime_vehicle_analytics
 WHERE temperature > 60
 WITH OPTIONS 
 (
-    DESTINATION = 'https://webhook.site/0bf1d616-7fb2-4ccf-9a94-a33287d9c09c' -- 'Paste Webhook URL'
+    DESTINATION = 'WEBHOOK_URL' -- 'Paste Webhook URL (see above)'
 );
 /* SQL Block End */
 
@@ -380,11 +375,11 @@ The only change in the query below is that we use a webhook that is specifically
 
 /* SQL Block Start */
 CREATE STREAM alert_slack_transit_truck
-ON TABLE transit_trucks.realtime_vehicle_analytics
+ON TABLE realtime_vehicle_analytics
 WHERE temperature > 60
 WITH OPTIONS 
 (
-    DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>'
+    DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>' --Update the url with your key.
 );
 /* SQL Block End */
 
@@ -410,7 +405,7 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 
 /* SQL Block Start */
 -- CREATE STREAM transit_truck_alerts_stream on 
--- TABLE transit_trucks.realtime_vehicle_analytics
+-- TABLE realtime_vehicle_analytics
 -- WITH OPTIONS 
 -- (
 --     event = 'insert', 
@@ -429,40 +424,22 @@ Finally, you can also build a dashboard app that provides a comprehensive view o
 /* TEXT Block End */
 
 
-/* Worksheet: 4. Clean up sheet */
-/* Worksheet Description: Description for sheet 2 */
+/* Worksheet: ❗️PAUSE SUBSCRIPTION */
+/* Worksheet Description: Description for sheet 5 */
 
 
 /* TEXT Block Start */
 /*
-CLEAN UP
-1. Reset the Kafka ingest batch size back to the default setting.
-2. Drop the schema and associated data
+PAUSE SUBSCRIPTIONS
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
--- Resetting the batch size back to default
-ALTER SYSTEM SET PROPERTIES ('kafka_batch_size' = '1000');
-/* SQL Block End */
+ALTER TABLE vehicle_locations
+PAUSE SUBSCRIPTION vehicle_locations_source;
 
-
-/* TEXT Block Start */
-/*
-Drop the schema and all the tables inside it.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
--- Drop the tables (we need to do this first because )
-DROP TABLE IF EXISTS transit_trucks.vehicle_locations;
-DROP TABLE IF EXISTS transit_trucks.vehicle_metrics;
-/* SQL Block End */
-
-
-/* SQL Block Start */
--- Drop the schema (and associated data sources)
-DROP SCHEMA IF EXISTS transit_trucks CASCADE;
+ALTER TABLE vehicle_metrics
+PAUSE SUBSCRIPTION vehicle_metrics_source;
 /* SQL Block End */

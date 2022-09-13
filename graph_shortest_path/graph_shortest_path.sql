@@ -1,4 +1,4 @@
-/* Workbook: Shortest Path - Guide */
+/* Workbook: Graph Shortest Path */
 /* Workbook Description: This guide shows how to use Kinetica's graph API to the shortest routes between different points in Seattle. The entire exercise is done using SQL. There are three types of routes that we solve - single source to single destination, a single source to many destinations and many sources to many destinations. */
 
 
@@ -27,12 +27,7 @@ The data for this guide is store in a publicly accessible AWS S3 bucket. Our fir
 
 
 /* SQL Block Start */
-CREATE SCHEMA IF NOT EXISTS graph_sp;
-/* SQL Block End */
-
-
-/* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE graph_sp.guides_data
+CREATE OR REPLACE DATA SOURCE guides_data
 LOCATION = 'S3'
 WITH OPTIONS (
     ANONYMOUS = 'true',
@@ -52,11 +47,11 @@ We will be using the seattle_roads file for this guide. The road weights data pr
 
 
 /* SQL Block Start */
-LOAD DATA INTO graph_sp.seattle_roads
+LOAD DATA INTO seattle_roads
 FROM FILE PATHS 'seattle_roads.csv'
 FORMAT TEXT 
 WITH OPTIONS(
-    DATA SOURCE = 'graph_sp.guides_data'
+    DATA SOURCE = 'guides_data'
 );
 /* SQL Block End */
 
@@ -67,7 +62,7 @@ WITH OPTIONS(
 
 /* SQL Block Start */
 SELECT * 
-FROM graph_sp.seattle_roads
+FROM seattle_roads
 LIMIT 5;
 /* SQL Block End */
 
@@ -119,23 +114,24 @@ Picking the identifier combination for creating the graph
 Based on the data that we have, we can create a weighted graph with direction.
 - the edges are represented using WKT LINESTRINGs in the WKTLINE column of the seattle_road_network table (EDGE_WKTLINE). The road segments' directionality is derived from the TwoWay column of the seattle_road_network table (EDGE_DIRECTION).
 - the weights are represented using the time taken to travel the segment found in the time column of the seattle_road_network table (WEIGHTS_VALUESPECIFIED). The weights are matched to the edges using the same WKTLINE column as edges (WEIGHTS_EDGE_WKTLINE) and the same TwoWay column as the edge direction (WEIGHTS_EDGE_DIRECTION).
+
 The nodes for the graph are implicitly derived from the edges (as the starting and ending points of each edge). The restrictions component is empty since we are not restricting any of the nodes or edges for this example.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DIRECTED GRAPH graph_sp.GRAPH_S (
+CREATE OR REPLACE DIRECTED GRAPH GRAPH_S (
     EDGES => INPUT_TABLE(
         SELECT
             WKTLINE AS WKTLINE,
             TwoWay AS DIRECTION,
             time AS WEIGHT_VALUESPECIFIED
         FROM
-            graph_sp.seattle_roads
+            seattle_roads
     ),
     OPTIONS => KV_PAIRS(
-        'graph_table' = 'graph_sp.seattle_graph_debug'
+        'graph_table' = 'seattle_graph_debug'
     )
 );
 /* SQL Block End */
@@ -178,14 +174,14 @@ For our first route combination we start with one source - `POINT(-122.1792501 4
 /* SQL Block Start */
 -- Create tables to record the source and destination points
 
-CREATE OR REPLACE TABLE graph_sp.seattle_sources (wkt WKT NOT NULL);
+CREATE OR REPLACE TABLE seattle_sources (wkt WKT NOT NULL);
 
-INSERT INTO graph_sp.seattle_sources 
+INSERT INTO seattle_sources 
 VALUES ('POINT(-122.1792501 47.2113606)');
 
-CREATE OR REPLACE TABLE graph_sp.seattle_dest (wkt WKT NOT NULL);
+CREATE OR REPLACE TABLE seattle_dest (wkt WKT NOT NULL);
 
-INSERT INTO graph_sp.seattle_dest
+INSERT INTO seattle_dest
 VALUES ('POINT(-122.2221 47.5707)');
 /* SQL Block End */
 
@@ -200,13 +196,13 @@ SOLVE_GRAPH is a function that can be executed either within a SELECT statement 
 
 /* SQL Block Start */
 -- Execute the solve graph function
-DROP TABLE IF EXISTS graph_sp.GRAPH_S_ONE_ONE_SOLVED;
+DROP TABLE IF EXISTS GRAPH_S_ONE_ONE_SOLVED;
 EXECUTE FUNCTION SOLVE_GRAPH(
-    GRAPH => 'graph_sp.GRAPH_S',
+    GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM graph_sp.seattle_sources),
-    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM graph_sp.seattle_dest),
-    SOLUTION_TABLE => 'graph_sp.GRAPH_S_ONE_ONE_SOLVED'
+    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM seattle_sources),
+    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM seattle_dest),
+    SOLUTION_TABLE => 'GRAPH_S_ONE_ONE_SOLVED'
 );
 /* SQL Block End */
 
@@ -219,7 +215,7 @@ The solutions table provides the route for the shortest path and its associated 
 
 
 /* SQL Block Start */
-SELECT * FROM graph_sp.GRAPH_S_ONE_ONE_SOLVED;
+SELECT * FROM GRAPH_S_ONE_ONE_SOLVED;
 /* SQL Block End */
 
 
@@ -239,7 +235,7 @@ Next we want to find the shortest path from the same source point to multiple de
 
 
 /* SQL Block Start */
-INSERT INTO graph_sp.seattle_dest
+INSERT INTO seattle_dest
 VALUES
 ('POINT(-122.541017 47.809121)'), 
 ('POINT(-122.520440 47.624725)'),
@@ -255,13 +251,13 @@ The only change we need to make to our previous code, now is the name of the sol
 
 
 /* SQL Block Start */
-drop table if exists graph_sp.GRAPH_S_ONE_MANY_SOLVED;
+drop table if exists GRAPH_S_ONE_MANY_SOLVED;
 EXECUTE FUNCTION SOLVE_GRAPH(
-    GRAPH => 'graph_sp.GRAPH_S',
+    GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM graph_sp.seattle_sources),
-    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM graph_sp.seattle_dest),
-    SOLUTION_TABLE => 'graph_sp.GRAPH_S_ONE_MANY_SOLVED'
+    SOURCE_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM seattle_sources),
+    DESTINATION_NODES => INPUT_TABLE(SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT FROM seattle_dest),
+    SOLUTION_TABLE => 'GRAPH_S_ONE_MANY_SOLVED'
 );
 /* SQL Block End */
 
@@ -274,7 +270,7 @@ The solution table lists each route from the source point to the 4 destination p
 
 
 /* SQL Block Start */
-select * from graph_sp.GRAPH_S_ONE_MANY_SOLVED;
+select * from GRAPH_S_ONE_MANY_SOLVED;
 /* SQL Block End */
 
 
@@ -289,7 +285,7 @@ Let's add these additional values to the source table. Note that we don't need t
 
 
 /* SQL Block Start */
-INSERT INTO graph_sp.seattle_sources 
+INSERT INTO seattle_sources 
 VALUES
 ('POINT(-122.1792501 47.2113606)'), 
 ('POINT(-122.375180125237 47.8122103214264)'),
@@ -306,11 +302,11 @@ The only thing to update in our solver function is the name of the solution tabl
 
 /* SQL Block Start */
 EXECUTE FUNCTION SOLVE_GRAPH(
-    GRAPH => 'graph_sp.GRAPH_S',
+    GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',
-    SOURCE_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from graph_sp.seattle_sources)),
-    DESTINATION_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from graph_sp.seattle_dest)),
-    SOLUTION_TABLE => 'graph_sp.GRAPH_S_MANY_MANY_SOLVED'
+    SOURCE_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_sources)),
+    DESTINATION_NODES => INPUT_TABLE((SELECT ST_GEOMFROMTEXT(wkt) AS NODE_WKTPOINT from seattle_dest)),
+    SOLUTION_TABLE => 'GRAPH_S_MANY_MANY_SOLVED'
 );
 /* SQL Block End */
 
@@ -323,15 +319,5 @@ Table shows the 4 routes from the two source points to two different destination
 
 
 /* SQL Block Start */
-SELECT * FROM graph_sp.GRAPH_S_MANY_MANY_SOLVED;
-/* SQL Block End */
-
-
-/* Worksheet: 5. 🧹 Clean up sheet */
-/* Worksheet Description: Description for sheet 5 */
-
-
-/* SQL Block Start */
--- Drop schema and all its contents
-DROP SCHEMA IF EXISTS graph_sp CASCADE;
+SELECT * FROM GRAPH_S_MANY_MANY_SOLVED;
 /* SQL Block End */

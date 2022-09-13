@@ -51,31 +51,9 @@ ki_home
 /* TEXT Block End */
 
 
-/* TEXT Block Start */
-/*
-1. Create the schema
-Let's drop the schema if it exists and then create it again.
-Note
-: Running this will delete any tables and data in the schema.
-*/
-/* TEXT Block End */
-
-
 /* SQL Block Start */
-DROP SCHEMA IF EXISTS fin_risk CASCADE;
-CREATE SCHEMA fin_risk;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-2a. Create the quarterly filing table
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-CREATE OR REPLACE TABLE fin_risk.filings_quarterly
+-- Create the filings table
+CREATE OR REPLACE TABLE filings_quarterly
 (
    "company" VARCHAR (128, DICT) NOT NULL,
    "filing" DATETIME NOT NULL,
@@ -98,15 +76,9 @@ CREATE OR REPLACE TABLE fin_risk.filings_quarterly
 /* SQL Block End */
 
 
-/* TEXT Block Start */
-/*
-2b. Create the EOD price table
-*/
-/* TEXT Block End */
-
-
 /* SQL Block Start */
-CREATE OR REPLACE TABLE fin_risk.px_eod
+-- Create the EOD price table
+CREATE OR REPLACE TABLE px_eod
 (
    "Symbol" VARCHAR (8, DICT) NOT NULL,
    "Date" VARCHAR (16, DICT) NOT NULL,
@@ -119,15 +91,9 @@ CREATE OR REPLACE TABLE fin_risk.px_eod
 /* SQL Block End */
 
 
-/* TEXT Block Start */
-/*
-2c. Create the table for real time exchange rate
-*/
-/* TEXT Block End */
-
-
 /* SQL Block Start */
-CREATE OR REPLACE TABLE fin_risk.px_streaming_quotes
+-- Create the table for real time exchange rate
+CREATE OR REPLACE TABLE px_streaming_quotes
 (
    "symbol" VARCHAR (8, DICT) NOT NULL,
    "px_last" DOUBLE NOT NULL,
@@ -139,14 +105,14 @@ CREATE OR REPLACE TABLE fin_risk.px_streaming_quotes
 
 /* TEXT Block Start */
 /*
-3a. Create the data source (static)
+CREATE THE STATIC DATA SOURCE
 Both the static datasets are available via a public S3 bucket - guidesdatapublic. We register a data source called 13F that references this externally maintained data. Note that we are not using any credentials to access this data because the permissions on the S3 bucket are set to be public. See the section below
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE fin_risk.static_13F
+CREATE OR REPLACE DATA SOURCE static_13F
 LOCATION = 'S3' 
 WITH OPTIONS (
     ANONYMOUS = 'true',
@@ -158,14 +124,14 @@ WITH OPTIONS (
 
 /* TEXT Block Start */
 /*
-3b. Create the data source for streaming data
-The real time exchange rate data is maintained as a Kafka topic on Confluent cloud.
+CREATE THE STREAMING DATA SOURCE
+The real time exchange rate data is maintained as a Kafka topic on Confluent cloud. First we will create a credential and then we create the data source.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL fin_risk.confluent_cred
+CREATE OR REPLACE CREDENTIAL confluent_cred
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
@@ -179,40 +145,40 @@ WITH OPTIONS (
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE fin_risk.streaming_13F
+CREATE OR REPLACE DATA SOURCE streaming_13F
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'px-equities-trades',
-    credential = 'fin_risk.confluent_cred'
+    credential = 'confluent_cred'
 );
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-4. Load data
+LOAD DATA
 Now that we have defined the data sources, we can load the data that is located in them to tables in Kinetica (that we defined earlier).
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-LOAD DATA INTO fin_risk.filings_quarterly
+LOAD DATA INTO filings_quarterly
 FROM FILE PATHS '13F/consolidated.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'fin_risk.static_13F'
+    DATA SOURCE = 'static_13F'
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
-LOAD DATA INTO fin_risk.px_eod
+LOAD DATA INTO px_eod
 FROM FILE PATHS '13F/pxeod.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'fin_risk.static_13F'
+    DATA SOURCE = 'static_13F'
 );
 /* SQL Block End */
 
@@ -220,19 +186,21 @@ WITH OPTIONS (
 /* TEXT Block Start */
 /*
 The streaming ingest below will continuously ingest data from the Kafka topic.
+✎ NOTE
+: The last sheet in the workbook contains code to pause the subscription. Make sure to do so to prevent taking up too much disk space.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-LOAD DATA INTO fin_risk.px_streaming_quotes
-FROM FILE PATHS ''  /* not mandatory */
+LOAD DATA INTO px_streaming_quotes
 FORMAT JSON 
 WITH OPTIONS (
-    data source = 'fin_risk.streaming_13F',
-    kafka_group_id = 'BH_90210', /* not mandatory*/
-    subscribe = TRUE,
-    type_inference_mode = 'speed'
+    DATA SOURCE = 'streaming_13F',
+    SUBSCRIBE = TRUE,
+    TYPE_INFERENCE_MODE = 'speed',
+    ERROR_HANDLING = 'permissive',
+    POLL_INTERVAL = '5 seconds'
 );
 /* SQL Block End */
 
@@ -250,11 +218,11 @@ The 13F quarterly filing data has filings from several quarters and includes inf
 
 
 /* SQL Block Start */
-CREATE OR REPLACE MATERIALIZED VIEW fin_risk.recent_filing AS
+CREATE OR REPLACE MATERIALIZED VIEW recent_filing AS
 SELECT * 
-    FROM fin_risk.filings_quarterly 
+    FROM filings_quarterly 
     WHERE 
-        filing=(select max(filing) from fin_risk.filings_quarterly) AND 
+        filing=(select max(filing) from filings_quarterly) AND 
         type NOT IN ('CALL', 'PUT');
 /* SQL Block End */
 
@@ -268,14 +236,14 @@ Combine portfolio holdings with share prices at the end of the day to get an est
 
 
 /* SQL Block Start */
-CREATE or REPLACE MATERIALIZED VIEW fin_risk.holdings_eod
+CREATE or REPLACE MATERIALIZED VIEW holdings_eod
 REFRESH ON QUERY AS 
 SELECT company, SUM(fq.Shares_Held*p.High) as Total_Current_Value
-FROM fin_risk.recent_filing fq, fin_risk.px_eod p
+FROM recent_filing fq, px_eod p
 WHERE fq.Symbol = p.Symbol
 GROUP BY company;
 
-SELECT * FROM fin_risk.holdings_eod;
+SELECT * FROM holdings_eod;
 /* SQL Block End */
 
 
@@ -290,7 +258,7 @@ Note
 
 
 /* SQL Block Start */
-CREATE or REPLACE MATERIALIZED VIEW fin_risk.holdings_streaming_scaled
+CREATE or REPLACE MATERIALIZED VIEW holdings_streaming_scaled
 REFRESH EVERY 5 SECONDS AS 
 SELECT 
     company, 
@@ -300,13 +268,13 @@ SELECT
         ) as "portfolio_change", 
     p.px_timestamp 
     FROM 
-        fin_risk.recent_filing fq, 
-        fin_risk.px_streaming_quotes p, 
-        fin_risk.px_streaming_quotes p_earliest
+        recent_filing fq, 
+        px_streaming_quotes p, 
+        px_streaming_quotes p_earliest
     WHERE 
         p_earliest.Symbol = fq.Symbol AND 
         p_earliest.px_timestamp = 
-            (SELECT MIN(px_timestamp) FROM fin_risk.px_streaming_quotes) AND 
+            (SELECT MIN(px_timestamp) FROM px_streaming_quotes) AND 
         fq.Symbol=p.Symbol
     GROUP BY p.px_timestamp, company
     ORDER BY p.px_timestamp;
@@ -322,16 +290,16 @@ The table calculates a materialized view of the change in portfolio value that r
 
 
 /* SQL Block Start */
-CREATE OR REPLACE MATERIALIZED VIEW fin_risk.portfolio_alert
+CREATE OR REPLACE MATERIALIZED VIEW portfolio_alert
 REFRESH EVERY 5 SECONDS AS 
 SELECT *
-FROM fin_risk.holdings_streaming_scaled p
+FROM holdings_streaming_scaled p
 WHERE (100 - p.portfolio_change) > 0.001;
 /* SQL Block End */
 
 
 /* SQL Block Start */
-SELECT * FROM fin_risk.portfolio_alert;
+SELECT * FROM portfolio_alert;
 /* SQL Block End */
 
 
@@ -350,10 +318,10 @@ For this demo, we recommend using the website: https://webhook.site/ to generate
 
 /* SQL Block Start */
 CREATE STREAM alert_webhook_fin_risk
-ON TABLE fin_risk.portfolio_alert
+ON TABLE portfolio_alert
 WITH OPTIONS 
 (
-    DESTINATION = 'https://webhook.site/8d4b9080-0760-4793-8d96-49c4e1b1bcd5' -- 'Paste Webhook URL'
+    DESTINATION = 'WEBHOOK_URL' -- 'Paste your Webhook URL (see above)'
 );
 /* SQL Block End */
 
@@ -368,7 +336,7 @@ The pattern above can be used to setup slack alerts as well. You can follow the 
 
 /* SQL Block Start */
 -- CREATE STREAM alert_slack_fin_risk
--- ON TABLE fin_risk.portfolio_alert
+-- ON TABLE portfolio_alert
 -- WITH OPTIONS 
 -- (
 --     DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>'
@@ -397,7 +365,7 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 
 /* SQL Block Start */
 -- CREATE STREAM portfolio_alert_stream on 
--- TABLE fin_risk.portfolio_alert
+-- TABLE portfolio_alert
 -- WITH OPTIONS 
 -- (
 --     event = 'insert', 
@@ -406,18 +374,19 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 /* SQL Block End */
 
 
-/* Worksheet: 4. 🧹 Clean up sheet */
-/* Worksheet Description: Description for sheet 4 */
+/* Worksheet: ❗️PAUSE SUBSCRIPTION */
+/* Worksheet Description: Description for sheet 5 */
 
 
 /* TEXT Block Start */
 /*
-Remove all the database objects associated with this demo.
+PAUSE SUBSCRIPTIONS
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-DROP TABLE IF EXISTS fin_risk.px_streaming_quotes;
-DROP SCHEMA IF EXISTS fin_risk CASCADE;
+ALTER TABLE px_streaming_quotes
+PAUSE SUBSCRIPTION streaming_13F;
 /* SQL Block End */

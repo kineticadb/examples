@@ -47,19 +47,6 @@ THE DATA
 
 /* TEXT Block Start */
 /*
-CREATE THE SCHEMA
-Tables in Kinetica can be organized in unique namespaces called Schemas. This is generally a good practice to keep your data organized and prevent accidental overwrites.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-CREATE SCHEMA IF NOT EXISTS ev_route_optimization;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
 REGISTER THE STATIC DATA SOURCE
 The static data for this example is stored in a Amazon S3 bucket. Let's register that so that we can connect to it. The files in this data source are publicly accessible, so we don't have to use any credentials to access them.
 */
@@ -67,7 +54,7 @@ The static data for this example is stored in a Amazon S3 bucket. Let's register
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE ev_route_optimization.ev_data_source
+CREATE OR REPLACE DATA SOURCE ev_data_source
 LOCATION = 'S3' 
 WITH OPTIONS (
     ANONYMOUS = 'true',
@@ -86,10 +73,10 @@ The source and destination points are streaming in from a Kafka topic on Conflue
 
 
 /* SQL Block Start */
--- Drop the table into which we will be streaming (if it exists)
-DROP TABLE IF EXISTS ev_route_optimization.source_dest;
+-- Drop the table into which we will be streaming (if it exists) so that we can recreate the credential
+DROP TABLE IF EXISTS source_dest;
 
-CREATE OR REPLACE CREDENTIAL ev_route_optimization.confluent_cred
+CREATE OR REPLACE CREDENTIAL confluent_cred
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
@@ -103,12 +90,12 @@ WITH OPTIONS (
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE ev_route_optimization.streaming_source_dest
+CREATE OR REPLACE DATA SOURCE streaming_source_dest
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'ev_source_dest',
-    credential = 'ev_route_optimization.confluent_cred'
+    credential = 'confluent_cred'
 );
 /* SQL Block End */
 
@@ -128,26 +115,26 @@ We will be loading data from two files that are on AWS S3.
 
 /* SQL Block Start */
 -- Drop the table if it already exists
-DROP TABLE IF EXISTS ev_route_optimization.mm_lakes_shape;
+DROP TABLE IF EXISTS mm_lakes_shape;
 
-LOAD DATA INTO ev_route_optimization.mm_lakes_shape
+LOAD DATA INTO mm_lakes_shape
 FROM FILE PATHS 'mm_lakes_shape.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'ev_route_optimization.ev_data_source'
+    DATA SOURCE = 'ev_data_source'
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
 -- Drop the table if it already exists
-DROP TABLE IF EXISTS ev_route_optimization.mm_evcharging;
+DROP TABLE IF EXISTS mm_evcharging;
 
-LOAD DATA INTO ev_route_optimization.mm_evcharging
+LOAD DATA INTO mm_evcharging
 FROM FILE PATHS 'mm_evcharging.csv'
 FORMAT TEXT
 WITH OPTIONS (
-    DATA SOURCE = 'ev_route_optimization.ev_data_source'
+    DATA SOURCE = 'ev_data_source'
 );
 /* SQL Block End */
 
@@ -162,21 +149,21 @@ This time we define the table befor proceeding with the ingest.
 
 /* SQL Block Start */
 -- Create the table for streaming ingest
-CREATE OR REPLACE TABLE ev_route_optimization.source_dest
+CREATE OR REPLACE TABLE source_dest
 (
     source_pt GEOMETRY NOT NULL,
     dest_pt GEOMETRY NOT NULL,
     TIMESTAMP timestamp NOT NULL
 );
 
-LOAD DATA INTO ev_route_optimization.source_dest
-FROM FILE PATHS ''  /* not mandatory */
+LOAD DATA INTO source_dest
 FORMAT JSON 
 WITH OPTIONS (
-    data source = 'ev_route_optimization.streaming_source_dest',
-    kafka_group_id = 'BH_90210', /* not mandatory*/
-    subscribe = TRUE,
-    type_inference_mode = 'speed'
+    DATA SOURCE = 'streaming_source_dest',
+    SUBSCRIBE = TRUE,
+    TYPE_INFERENCE_MODE = 'speed',
+    ERROR_HANDLING = 'permissive',
+    POLL_INTERVAL = '5 seconds'
 );
 /* SQL Block End */
 
@@ -195,17 +182,17 @@ Our first task is to convert the road network into a graph representation. Each 
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DIRECTED GRAPH ev_route_optimization.mm_lakes 
+CREATE OR REPLACE DIRECTED GRAPH mm_lakes 
 (
     EDGES => INPUT_TABLE(
         SELECT  
             shape AS WKTLINE, 
             direction AS DIRECTION,
             time AS WEIGHT_VALUESPECIFIED
-        FROM ev_route_optimization.mm_lakes_shape
+        FROM mm_lakes_shape
     ),
     OPTIONS => KV_PAIRS(
-        graph_table = 'ev_route_optimization.mm_lakes_graph_table'
+        graph_table = 'mm_lakes_graph_table'
     )
 );
 /* SQL Block End */
@@ -221,7 +208,7 @@ The table is shown below. Each row in the table represents an edge on the graph 
 
 
 /* SQL Block Start */
-SELECT * FROM ev_route_optimization.mm_lakes_graph_table
+SELECT * FROM mm_lakes_graph_table
 LIMIT 5;
 /* SQL Block End */
 
@@ -229,7 +216,7 @@ LIMIT 5;
 /* TEXT Block Start */
 /*
 VISUALIZE THE GRAPH
-We can use the optional graph output table to visualize the graph on a map. Click on one of the road segments to see the associate row of data from the output table.
+We can use the optional graph output table to visualize the graph on a map. Click on the refresh icon (top left) to display the map. Click on one of the road segments to see the associate row of data from the output table.
 */
 /* TEXT Block End */
 
@@ -259,7 +246,7 @@ Now that we have the graph representation of the road network we can run solvers
 
 /* SQL Block Start */
 -- Create the optimal route table to store the most current result from the SQL procedure below
-CREATE OR REPLACE TABLE ev_route_optimization.optimal_route
+CREATE OR REPLACE TABLE optimal_route
 (
     pk_id INT (PRIMARY_KEY) NOT NULL,
     wkt1 GEOMETRY NOT NULL,
@@ -270,7 +257,12 @@ CREATE OR REPLACE TABLE ev_route_optimization.optimal_route
 
 
 /* SQL Block Start */
-SELECT * FROM ev_route_optimization.source_dest
+select count(*) from source_dest;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+SELECT * FROM source_dest
 LIMIT 5;
 /* SQL Block End */
 
@@ -290,19 +282,19 @@ The maps below the procedure show the two shortest path routes (Source to EV and
 
 
 /* SQL Block Start */
-CREATE OR REPLACE PROCEDURE ev_route_optimization.shortest_path_updater
+CREATE OR REPLACE PROCEDURE shortest_path_updater
 BEGIN
     -- STEP 1: Run the shortest path solver from the source to all EV charging stations within a 2400 sec radius
-    CREATE OR REPLACE TABLE ev_route_optimization.source_to_charging_path AS
+    CREATE OR REPLACE TABLE source_to_charging_path AS
     SELECT * 
     FROM TABLE (
         SOLVE_GRAPH
         (
-            GRAPH => 'ev_route_optimization.mm_lakes',
+            GRAPH => 'mm_lakes',
             SOLVER_TYPE => 'SHORTEST_PATH',
             SOURCE_NODES => INPUT_TABLE(
                 SELECT ST_GEOMFROMTEXT(source_pt) AS WKTPOINT 
-                FROM ev_route_optimization.source_dest 
+                FROM source_dest 
                 ORDER BY TIMESTAMP DESC -- Find the latest source record
                 LIMIT 1
             ),
@@ -310,22 +302,22 @@ BEGIN
                 SELECT 
                     Longitude AS X,
                     Latitude AS Y 
-                FROM ev_route_optimization.mm_evcharging
+                FROM mm_evcharging
             ),
             OPTIONS => KV_PAIRS(max_solution_radius = '2400')
         )
     );
     -- Step 2: Run the inverse shortest path solver from all EV charging stations to the destination
-    CREATE OR REPLACE TABLE ev_route_optimization.charging_to_dest_path AS
+    CREATE OR REPLACE TABLE charging_to_dest_path AS
     SELECT * 
     FROM TABLE (
         SOLVE_GRAPH
         (
-            GRAPH => 'ev_route_optimization.mm_lakes',
+            GRAPH => 'mm_lakes',
             SOLVER_TYPE => 'INVERSE_SHORTEST_PATH',
             SOURCE_NODES => INPUT_TABLE(
                 SELECT ST_GEOMFROMTEXT(dest_pt) AS WKTPOINT 
-                FROM ev_route_optimization.source_dest 
+                FROM source_dest 
                 ORDER BY TIMESTAMP DESC -- Find the latest destination record
                 LIMIT 1
             ),
@@ -333,21 +325,21 @@ BEGIN
                 SELECT 
                     Longitude AS X,
                     Latitude AS Y 
-                FROM ev_route_optimization.mm_evcharging
+                FROM mm_evcharging
             )
         )
     );
     -- Step 3: Find the combined path that minimizes the cost from source to destination with a stop at an EV charging station
     
-    INSERT INTO ev_route_optimization.optimal_route /* ki_hint_update_on_existing_pk */  
+    INSERT INTO optimal_route /* ki_hint_update_on_existing_pk */  
     SELECT * 
     FROM
     (
         WITH temp (id_with_min_cost) AS
         (
             SELECT arg_min(s1+s2,id1) as id_with_min_cost FROM
-                (SELECT  SOLVERS_NODE_COSTS as s1, SOLVERS_NODE_ID as id1, * from ev_route_optimization.source_to_charging_path),
-                (SELECT  SOLVERS_NODE_COSTS as s2, SOLVERS_NODE_ID as id2, * from ev_route_optimization.charging_to_dest_path)
+                (SELECT  SOLVERS_NODE_COSTS as s1, SOLVERS_NODE_ID as id1, * from source_to_charging_path),
+                (SELECT  SOLVERS_NODE_COSTS as s2, SOLVERS_NODE_ID as id2, * from charging_to_dest_path)
             WHERE id1 = id2
         )
         SELECT 
@@ -356,15 +348,15 @@ BEGIN
             s2.wktroute as wkt2,
             st_linemerge(st_collect(s1.wktroute,s2.wktroute)) as wkt_full
         FROM 
-            ev_route_optimization.source_to_charging_path s1, 
-            ev_route_optimization.charging_to_dest_path s2,
+            source_to_charging_path s1, 
+            charging_to_dest_path s2,
             temp 
         WHERE 
             s1.SOLVERS_NODE_ID = temp.id_with_min_cost and
             s2.SOLVERS_NODE_ID = temp.id_with_min_cost
     );
 END 
-EXECUTE FOR EVERY 5 SECONDS;
+EXECUTE FOR EVERY 10 SECONDS;
 /* SQL Block End */
 
 
@@ -373,7 +365,7 @@ EXECUTE FOR EVERY 5 SECONDS;
 SELF REFRESHING MAP SHOWING THE SHORTEST PATH FROM SOURCE TO ALL EV STATIONS (WITHIN 2400 SECS)
 The map below is set to refresh every 2 secs to show updated paths based on latest source destination.
 ✎ NOTE
-: The table that is referenced might be missing occassionally (API error) because the map refresh might coincide with the execution of the stored procedure. Occasionally, there might not be a path shown on the map below (even when there is no error). This is because the current source point doesn't have an EV charging station that is within 40 minutes from it.
+: The table that is referenced might be missing occassionally (API error) because the map refresh might coincide with the execution of the stored procedure. Occasionally, there might not be a path shown on the map below (even when there is no error). This is because the current source point doesn't have an EV charging station that is within 40 minutes from it. Additionally, the data will
 */
 /* TEXT Block End */
 
@@ -394,14 +386,19 @@ The path below shows the shortest path between the source and the destination po
 /* TEXT Block End */
 
 
-/* Worksheet: Clean up sheet */
+/* Worksheet: ❗️PAUSE SUBSCRIPTION */
 /* Worksheet Description: Description for sheet 5 */
 
 
-/* SQL Block Start */
--- Drop the table with the streaming ingest so that we can drop the schema and all the other tables in it.
-DROP TABLE ev_route_optimization.source_dest;
+/* TEXT Block Start */
+/*
+PAUSE SUBSCRIPTIONS
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
+*/
+/* TEXT Block End */
 
--- Drop schema and all its contents
-DROP SCHEMA IF EXISTS ev_route_optimization CASCADE;
+
+/* SQL Block Start */
+ALTER TABLE source_dest
+PAUSE SUBSCRIPTION streaming_source_dest;
 /* SQL Block End */
