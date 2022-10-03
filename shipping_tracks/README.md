@@ -19,9 +19,20 @@ Tracking entities in real-time with Kinetica
 This demo uses Tracks - a native geospatial object in Kinetica - along with other geospatial functions and visualizations to detect the following events.
 
 * When an object enters a certain area (geo-fence)
-* When an object is dwelling or loitering
-* When two objects come within a certain distance of each other
 
+<h3 align="center">
+   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/geofence.gif?raw=true" width="400px"></img>
+</h3>
+
+* When an object is dwelling or loitering
+
+<h3 align="center">
+   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/dwell_loiter.gif?raw=true" width="400px"></img>
+</h3>
+* When two objects come within a certain distance of each other
+<h3 align="center">
+   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/proximate.gif?raw=true" width="400px"></img>
+</h3>
 Kinetica’s vectorized engine makes it possible to perform these complex computations in real time as the data streams in. Even on a personal computer.
 
 ### About the data
