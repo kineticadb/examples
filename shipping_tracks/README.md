@@ -43,11 +43,6 @@ We have setup a synthetic Kafka topic that uses a sample of 4 million records fr
 
 The Kafka topic is set to simulate real time information on ship locations as they stream in.
 
-### Try it yourself
-All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
-
-Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
-
 ### Why is this useful?
 The advancements of sensors and IoT devices now means that anything that moves can be recorded in real time. In face, location enriched data is the fastest growing segments of data in the world today. 
 
@@ -58,6 +53,11 @@ This growing segment of data opens up a remarkable number of new opportunities l
 Track data is often the most valuable in real time. You need to be able study and respond to Track behavior as events occur. Existing tools however, are not setup to harness the potential of Tracks in real time. 
 
 This example is a demonstration of Kinetica can be used to address these gaps in current technologies.
+
+# Try it yourself
+All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
+
+Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
 # Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
