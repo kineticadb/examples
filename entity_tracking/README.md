@@ -50,7 +50,7 @@ This growing segment of data opens up a remarkable number of new opportunities l
 
 Track data is often the most valuable in real time. You need to be able study and respond to Track behavior as events occur. Existing tools however, are not setup to harness the potential of Tracks in real time. 
 
-This example is a demonstration of Kinetica can be used to address these gaps in current technologies.
+This example is a demonstration of how Kinetica can be used to address these gaps.
 
 # Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
