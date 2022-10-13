@@ -44,11 +44,11 @@ We have setup a synthetic Kafka topic that uses a sample of 4 million records fr
 The Kafka topic is set to simulate real time information on ship locations as they stream in.
 
 ### Why is this useful?
-The advancements in sensors and IoT devices now means that almost anything that moves can be recorded in real time. In fact, location enriched i.e. 'Tracks' data is the fastest growing segment of data in the world today. 
+The advancements in sensors and IoT devices now means that almost anything that moves can be recorded in real time. In fact, location enriched data or 'Tracks' data in other words is the fastest growing segment of data in the world today. 
 
-This growing segment of data opens up a remarkable number of new opportunities in varied sectors like public health, fleet optimization, proximity marketing etc.
+This new data opens up a remarkable number of opportunities in varied sectors like public health, fleet optimization, proximity marketing etc.
 
-But track data is often the most valuable in real time. You need to be able study and respond to Track behavior as events occur. Existing tools however, are not setup to harness the potential of Tracks in real time. 
+But track data is the most valuable in real time. Most use cases require you to study and respond to track behavior as they unfold. Existing tools however, are not setup to harness the potential of Tracks in real time. 
 
 This example is a demonstration of how Kinetica can be used to address these gaps.
 
