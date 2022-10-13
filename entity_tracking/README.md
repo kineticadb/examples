@@ -16,6 +16,10 @@
 <h1>
 Tracking entities in real-time with Kinetica
 </h1>
+
+<h3 align="center">
+   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/tracks_speed.gif?raw=true" width="600px"></img>
+</h3>
 This demo uses Tracks - a native geospatial object in Kinetica - along with other geospatial functions and visualizations to detect the following events.
 
 * When an object enters a certain area (geo-fence)
