@@ -91,7 +91,7 @@ It's usually best practice to specify credentials separately so that they can be
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL confluent_creds
+CREATE OR REPLACE CREDENTIAL truck_creds
 TYPE = 'kafka'
 WITH OPTIONS (
     'security.protocol' = 'SASL_SSL',
@@ -107,7 +107,7 @@ CREATE OR REPLACE DATA SOURCE vehicle_metrics_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_metrics',
-    credential = 'confluent_creds'
+    credential = 'truck_creds'
 );
 /* SQL Block End */
 
@@ -117,7 +117,7 @@ CREATE OR REPLACE DATA SOURCE vehicle_locations_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_locations',
-    credential = 'confluent_creds'
+    credential = 'truck_creds'
 );
 /* SQL Block End */
 
@@ -184,13 +184,13 @@ GROUP BY TRACKID;
 
 
 /* SQL Block Start */
--- A Materialized view that only shows the last 10 minutes of locations so that the map does not look too filled up
+-- A Materialized view that only shows the last 5 minutes of locations so that the map does not look too filled up
 CREATE OR REPLACE MATERIALIZED VIEW location_10mins
 REFRESH EVERY 5 SECONDS
 AS 
 (
     SELECT * FROM vehicle_locations
-    WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 10
+    WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5
 );
 /* SQL Block End */
 

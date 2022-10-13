@@ -76,7 +76,7 @@ The source and destination points are streaming in from a Kafka topic on Conflue
 -- Drop the table into which we will be streaming (if it exists) so that we can recreate the credential
 DROP TABLE IF EXISTS source_dest;
 
-CREATE OR REPLACE CREDENTIAL confluent_cred
+CREATE OR REPLACE CREDENTIAL ev_creds
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
@@ -95,7 +95,7 @@ LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'ev_source_dest',
-    credential = 'confluent_cred'
+    credential = 'ev_creds'
 );
 /* SQL Block End */
 

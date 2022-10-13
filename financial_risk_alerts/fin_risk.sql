@@ -131,7 +131,7 @@ The real time exchange rate data is maintained as a Kafka topic on Confluent clo
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL confluent_cred
+CREATE OR REPLACE CREDENTIAL fin_risk_creds
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
@@ -150,7 +150,7 @@ LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'px-equities-trades',
-    credential = 'confluent_cred'
+    credential = 'fin_risk_creds'
 );
 /* SQL Block End */
 
@@ -381,7 +381,7 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 /* TEXT Block Start */
 /*
 PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to
 */
 /* TEXT Block End */
 
