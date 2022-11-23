@@ -41,7 +41,7 @@ THE DATA
 /* TEXT Block End */
 
 
-/* Worksheet: Data setup (DDL) */
+/* Worksheet: 1. Data setup (DDL) */
 /* Worksheet Description: Description for sheet 2 */
 
 
@@ -83,8 +83,8 @@ SECRET = ''
 WITH OPTIONS (  
    'security.protocol' = 'SASL_SSL',
    'sasl.mechanism' = 'PLAIN',
-   'sasl.username' = 'FKHU5OKQSM6J3FZY',
-   'sasl.password' = 'BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+   'sasl.username' = 'QZN62QB2RBTLW74L',
+   'sasl.password' = 'iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
    );
 /* SQL Block End */
 
@@ -168,7 +168,7 @@ WITH OPTIONS (
 /* SQL Block End */
 
 
-/* Worksheet: Create and explore the graph network */
+/* Worksheet: 2. Create and explore the graph network */
 /* Worksheet Description: Description for sheet 5 */
 
 
@@ -192,7 +192,8 @@ CREATE OR REPLACE DIRECTED GRAPH mm_lakes
         FROM mm_lakes_shape
     ),
     OPTIONS => KV_PAIRS(
-        graph_table = 'mm_lakes_graph_table'
+        graph_table = 'mm_lakes_graph_table',
+        'save_persist' = 'true'
     )
 );
 /* SQL Block End */
@@ -229,7 +230,7 @@ We will use the spatial graph network depicted above in combination with the loc
 /* TEXT Block End */
 
 
-/* Worksheet: Find the best route */
+/* Worksheet: 3. Find the best route */
 /* Worksheet Description: Description for Sheet 1 */
 
 
@@ -386,7 +387,7 @@ The path below shows the shortest path between the source and the destination po
 /* TEXT Block End */
 
 
-/* Worksheet: ❗️PAUSE SUBSCRIPTION */
+/* Worksheet: ❗️4. PAUSE SUBSCRIPTION */
 /* Worksheet Description: Description for sheet 5 */
 
 

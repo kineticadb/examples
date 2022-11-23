@@ -28,6 +28,8 @@ ABOUT THE TABLES
 We will be working with two streaming data tables
 with fake data
 , one that records vehicle locations and another that records vehicle metrics like temperature and pressure. Both these tables are recording information for transit trucks. The trucks are identified by identifier columns (TRACKID for locations and ID for metrics).
+⚠️ NOTE
+: The demo simulates about 3 hours of truck activity. After each trip is completed the topic producer will restart from the same starting position for each trip and recreate the same path once more. The Kafka topic is configured to delete older messages so that the same locations are not repeated. However, when Kinetica loads data from a topic into Kinetica, older messages are persisted in the table. So you will end up with duplicate locations for the same truck (with different timestamps).
 */
 /* TEXT Block End */
 
@@ -96,8 +98,8 @@ TYPE = 'kafka'
 WITH OPTIONS (
     'security.protocol' = 'SASL_SSL',
     'sasl.mechanism' = 'PLAIN',
-    'sasl.username'='FKHU5OKQSM6J3FZY',
-    'sasl.password'='BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+    'sasl.username'='QZN62QB2RBTLW74L',
+    'sasl.password'='iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
 );
 /* SQL Block End */
 
@@ -139,8 +141,7 @@ WITH OPTIONS (
     DATA SOURCE = 'vehicle_locations_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive',
-    POLL_INTERVAL = '5 seconds'
+    ERROR_HANDLING = 'permissive'
 
 );
 /* SQL Block End */
@@ -153,8 +154,7 @@ WITH OPTIONS (
     DATA SOURCE = 'vehicle_metrics_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive',
-    POLL_INTERVAL = '5 seconds'
+    ERROR_HANDLING = 'permissive'
 );
 /* SQL Block End */
 
@@ -183,27 +183,13 @@ GROUP BY TRACKID;
 /* SQL Block End */
 
 
-/* SQL Block Start */
--- A Materialized view that only shows the last 5 minutes of locations so that the map does not look too filled up
-CREATE OR REPLACE MATERIALIZED VIEW location_10mins
-REFRESH EVERY 5 SECONDS
-AS 
-(
-    SELECT * FROM vehicle_locations
-    WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5
-);
-/* SQL Block End */
-
-
 /* TEXT Block Start */
 /*
-A MAP SHOWING THE MOVEMENT OF TRUCKS (USING THE VIEW CREATED ABOVE)
+A MAP SHOWING THE MOVEMENT OF TRUCKS
 Kinetica provides geospatial object called tracks that represents the path an object takes across the map. A track is a combination of an id, timestamp and a point (lat and lon).  We can use this feature to represent moving objects on a map.
 We have currently set the auto refresh option to 5 seconds. So the map will refresh every 5 seconds to show the movement of trucks over time as new data streams in from the kafka topics. You can use the configure modal to play around with the different options for the map block.
 ✎ Note
-: The tracks interface on Kinetica (as of version 7.1.6.9)
-requires
-that column names in the table that is being used to render the tracks be the following TRACKID, TIMESTAMP, x, y. The tracks currently will not render correctly if the columns are not named as above. Future versions of Kinetica relax these restrictions.
+: The data for tracks repeats about every 3 hours or so. So if you leave the subscription on then this map will slowly fill up with truck tracks and then start replotting on top of existing tracks.
 */
 /* TEXT Block End */
 
@@ -226,17 +212,17 @@ GROUP BY ID;
 /* TEXT Block Start */
 /*
 VISUALIZE THE TEMPERATURE OVER TIME
-Workbench also provides a series of charts that can be used to visualize the output from select statements. We can use that to quickly plot the output from a select statement. Here, we use it to visualize the temperature over time.
-✎ Note:
-The visualization will be sparse initially (most likely a single point) the first time you run the query below since because there isn't enough data to visualize. Try re-running the query in 30 mins to see more points.
+Workbench also provides a series of charts that can be used to visualize the output from select statements. We can use that to quickly plot the output from a select statement. Here, we use it to visualize the temperature changes from the start of the current hour. We are plotting values for just the first 3 truck ids.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-SELECT id, HOUR(ts) as ts_hour, max(temp) as max_temp
+SELECT ID, MINUTE(ts) as ts_min, mean(temp) / 1000 as mean_temp
 FROM vehicle_metrics
-GROUP BY id, HOUR(ts);
+WHERE TIMEBOUNDARYDIFF('HOUR', ts, NOW()) < 1 AND ID < 4
+GROUP BY ID, MINUTE(ts)
+ORDER BY ts_min;
 /* SQL Block End */
 
 

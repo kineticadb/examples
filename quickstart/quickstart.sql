@@ -22,11 +22,13 @@ This workbook is an introduction to loading data into Kinetica, performing analy
 /*
 HOW TO USE WORKBOOKS
 Workbooks are organized into worksheets. Worksheets are handy for organizing your work by separating the different sections of your analysis. Each worksheet contains blocks of code, text and media content. You can either execute all the code in a sheet by clicking on the "Run All" button or by running each individual block on it own.
+RUN WORKSHEETS SEQUENTIALLY
+All example workbooks use worksheets to sequentially order the code. This means that some of the code in later worksheets will rely on tables or views that may have been created in previous worksheets.
 */
 /* TEXT Block End */
 
 
-/* Worksheet: Load the data */
+/* Worksheet: 1. Load the data */
 /* Worksheet Description: Description for sheet 2 */
 
 
@@ -67,8 +69,8 @@ SECRET = ''
 WITH OPTIONS (  
    'security.protocol' = 'SASL_SSL',
    'sasl.mechanism' = 'PLAIN',
-   'sasl.username' = 'FKHU5OKQSM6J3FZY',
-   'sasl.password' = 'BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+   'sasl.username' = 'QZN62QB2RBTLW74L',
+   'sasl.password' = 'iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
 );
 
 -- Create the data source. Each kafka topic is created as a separate data source.
@@ -165,7 +167,7 @@ ALTER COLUMN payment_type varchar(16);
 /* SQL Block End */
 
 
-/* Worksheet: Explore the data */
+/* Worksheet: 2. Explore the data */
 /* Worksheet Description: Description for sheet 3 */
 
 
@@ -237,7 +239,7 @@ SELECT * FROM taxi_data_historical;
 /* SQL Block End */
 
 
-/* Worksheet: Location Analytics */
+/* Worksheet: 3. Location Analytics */
 /* Worksheet Description: Description for sheet 5 */
 
 
@@ -341,7 +343,7 @@ ORDER BY
 /* SQL Block End */
 
 
-/* Worksheet: Real time alerting */
+/* Worksheet: 5. Real time alerting */
 /* Worksheet Description: Description for sheet 8 */
 
 
@@ -406,7 +408,7 @@ WITH OPTIONS
 /* SQL Block End */
 
 
-/* Worksheet: Other capabilities */
+/* Worksheet: 6. Other capabilities */
 /* Worksheet Description: Description for sheet 8 */
 
 
@@ -425,7 +427,7 @@ Kinetica also offers a dashboarding tool called Reveal (see below) that is reall
 /* TEXT Block End */
 
 
-/* Worksheet: ❗️Pause subscription */
+/* Worksheet: ❗️7. Pause subscription */
 /* Worksheet Description: Description for sheet 6 */
 
 

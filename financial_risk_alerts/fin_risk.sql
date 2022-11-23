@@ -138,8 +138,8 @@ SECRET = ''
 WITH OPTIONS (  
    'security.protocol' = 'SASL_SSL',
    'sasl.mechanism' = 'PLAIN',
-   'sasl.username' = 'FKHU5OKQSM6J3FZY',
-   'sasl.password' = 'BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+   'sasl.username' = 'QZN62QB2RBTLW74L',
+   'sasl.password' = 'iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
    );
 /* SQL Block End */
 

@@ -24,7 +24,7 @@ SELECT ST_MAKEENVELOPE(-98.66,18.09,-76.89,30.26);
 /* SQL Block End */
 
 
-/* Worksheet: Data setup (DDL) */
+/* Worksheet: 1. Data setup (DDL) */
 /* Worksheet Description: Description for sheet 6 */
 
 
@@ -40,27 +40,27 @@ The Kafka streams is setup to simulate a real time stream of ship locations over
 
 /* SQL Block Start */
 -- Drop the table into which we will be streaming (if it exists) so that we can recreate the credential
-DROP TABLE IF EXISTS ais_tracks_stream;
+DROP TABLE IF EXISTS ship_tracks;
 
 -- Create the credentials for the kafka cluster
-CREATE OR REPLACE CREDENTIAL ais_confluent_creds
+CREATE OR REPLACE CREDENTIAL ship_confluent_creds
 TYPE = 'kafka',
 IDENTITY = '' ,
 SECRET = ''
 WITH OPTIONS (  
    'security.protocol' = 'SASL_SSL',
    'sasl.mechanism' = 'PLAIN',
-   'sasl.username' = 'FKHU5OKQSM6J3FZY',
-   'sasl.password' = 'BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+   'sasl.username' = 'QZN62QB2RBTLW74L',
+   'sasl.password' = 'iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
 );
 
 -- Create the data source
-CREATE OR REPLACE DATA SOURCE ais_stream_source
+CREATE OR REPLACE DATA SOURCE ships_stream_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'ais_tracks',
-    credential = 'confluent_cred'
+    credential = 'ship_confluent_creds'
 );
 /* SQL Block End */
 
@@ -78,7 +78,8 @@ The data for the Kafka topic is generated using a seed file that contains about 
 
 
 /* SQL Block Start */
-CREATE OR REPLACE TABLE ais_tracks_stream
+-- Create the table for the ais data
+CREATE OR REPLACE TABLE ship_tracks
 (
     "TIMESTAMP" TIMESTAMP NOT NULL,
     "CONTINENT" VARCHAR (64, dict),
@@ -90,26 +91,19 @@ CREATE OR REPLACE TABLE ais_tracks_stream
     "SHIP_TYPE" VARCHAR (64, dict)
 );
 
-
-LOAD DATA INTO ais_tracks_stream
+-- Load the data from the kafka data source into the table
+LOAD DATA INTO ship_tracks
 FORMAT JSON 
 WITH OPTIONS (
-    DATA SOURCE = 'ais_stream_source',
+    DATA SOURCE = 'ships_stream_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive',
-    kafka_group_id = 'ais_tracks_grp_6'
+    ERROR_HANDLING = 'permissive'
 );
 /* SQL Block End */
 
 
-/* SQL Block Start */
-SELECT COUNT(*) FROM ais_tracks_stream
-WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) > 44;
-/* SQL Block End */
-
-
-/* Worksheet: Tracks */
+/* Worksheet: 2. Tracks */
 /* Worksheet Description: Description for sheet 2 */
 
 
@@ -139,7 +133,8 @@ Tracks come with two aggregate functions ST_TRACKLENGTH and ST_TRACKDURATION. Le
 
 
 /* SQL Block Start */
-CREATE OR REPLACE TABLE track_summary AS
+CREATE OR REPLACE MATERIALIZED VIEW track_summary 
+REFRESH EVERY 2 MINUTES AS
 SELECT 
     TRACKID, 
     COUNT(*) AS n_obs, 
@@ -150,7 +145,7 @@ SELECT
     MAX(X) AS max_longitude,
     MIN(Y) AS min_latitude,
     MAX(Y) AS max_latitude
-FROM ais_tracks_stream
+FROM ship_tracks
 GROUP BY TRACKID
 ORDER BY track_length_km DESC;
 
@@ -167,28 +162,31 @@ Let's pick a random track from the 40 longest tracks in the data to study more c
 
 
 /* SQL Block Start */
-CREATE OR REPLACE TABLE long_tracks AS 
+CREATE OR REPLACE MATERIALIZED VIEW long_tracks
+REFRESH ON CHANGE AS
 SELECT TRACKID 
 FROM track_summary
 LIMIT 40;
 
+-- Select a random track to display on the map
 CREATE OR REPLACE MATERIALIZED VIEW single_track 
 REFRESH EVERY 5 SECONDS
 AS 
-SELECT * 
-FROM ais_tracks_stream
+SELECT TRACKID, x, y, TIMESTAMP 
+FROM ship_tracks
 WHERE TRACKID = (SELECT TRACKID FROM long_tracks ORDER BY RAND() LIMIT 1);
 /* SQL Block End */
 
 
-/* Worksheet: Geofencing */
+/* Worksheet: 3. Geofencing */
 /* Worksheet Description: Description for sheet 4 */
 
 
 /* TEXT Block Start */
 /*
 GEOFENCING ALERTS
-Now that we have the data setup let's look at some of the common use cases with Tracks. The first use case we will explore is that for geofencing. Let's say there are certain areas in the Gulf of Mexico that are more prone to inclement weather. You would like to keep a closer eye on ships that enter this area. We can use the ST_TRACKINTERSECTS method to setup an alert whenever a ship enters this region.
+We are expecting bad weather around New Orleans. You have been tasked with setting up a way to alert ships that are traveling too fast in this area. The threshold is set as  ships that have traveled more than two kilometers over the last 5 minutes.
+The zone around New Orleans is shown below.
 */
 /* TEXT Block End */
 
@@ -198,7 +196,30 @@ Now that we have the data setup let's look at some of the common use cases with 
 CREATE OR REPLACE TABLE geo_fence AS 
 SELECT 
     1 as zone_id, 
-    ST_MAKETRIANGLE2D( -90, 29, -94, 27, -86, 26) as monitor_zone;
+    ST_MAKEENVELOPE( -91, 28.5, -88.5, 30.5) as monitor_zone;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+First we need to setup a view that calculates the distance moved by all ships in the last 5 minutes.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+-- Calculate the distance traveled over the last 5 minutes
+CREATE OR REPLACE MATERIALIZED VIEW track_length_5mins
+REFRESH ON CHANGE AS
+SELECT 
+    TRACKID, 
+    ST_TRACKLENGTH(Y, X,TIMESTAMP, 1) / 1000 AS track_length 
+FROM ship_tracks 
+WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5
+GROUP BY TRACKID;
+
+-- Show the ships that are traveling fast
+SELECT TRACKID FROM track_length_5mins WHERE track_length > 2;
 /* SQL Block End */
 
 
@@ -213,24 +234,26 @@ The code below uses a materialized view that is refreshed every 5 seconds to ide
 
 
 /* SQL Block Start */
-CREATE OR REPLACE MATERIALIZED VIEW recent_tracks 
-REFRESH EVERY 5 MINUTES
-AS 
-SELECT * FROM ais_tracks_stream
-WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 4;
+-- Set up a view with all the fast moving tracks (we want to look for intersections anytime over the past 4 hours with the zone of interest)
+CREATE OR REPLACE MATERIALIZED VIEW moving_tracks
+REFRESH ON CHANGE AS 
+SELECT * FROM ship_tracks 
+WHERE 
+    TRACKID IN (SELECT TRACKID FROM track_length_5mins WHERE track_length > 2) AND 
+    TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 4;
 /* SQL Block End */
 
 
 /* SQL Block Start */
--- A materialized view of all the paths that have intersected with the fence over the last two hours
+-- A materialized view of all the paths from the view above that have intersected with the zone
 CREATE OR REPLACE MATERIALIZED VIEW fence_tracks
-REFRESH EVERY 5 SECONDS AS
+REFRESH ON CHANGE AS
 SELECT *
 FROM TABLE
 (
     ST_TRACKINTERSECTS
     (
-        TRACK_TABLE => INPUT_TABLE(recent_tracks),
+        TRACK_TABLE => INPUT_TABLE(moving_tracks),
         TRACK_ID_COLUMN => 'TRACKID',
         TRACK_X_COLUMN => 'x',
         TRACK_Y_COLUMN => 'y',
@@ -244,11 +267,11 @@ FROM TABLE
 
 
 /* SQL Block Start */
--- Get the full path of all the tracks that intersected with the fence over the last 2 hours
+-- View to show all the fast moving ships that have intersected with the geofence
 CREATE OR REPLACE MATERIALIZED VIEW fence_track_paths
 REFRESH ON CHANGE 
 AS 
-SELECT * FROM ais_tracks_stream
+SELECT * FROM moving_tracks
 WHERE TRACKID IN (SELECT TRACKID FROM fence_tracks);
 /* SQL Block End */
 
@@ -258,23 +281,37 @@ WHERE TRACKID IN (SELECT TRACKID FROM fence_tracks);
 CREATE AN ALERT
 The materialized view that was setup earlier does all the work of monitoring the incoming data to automatically detect anytime a track intersects with our geofence. Now all we need to do is to direct that information out of Kinetica so that the end use is alerted as soon an event of interest occurs.
 There are a few different ways to do this. We could set up a Kafka topic as a data sink that receives all new records from the portfolio alert table that we created in the previous sheet or can use webhooks to setup alerts to messaging tools like Slack or custom applications.
-For this demo, we recommend using the website: https://webhook.site/ to generate a webhook URL. Copy the webhook URL and paste it as the destination in the stream below. This will send alerts to that URL any time a track intersects with the geofence.
+We are using slack for this demo.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
+CREATE OR REPLACE MATERIALIZED VIEW slack_alert_text
+REFRESH ON CHANGE AS 
+SELECT CONCAT(TRACKID, ' has moved more than 2 Kms inside the weather zone in the last 5 mins❗️') as text 
+FROM fence_tracks;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+CREATE OR REPLACE DATA SINK slack_alerts
+LOCATION = 'https://hooks.slack.com/services/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';
+/* SQL Block End */
+
+
+/* SQL Block Start */
 -- Setup an alert sink
-CREATE STREAM geofence_alerts ON fence_tracks
+CREATE STREAM geofence_alerts ON slack_alert_text
 REFRESH ON CHANGE 
 WITH OPTIONS 
 (
-    DESTINATION = 'PASTE WEBHOOK' --- Generate a webhook URL and paste here
+    DATASINK_NAME = 'slack_alerts'
 );
 /* SQL Block End */
 
 
-/* Worksheet: Dwell Times */
+/* Worksheet: 4. Dwell Times */
 /* Worksheet Description: Description for sheet 3 */
 
 
@@ -282,18 +319,25 @@ WITH OPTIONS
 /*
 ALERT BASED ON DWELL AND/OR LOITERING
 As a port manager you also want to know when a vessel is spending more time than usual without moving or circling around the same spots. We are interested in just the last 4 hours of activity. So let's start by identifying tracks that have timestamps in the last 4 hours and calculating the area of the bounds of that track and the length.
-
-I have set the materialized view to update every 10 minutes since we don't need to
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
+-- Create a view with the tracks over the last 4 hours
+CREATE OR REPLACE MATERIALIZED VIEW recent_tracks
+REFRESH EVERY 5 MINUTES AS
+SELECT * 
+FROM ship_tracks 
+WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5;
+
 -- Identify the track length and the bounds of the tracks that have recordings for the last 4 hours.
 CREATE OR REPLACE MATERIALIZED VIEW track_area_length_4hr
-REFRESH EVERY 10 MINUTES AS 
+REFRESH EVERY 5 MINUTES AS 
 SELECT 
     TRACKID,
+    ABS(MAX(X) - MIN(X)) AS x_dist,
+    ABS(MAX(Y) - MIN(Y)) AS y_dist,
     ST_AREA(ST_MAKEENVELOPE(MIN(X), MIN(Y), MAX(X), MAX(Y))) AS track_bounds_area,
     ST_TRACKLENGTH(Y, X,TIMESTAMP, 1) AS track_length
 FROM (SELECT * FROM recent_tracks)
@@ -308,7 +352,7 @@ SELECT * FROM track_area_length_4hr;
 /*
 DWELLING VS LOITERING
 Dwelling is when a object is almost entirely stationary. For instance, a ship that has dropped anchor will barely move until it lifts its anchor. So we'd expect the track length and the area that it covers to be pretty small for the period that it is dwelling.
-Loitering on the other hand is when an  is constantly moving but within a small area. So in the case of dwelling, we'd expect the track length to be significantly greater than zero but the area that it covers (based on the bounds) to be pretty small.
+Loitering on the other hand is when an  is constantly moving but within a small area. So in the case of dwelling, we'd expect the track length to be significantly greater than zero but the area that it covers (based on the bounds) to be pretty small. Loitering in this context could mean a ship which is performing a particular kind of activity like fishing.
 Let's start by finding all the ships that are dwelling. Our threshold for dwelling is an bounds area less than 100 metre squared and a track length less than 100 metres total over the last 4 hours.
 */
 /* TEXT Block End */
@@ -322,14 +366,14 @@ SELECT * FROM recent_tracks
 WHERE TRACKID IN 
 (
     SELECT TRACKID FROM track_area_length_4hr
-    WHERE track_bounds_area < 100 AND track_length < 100
+    WHERE (x_dist < 0.01 AND y_dist < 0.01) AND track_length < 50
 );
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-Click the refresh button to see the ships that are dwelling.
+👆🏻Click the refresh button to see the ships that are dwelling.
 🔎 Try zooming down to a 5 metre level to see how the track looks up close.
 */
 /* TEXT Block End */
@@ -350,7 +394,7 @@ SELECT * FROM recent_tracks
 WHERE TRACKID IN 
 (
     SELECT TRACKID FROM track_area_length_4hr
-    WHERE track_bounds_area < 400 AND track_length BETWEEN 1000 AND 5000
+    WHERE (x_dist < 0.01 AND y_dist < 0.01) AND track_length > 1000
 );
 /* SQL Block End */
 
@@ -363,7 +407,17 @@ Click the refresh button on the map to see the Tracks that are loitering.
 /* TEXT Block End */
 
 
-/* Worksheet: Proximity */
+/* TEXT Block Start */
+/*
+SET UP AN ALERT
+Go ahead and clone this example to your workspace if you are running this on read only mode (example) to complete the next steps.
+In the previous worksheet we set up an alert by first setting up a Data Sink that was configured to send messages to a Slack channel. Follow the instructions here to set up a slack app and use that to send messages to a channel on you workspace whenever dwelling or loitering ships are identified.. https://api.slack.com/messaging/webhooks.
+If you don't have access to Slack, you can follow the instructions from one of other examples to set up an alerting system via webhook . Try the "Time Series Joins With ASOF" example.
+*/
+/* TEXT Block End */
+
+
+/* Worksheet: 5. Proximity */
 /* Worksheet Description:  */
 
 
@@ -410,14 +464,17 @@ The queries below are optional. They select two proximate tracks at random from 
 
 
 /* SQL Block Start */
+-- Select a random row from the proximate tracks
 CREATE OR REPLACE MATERIALIZED VIEW single_proximates 
 REFRESH EVERY 5 SECONDS AS 
 SELECT * FROM proximate_tracks
 ORDER BY RAND()
 LIMIT 1;
+
+-- Create a view of proxiamte tracks to show on map (one at a time)
 CREATE OR REPLACE MATERIALIZED VIEW map_proximates 
 REFRESH EVERY 5 SECONDS AS
-SELECT * from recent_tracks
+SELECT * from ship_tracks
 WHERE TRACKID = (SELECT TRACK_TABLE_TRACKID FROM single_proximates) OR
 TRACKID = (SELECT SEARCH_TABLE_TRACKID FROM single_proximates);
 /* SQL Block End */
@@ -425,6 +482,34 @@ TRACKID = (SELECT SEARCH_TABLE_TRACKID FROM single_proximates);
 
 /* TEXT Block Start */
 /*
-The map below shows tracks that at some point in the last 4 hours passed within 2 metres of each other within a 1 minute window.
+The map below shows tracks that at some point in the last 4 hours passed within 2 metres of each other within a 1 minute window. Most of these will likely be tug boats.
 */
 /* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
+SET UP AN ALERT
+Go ahead and clone this example to your workspace if you are running this on read only mode (example) to complete the next steps.
+Set up a slack app and use that to send messages to a channel on you workspace whenever proximity events occur (https://api.slack.com/messaging/webhooks).
+If you don't have access to Slack, you can follow the instructions from one of other examples to set up an alerting system via webhook . Try the "Time Series Joins With ASOF" example.
+*/
+/* TEXT Block End */
+
+
+/* Worksheet: ❗️6. Pause subscription */
+/* Worksheet Description: Description for sheet 7 */
+
+
+/* TEXT Block Start */
+/*
+PAUSE SUBSCRIPTIONS
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+ALTER TABLE ship_tracks
+PAUSE SUBSCRIPTION ships_stream_source;
+/* SQL Block End */
