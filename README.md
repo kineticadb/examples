@@ -1,5 +1,5 @@
 <h3 align="center">
-    <img width="300" src="https://www.kinetica.com/wp-content/uploads/2016/08/kinetica_logo_on_indigo2x.png" alt="Kinetica Logo"/>
+    <img width="300" src="_imgs/logo_purple.png" alt="Kinetica Logo"/>
 </h3>
 <h2 align="center">The database for time and space</h2>
 <h3 align="center">
