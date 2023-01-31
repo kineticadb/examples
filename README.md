@@ -1,5 +1,5 @@
 <h3 align="center">
-    <img width="300" src="_imgs/logo_purple.png" alt="Kinetica Logo"/>
+    <img width="300" src="_assets/images/logo_purple.png" alt="Kinetica Logo"/>
 </h3>
 <h2 align="center">The database for time and space</h2>
 <h3 align="center">
@@ -15,13 +15,13 @@
 Kinetica is a database, purpose built for real-time analytics at scale. It leverages vectorized memory-first architecture with kernels that have been custom built for over a decade to deliver blistering performance at scale on significantly less infrastructure than traditional data warehouses. Using a highly-distributed, lockless design, Kinetica enables simultaneous ingestion and analysis with integrated geospatial, graph, SQL, and AI/ML capabilities. With out of the box connectors for ingest and egress, native language bindings and a rich API ecosystem, developers can leverage the tools that they are comfortable and familiar with to build and deploy advanced analytical applications.
 
 <h3 align="center">
-<img src="_imgs/architecture.gif"></img>
+<img src="_assets/gifs/architecture.gif"></img>
 </h3>
 
-This project contains **fully reproducible examples** of using Kinetica. Most of the examples feature workbench, an interactive SQL notebook wtih built in features to import/export, explore and visualize your data. Workbench is available via the free [developer edition](https://www.kinetica.com/try/) of Kinetica and as a service on [Azure and AWS](https://www.kinetica.com/platform/cloud/).
+This project contains **fully reproducible examples** of using Kinetica. Most of the examples feature workbench, an interactive SQL notebook wtih built in features to import/export, explore and visualize your data. Workbench is available for free via [Kinetica cloud](https://cloud.kinetica.com/trynow/) and the [developer edition](https://www.kinetica.com/developer-edition/). You can also deploy it as a managed service on [Azure and AWS](https://www.kinetica.com/platform/cloud/).
 
-<h3 align='center'>
-<img src='https://2wz2rk1b7g6s3mm3mk3dj0lh-wpengine.netdna-ssl.com/wp-content/uploads/2022/06/workbench_screenshot.png'>
+<h3 align="center">
+<img src="_assets/images/workbench.png"></img>
 </h3>
 
 # How to run these examples
