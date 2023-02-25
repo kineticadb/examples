@@ -141,7 +141,8 @@ WITH OPTIONS (
     DATA SOURCE = 'vehicle_locations_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive'
+    ERROR_HANDLING = 'permissive',
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 
 );
 /* SQL Block End */
@@ -154,7 +155,8 @@ WITH OPTIONS (
     DATA SOURCE = 'vehicle_metrics_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive'
+    ERROR_HANDLING = 'permissive',
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
 
@@ -408,24 +410,3 @@ Finally, you can also build a dashboard app that provides a comprehensive view o
 2. Tableau: https://docs.kinetica.com/7.1/azure/bi/tableau/
 */
 /* TEXT Block End */
-
-
-/* Worksheet: ❗️PAUSE SUBSCRIPTION */
-/* Worksheet Description: Description for sheet 5 */
-
-
-/* TEXT Block Start */
-/*
-PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-ALTER TABLE vehicle_locations
-PAUSE SUBSCRIPTION vehicle_locations_source;
-
-ALTER TABLE vehicle_metrics
-PAUSE SUBSCRIPTION vehicle_metrics_source;
-/* SQL Block End */

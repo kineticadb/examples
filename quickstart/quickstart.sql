@@ -120,7 +120,7 @@ WITH OPTIONS (
     DATA SOURCE = 'taxi_streaming_ds',
     SUBSCRIBE = 'TRUE',
     ERROR_HANDLING = 'permissive',
-    POLL_INTERVAL = '5 seconds'
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
 
@@ -425,21 +425,3 @@ DASHBOARDS USING REVEAL
 Kinetica also offers a dashboarding tool called Reveal (see below) that is really useful for exploring your data. However, Reveal is not available on the free SaaS and developer edition of Kinetica.
 */
 /* TEXT Block End */
-
-
-/* Worksheet: ❗️7. Pause subscription */
-/* Worksheet Description: Description for sheet 6 */
-
-
-/* TEXT Block Start */
-/*
-PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-ALTER TABLE taxi_data_streaming
-PAUSE SUBSCRIPTION taxi_streaming_ds;
-/* SQL Block End */

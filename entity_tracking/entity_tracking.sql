@@ -98,7 +98,8 @@ WITH OPTIONS (
     DATA SOURCE = 'ships_stream_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
-    ERROR_HANDLING = 'permissive'
+    ERROR_HANDLING = 'permissive',
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
 
@@ -279,34 +280,22 @@ WHERE TRACKID IN (SELECT TRACKID FROM fence_tracks);
 /* TEXT Block Start */
 /*
 CREATE AN ALERT
-The materialized view that was setup earlier does all the work of monitoring the incoming data to automatically detect anytime a track intersects with our geofence. Now all we need to do is to direct that information out of Kinetica so that the end use is alerted as soon an event of interest occurs.
-There are a few different ways to do this. We could set up a Kafka topic as a data sink that receives all new records from the portfolio alert table that we created in the previous sheet or can use webhooks to setup alerts to messaging tools like Slack or custom applications.
-We are using slack for this demo.
+The materialized view that was setup earlier does all the work of monitoring the incoming data to automatically detect anytime a track intersects with our geofence. Now all we need to do is to direct that information out of Kinetica so that the end user is alerted as soon an event of interest occurs.
+There are a few different ways to do this. We could set up a Kafka topic or apps like Slack as a data sink that receives alerts. Or we can use a simple webhook to send the alerts and then process data from the webhook in downstream apps.
+SEE EVENTS BEING STREAMED IN REAL TIME
+For this illustration, we will use the latter to send records to a pipedream webhook and then hook that up to the following google spreadsheet:
+Visit the link above to see events buy events being detected in real time by Kinetica.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE MATERIALIZED VIEW slack_alert_text
-REFRESH ON CHANGE AS 
-SELECT CONCAT(TRACKID, ' has moved more than 2 Kms inside the weather zone in the last 5 mins❗️') as text 
-FROM fence_tracks;
-/* SQL Block End */
-
-
-/* SQL Block Start */
-CREATE OR REPLACE DATA SINK slack_alerts
-LOCATION = 'https://hooks.slack.com/services/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';
-/* SQL Block End */
-
-
-/* SQL Block Start */
--- Setup an alert sink
-CREATE STREAM geofence_alerts ON slack_alert_text
+-- CREATE A STREAM 
+CREATE STREAM ship_fence_events ON fence_tracks
 REFRESH ON CHANGE 
 WITH OPTIONS 
 (
-    DATASINK_NAME = 'slack_alerts'
+    DESTINATION = 'https://eooqqk4ei4cjxan.m.pipedream.net' 
 );
 /* SQL Block End */
 
@@ -492,24 +481,6 @@ The map below shows tracks that at some point in the last 4 hours passed within 
 SET UP AN ALERT
 Go ahead and clone this example to your workspace if you are running this on read only mode (example) to complete the next steps.
 Set up a slack app and use that to send messages to a channel on you workspace whenever proximity events occur (https://api.slack.com/messaging/webhooks).
-If you don't have access to Slack, you can follow the instructions from one of other examples to set up an alerting system via webhook . Try the "Time Series Joins With ASOF" example.
+If you don't have access to Slack, you can follow the instructions in the geofence sheet to set up an alerting system via webhook.
 */
 /* TEXT Block End */
-
-
-/* Worksheet: ❗️6. Pause subscription */
-/* Worksheet Description: Description for sheet 7 */
-
-
-/* TEXT Block Start */
-/*
-PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-ALTER TABLE ship_tracks
-PAUSE SUBSCRIPTION ships_stream_source;
-/* SQL Block End */

@@ -116,7 +116,7 @@ CREATE OR REPLACE DATA SOURCE static_13F
 LOCATION = 'S3' 
 WITH OPTIONS (
     ANONYMOUS = 'true',
-    BUCKET NAME = 'guidesdatapublic',
+    BUCKET NAME = 'kinetica-examples-data-public',
     REGION = 'us-east-1'
 );
 /* SQL Block End */
@@ -200,7 +200,7 @@ WITH OPTIONS (
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
     ERROR_HANDLING = 'permissive',
-    POLL_INTERVAL = '5 seconds'
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
 
@@ -371,22 +371,4 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 --     event = 'insert', 
 --     datasink_name = 'fin_risk_sink'
 -- );
-/* SQL Block End */
-
-
-/* Worksheet: ❗️PAUSE SUBSCRIPTION */
-/* Worksheet Description: Description for sheet 5 */
-
-
-/* TEXT Block Start */
-/*
-PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-ALTER TABLE px_streaming_quotes
-PAUSE SUBSCRIPTION streaming_13F;
 /* SQL Block End */

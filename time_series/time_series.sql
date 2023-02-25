@@ -444,7 +444,7 @@ Visit the link above to see events buy events being detected in real time by Kin
 
 
 /* SQL Block Start */
--- This query will not run as is. Update the URL below to make it work.
+-- CREATE A STREAM 
 CREATE STREAM buy_events ON trade_quotes 
 REFRESH ON CHANGE 
 WITH OPTIONS 
