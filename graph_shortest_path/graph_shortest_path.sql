@@ -27,11 +27,11 @@ The data for this guide is store in a publicly accessible AWS S3 bucket. Our fir
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE guides_data
+CREATE OR REPLACE DATA SOURCE graph_data
 LOCATION = 'S3'
 WITH OPTIONS (
     ANONYMOUS = 'true',
-    BUCKET NAME = 'guidesdatapublic',
+    BUCKET NAME = 'kinetica-examples-data-public',
     REGION = 'us-east-1'
 );
 /* SQL Block End */
@@ -51,7 +51,7 @@ LOAD DATA INTO seattle_roads
 FROM FILE PATHS 'seattle_roads.csv'
 FORMAT TEXT 
 WITH OPTIONS(
-    DATA SOURCE = 'guides_data'
+    DATA SOURCE = 'graph_data'
 );
 /* SQL Block End */
 
