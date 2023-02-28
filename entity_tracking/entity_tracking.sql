@@ -1,4 +1,4 @@
-/* Workbook: Tracking entities in real time */
+/* Workbook: Tracking Entities In Real Time */
 /* Workbook Description: This workbook uses a small sample of the AIS data to track entities in real time. */
 
 
@@ -164,7 +164,7 @@ Let's pick a random track from the 40 longest tracks in the data to study more c
 
 /* SQL Block Start */
 CREATE OR REPLACE MATERIALIZED VIEW long_tracks
-REFRESH ON CHANGE AS
+REFRESH EVERY 5 SECONDS AS 
 SELECT TRACKID 
 FROM track_summary
 LIMIT 40;
@@ -211,7 +211,7 @@ First we need to setup a view that calculates the distance moved by all ships in
 /* SQL Block Start */
 -- Calculate the distance traveled over the last 5 minutes
 CREATE OR REPLACE MATERIALIZED VIEW track_length_5mins
-REFRESH ON CHANGE AS
+REFRESH EVERY 5 SECONDS AS 
 SELECT 
     TRACKID, 
     ST_TRACKLENGTH(Y, X,TIMESTAMP, 1) / 1000 AS track_length 
@@ -237,7 +237,7 @@ The code below uses a materialized view that is refreshed every 5 seconds to ide
 /* SQL Block Start */
 -- Set up a view with all the fast moving tracks (we want to look for intersections anytime over the past 4 hours with the zone of interest)
 CREATE OR REPLACE MATERIALIZED VIEW moving_tracks
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS
 SELECT * FROM ship_tracks 
 WHERE 
     TRACKID IN (SELECT TRACKID FROM track_length_5mins WHERE track_length > 2) AND 
@@ -248,7 +248,7 @@ WHERE
 /* SQL Block Start */
 -- A materialized view of all the paths from the view above that have intersected with the zone
 CREATE OR REPLACE MATERIALIZED VIEW fence_tracks
-REFRESH ON CHANGE AS
+REFRESH EVERY 5 SECONDS AS
 SELECT *
 FROM TABLE
 (
@@ -284,7 +284,8 @@ The materialized view that was setup earlier does all the work of monitoring the
 There are a few different ways to do this. We could set up a Kafka topic or apps like Slack as a data sink that receives alerts. Or we can use a simple webhook to send the alerts and then process data from the webhook in downstream apps.
 SEE EVENTS BEING STREAMED IN REAL TIME
 For this illustration, we will use the latter to send records to a pipedream webhook and then hook that up to the following google spreadsheet:
-Visit the link above to see events buy events being detected in real time by Kinetica.
+https://bit.ly/3kvkeF6
+Copy and paste the link above into your browswers address bar to see geofencing events being detected in real time by Kinetica.
 */
 /* TEXT Block End */
 

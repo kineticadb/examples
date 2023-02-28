@@ -1,5 +1,5 @@
-/* Workbook: Time series analysis */
-/* Workbook Description: Description for Time series Analytics */
+/* Workbook: Time Series Analysis */
+/* Workbook Description: Common time series functions and use cases. */
 
 
 /* Worksheet: Data */
@@ -260,7 +260,7 @@ Let's use a window function to find the  5 minute moving average of closing pric
 /* SQL Block Start */
 -- Calculate the price gap when compared to a moving average for a 10 minute window
 CREATE OR REPLACE MATERIALIZED VIEW mv_mov_avg_minute
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS
 SELECT
     time,
     symbol,
@@ -310,7 +310,7 @@ Let's compare the cumulative hourly sum of traded stocks for the last 24 hours o
 /* SQL Block Start */
 -- Find the hourly total volume
 CREATE OR REPLACE MATERIALIZED VIEW hourly_volumes
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS 
 SELECT 
     symbol,
     HOUR(time) AS time_hour,
@@ -353,7 +353,7 @@ Let's use the rank function to find the top 5 percent positve changes in closing
 
 /* SQL Block Start */
 CREATE OR REPLACE MATERIALIZED VIEW percent_changes
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS 
 SELECT  
     symbol,
     time,
@@ -386,6 +386,7 @@ ORDER BY change_rank;
 
 
 /* SQL Block Start */
+-- Display the results
 SELECT * FROM top_changes;
 /* SQL Block End */
 
@@ -406,7 +407,7 @@ Kinetica allows you to perform high cardinality ASOF joins on streaming data to 
 
 /* SQL Block Start */
 CREATE OR REPLACE MATERIALIZED VIEW trade_quotes 
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS
 SELECT 
     DATETIME(time) AS time,
     t.symbol AS symbol,
@@ -438,7 +439,7 @@ EVENT STREAMING
 Let's say we want to trigger an event alert anytime there is a new sell decision using the ASOF query that we saw in the previous worksheet. We can does using a stream. A stream can send records from Kinetica into other data sinks like Kafka or a simple webhook.
 SEE EVENTS BEING STREAMED IN REAL TIME
 For this illustration, we will use the latter to send records to a pipedream webhook and then hook that up to the following google spreadsheet: https://bit.ly/3ExmTVC
-Visit the link above to see events buy events being detected in real time by Kinetica.
+Copy the link above and paste in your browsers address bar to see buy events being detected in real time by Kinetica.
 */
 /* TEXT Block End */
 

@@ -40,7 +40,7 @@ WITH OPTIONS (
 );
 
 -- Create the data source for vehicle locations
-CREATE OR REPLACE DATA SOURCE vehicle_locations_source
+CREATE OR REPLACE DATA SOURCE truck_locations_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_locations',
@@ -48,12 +48,12 @@ WITH OPTIONS (
 );
 
 -- Create the data source for taxi stream
-CREATE OR REPLACE DATA SOURCE taxi_streaming_ds
+CREATE OR REPLACE DATA SOURCE ny_taxi_stream
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS 
 (
     kafka_topic_name =  'qs_taxi',
-    credential = 'qs_creds'
+    credential = 'truck_creds'
 );
 /* SQL Block End */
 
@@ -68,7 +68,7 @@ The block of code below creates a table for recording the position of trucks in 
 
 /* SQL Block Start */
 -- A table to store the position of trucks over time.
-CREATE OR REPLACE TABLE vehicle_locations
+CREATE OR REPLACE TABLE truck_locations
 (
     x float,
     y float,
@@ -80,11 +80,11 @@ CREATE OR REPLACE TABLE vehicle_locations
 );
 
 -- Load data
-LOAD DATA INTO vehicle_locations
+LOAD DATA INTO truck_locations
 FROM FILE PATH ''
 FORMAT JSON
 WITH OPTIONS (
-    DATA SOURCE = 'vehicle_locations_source',
+    DATA SOURCE = 'truck_locations_source',
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
     ERROR_HANDLING = 'permissive',
@@ -95,7 +95,7 @@ WITH OPTIONS (
 CREATE OR REPLACE MATERIALIZED VIEW recent_locations
 REFRESH EVERY 5 SECONDS AS 
 SELECT * 
-FROM vehicle_locations 
+FROM truck_locations 
 WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1;
 /* SQL Block End */
 
@@ -141,7 +141,7 @@ A stream of NY taxi trips. This is for the binning sheet.
 LOAD DATA INTO taxi_trips
 FORMAT JSON
 WITH OPTIONS (
-    DATA SOURCE = 'taxi_streaming_ds',
+    DATA SOURCE = 'ny_taxi_stream',
     SUBSCRIBE = 'TRUE',
     TYPE_INFERENCE_MODE = 'speed',
     ERROR_HANDLING = 'permissive',
@@ -253,7 +253,7 @@ WHERE ST_AREA(wkt, 1) > 500000;
 /* TEXT Block Start */
 /*
 WHAT IS A SPATIAL JOIN?
-Spatial joins combine two different tables using a spatial relationship. They are used to answer questions such as “which areas overlap”, “where do the boundaries occur”, and “what is the area covered by a certain feature”. Spatial joins are typically computationally expensive to perform especially on larger data. But not so in Kinetica.
+Spatial joins combine two different tables using a spatial relationship. They are used to answer questions such as “which areas overlap”, “where do the boundaries occur”, and “what is the area covered by a certain feature”. Spatial joins are typically computationally expensive to perform especially on larger data. But Kinetica can handle this with ease. In fact, not only that it can keep the view maintained in real time as new data streams in.
 A SPATIAL JOIN
 In the code below, we use a join to identify records where a truck is within 200 meters of a particular fence.
 */
@@ -317,6 +317,8 @@ FROM recent_locations, dc_fences
 WHERE 
     STXY_CONTAINS(wkt, x, y) = 1 AND 
     TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5;
+
+SELECT * FROM fence_events;
 /* SQL Block End */
 
 
@@ -353,8 +355,8 @@ Let's calculate the length and duration each of the truck tracks.
 
 /* SQL Block Start */
 -- Compute the length and duration of tracks
-CREATE OR REPLACE MATERIALIZED VIEW track_summary
-REFRESH EVERY 1 MINUTE AS 
+CREATE OR REPLACE MATERIALIZED VIEW truck_summary
+REFRESH EVERY 5 SECOND AS
 SELECT 
     TRACKID,
     ROUND(ST_TRACKLENGTH(Y, X,TIMESTAMP, 1) / 1000) AS track_length_km, 
@@ -363,7 +365,7 @@ FROM recent_locations
 GROUP BY TRACKID;
 
 
-SELECT * FROM track_summary;
+SELECT * FROM truck_summary;
 /* SQL Block End */
 
 
@@ -459,7 +461,7 @@ Let's use the latter to visualize hotspots for taxi pickups in New York. The ste
 /* SQL Block Start */
 -- Calculate the h3 index for each pickup and dropoff point
 CREATE OR REPLACE MATERIALIZED VIEW nytaxi_h3_index
-REFRESH ON CHANGE AS 
+REFRESH EVERY 5 SECONDS AS 
 SELECT 
     pickup_latitude,
     pickup_longitude,

@@ -363,7 +363,7 @@ We can use Kinetica to set up an alert whenever a particular drop off location i
 /* TEXT Block Start */
 /*
 MATERIALIZED VIEWS
-Materialized views can be kept up to date using 4 modes - manual, on change, on query, or periodic. Here we will use the periodic option to select all the drop offs that are within 500 meters of your restaurant. This query is refreshed every 5 seconds, so you will recieve an alert if there was a new dropoff in the last 5 seconds.
+Materialized views can be kept up to date using 4 modes - manual, on change, on query, or periodic. Here we will use the periodic option to select all the drop offs that are within 200 meters of your restaurant in the last 10 minutes. This query is refreshed every 5 seconds, so you will recieve an alert if there was a new dropoff in the last 5 seconds.
 ✎ NOTE
 : There is an element of chance for the query below, since it is not necessary that there are any dropoffs happening around the store at a given point time. So you might not see new dropoffs appear immediately
 */
@@ -374,15 +374,21 @@ Materialized views can be kept up to date using 4 modes - manual, on change, on 
 CREATE OR REPLACE MATERIALIZED VIEW store_front_dropoffs
 REFRESH EVERY 5 SECONDS
 AS
-SELECT *
+SELECT 
+    DATETIME(dropoff_datetime) AS dropoff_datetime,
+    dropoff_latitude, 
+    dropoff_longitude, 
+    vendor_id
 FROM taxi_data_streaming
-WHERE GEODIST(-73.992975, 40.736562, dropoff_longitude, dropoff_latitude) < 1000;
+WHERE GEODIST(-73.992975, 40.736562, dropoff_longitude, dropoff_latitude) <  200 AND 
+TIMEBOUNDARYDIFF('MINUTE', dropoff_datetime, NOW()) < 10
+;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-The map below shows the dropoffs that are within 500 meters of the store. It is set to update every 5 seconds, so new dropoffs will automatically show up whenever they satisfy the criteria.
+The map below shows the dropoffs that are within 200 meters of the store in the last 10 minutes. It is set to update every 5 seconds, so new dropoffs will automatically show up whenever they satisfy the criteria.
 */
 /* TEXT Block End */
 
@@ -390,9 +396,11 @@ The map below shows the dropoffs that are within 500 meters of the store. It is 
 /* TEXT Block Start */
 /*
 SETTING UP AN ALERT
-Broadly speaking there are two ways to setup an alert using Kinetica. You could either push alerts via a webhook or your could sink them to a Kafka topic. For this example we will use a webhook.
-TASK
-✍️ Go to https://webhook.site/ and copythe generated webhook and paste it below in the destination field. You can now, monitor the webhook site to see any alerts come in. Note that you may have to wait for a few minutes to see alerts that satisfy our criteria.
+Broadly speaking there are two ways to setup an alert using Kinetica. You could either push alerts via a webhook or your could stream them to a data sink (like Apache Kafka). For this example we will use a webhook.
+SEE EVENTS BEING STREAMED IN REAL TIME
+For this illustration, we will use the latter to send records to a pipedream webhook and then hook that up to the following google spreadsheet:
+https://bit.ly/3IWFLQA
+Copy the link above and paste in your browsers address bar to see taxi dropoff events within 200 meters of the store being detected in real time by Kinetica.
 */
 /* TEXT Block End */
 
@@ -403,7 +411,7 @@ ON TABLE store_front_dropoffs
 REFRESH ON CHANGE
 WITH OPTIONS 
 (
-    DESTINATION = 'https://webhook.site/3fe97798-026d-4b02-88f3-48905dfed9a9' -- 'Paste Webhook URL'
+    DESTINATION = 'https://eo8ebtcs7m354db.m.pipedream.net' 
 );
 /* SQL Block End */
 

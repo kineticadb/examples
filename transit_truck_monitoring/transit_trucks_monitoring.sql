@@ -93,7 +93,7 @@ It's usually best practice to specify credentials separately so that they can be
 
 
 /* SQL Block Start */
-CREATE OR REPLACE CREDENTIAL truck_creds
+CREATE OR REPLACE CREDENTIAL transit_creds
 TYPE = 'kafka'
 WITH OPTIONS (
     'security.protocol' = 'SASL_SSL',
@@ -109,7 +109,7 @@ CREATE OR REPLACE DATA SOURCE vehicle_metrics_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_metrics',
-    credential = 'truck_creds'
+    credential = 'transit_creds'
 );
 /* SQL Block End */
 
@@ -119,7 +119,7 @@ CREATE OR REPLACE DATA SOURCE vehicle_locations_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_locations',
-    credential = 'truck_creds'
+    credential = 'transit_creds'
 );
 /* SQL Block End */
 
@@ -179,8 +179,16 @@ Note
 
 
 /* SQL Block Start */
+-- Create a view to represent the last hour of data
+CREATE OR REPLACE MATERIALIZED VIEW recent_truck_locations
+REFRESH EVERY 5 SECONDS AS 
+SELECT * 
+FROM vehicle_locations 
+WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1;
+
+
 SELECT TRACKID, COUNT(*) 
-FROM vehicle_locations
+FROM recent_truck_locations
 GROUP BY TRACKID;
 /* SQL Block End */
 
@@ -249,7 +257,7 @@ REFRESH EVERY 5 SECONDS
 AS
 SELECT vl.TRACKID AS vehicle_id, DATETIME(vm.ts) as DATETIME, vm.pressure
 FROM 
-vehicle_locations vl 
+recent_truck_locations vl 
 INNER JOIN vehicle_metrics vm ON vl.TRACKID = vm.id AND vl.TIMESTAMP = vm.ts;
 /* SQL Block End */
 
@@ -293,7 +301,7 @@ vl.y,
 (vm.pressure/100) as pressure,
 (vm."compression"/20) as avg_compression,
 (vm.temp/1000) as temperature
-FROM vehicle_locations vl 
+FROM recent_truck_locations vl 
 INNER JOIN
 vehicle_metrics vm
 ON vl.TRACKID = vm.id AND
@@ -334,20 +342,21 @@ Now we can setup downstream alerts and decisioning systems that are triggered wh
 Now that we have a continuously updated ASOF Join view that combines location and metrics data we can go ahead and point downstream dashboards and alerting systems to the materialized view table to get real time information on the trucks that are not maintaining the correct conditions for cold transit.
 SETTING UP AN ALERT FOR TEMPERATURE GREATER THAN 60
 There are a few different ways to do it. We could set up a Kafka data sink that receives all new records from the portfolio alert table that we created in the previous sheet. We can use webhooks to setup alerts on applications like Slack etc.
-For this demo, we recommend using the website: https://webhook.site/ to generate a webhook URL. Copy the webhook URL and paste it as the destination in the stream below. This will send alerts to that URL any time the temperature value is greater than 60 for a particular truck.
+CLONE, UNCOMMENT AND UPDATE
+For this demo, we recommend using the website: https://webhook.site/ to generate a webhook URL. Clone this workbook to add the webhook URL as the destination in the stream below. This will send alerts to that URL any time the temperature value is greater than 60 for a particular truck. Uncomment the code below to try this on your own.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
 -- This query will not run as is. Update the URL below to make it work.
-CREATE STREAM alert_webhook
-ON TABLE realtime_vehicle_analytics
-WHERE temperature > 60
-WITH OPTIONS 
-(
-    DESTINATION = 'WEBHOOK_URL' -- 'Paste Webhook URL (see above)'
-);
+-- CREATE STREAM alert_webhook
+-- ON TABLE realtime_vehicle_analytics
+-- WHERE temperature > 60
+-- WITH OPTIONS 
+-- (
+--     DESTINATION = 'WEBHOOK_URL' -- 'Paste Webhook URL (see above)'
+-- );
 /* SQL Block End */
 
 
@@ -362,13 +371,13 @@ The only change in the query below is that we use a webhook that is specifically
 
 
 /* SQL Block Start */
-CREATE STREAM alert_slack_transit_truck
-ON TABLE realtime_vehicle_analytics
-WHERE temperature > 60
-WITH OPTIONS 
-(
-    DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>' --Update the url with your key.
-);
+-- CREATE STREAM alert_slack_transit_truck
+-- ON TABLE realtime_vehicle_analytics
+-- WHERE temperature > 60
+-- WITH OPTIONS 
+-- (
+--     DESTINATION = 'https://hooks.slack.com/services/<ENTER YOUR KEY>' --Update the url with your key.
+-- );
 /* SQL Block End */
 
 
