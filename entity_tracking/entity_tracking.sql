@@ -319,7 +319,7 @@ CREATE OR REPLACE MATERIALIZED VIEW recent_tracks
 REFRESH EVERY 5 MINUTES AS
 SELECT * 
 FROM ship_tracks 
-WHERE TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5;
+WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1;
 
 -- Identify the track length and the bounds of the tracks that have recordings for the last 4 hours.
 CREATE OR REPLACE MATERIALIZED VIEW track_area_length_4hr
