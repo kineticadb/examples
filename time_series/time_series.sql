@@ -198,41 +198,46 @@ FROM trades;
 
 /* TEXT Block Start */
 /*
-FIND THE DATE RANGE OF THE DATA
-The data starts from November 8 till December 12th in 2022.
+IDENTIFY TIME BUCKETS
+A time bucket is useful for establishing an arbitrary interval into which a time (or date) value falls into. This is useful for creating arbitrary groups in data aggregating data based on those groups.
+Let's use this to bucket our data into 5 minute intervals and calculate the total volume of trades within those groups for yesterday. The time bucket functions returns the start of the a particular interval. I have used the SPLIT function to only return the corresponding time part of the interval without the date part. This will make it easier to ready the labels in the bar chart.
+👉🏼NOTE:
+The data for this workbook is based on real world data but it is synthetic. The kafka producer that generates this data is constantly producing data irrespective of whether it corresponds to market hours or not. This is so that the queries here will have access to the most recent data regardless of which time zone they are run from.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
 SELECT 
-    DAY(MIN(time)) as start_day,
-    MONTH(MIN(time)) as start_month,
-    YEAR(MIN(time)) as start_year,
-    DAY(MAX(time)) as end_day,
-    MONTH(MAX(time)) as end_month,
-    YEAR(MAX(time)) as end_year
-FROM trades;
+    SPLIT(
+        TIME_BUCKET(INTERVAL 30 MINUTES, time, 0, 0), --bucket the data
+        ' ',
+        2) AS time_bucket,
+    SUM(trading_volume) AS total_volume
+FROM trades
+WHERE date(time) = DATE(DATEADD(DAY, -1, NOW()))
+GROUP BY time_bucket
+ORDER BY time_bucket;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-Let's use the TIMESTAMPDIFF function to find the total number of hours of quotes data we have.
+ADD OR SUBTRACT FROM DATE OR TIME VALUES
+Kinetica offers a few different functions to add or subtract data and time values. Here I have used a simple interval functions to add a day to the current time (in UTC timezone).
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-SELECT TIMESTAMPDIFF(HOUR, MIN(timestamp), MAX(timestamp)) AS total_hrs_avl
-FROM quotes;
+SELECT NOW() + INTERVAL 1 DAY AS same_time_tomorrow;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
 DATE/TIME CONVERSION FUNCTIONS
-Kinetica also offers functions that can be used to convert between different data time formats.
+Kinetica offers functions that can be used to convert between different data time formats.
 Let's use the DATE_TO_EPOCH_MSECS(year, month, day, hour, min, sec, msec) function to convert the time column in the trades data to milliseconds since the UNIX epoch (Jan 1, 1970).
 */
 /* TEXT Block End */
