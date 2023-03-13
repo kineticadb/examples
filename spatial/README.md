@@ -1,16 +1,3 @@
-<head>
-<style>
-   .column {
-      float: left;
-      width: 33.33%;
-   }
-   .row:after {
-      content: "";
-      display: table;
-      clear: both;
-   }
-</style>
-</head>
 <h3 align="center" style="margin:0px">
     <img width="200" src="../_assets/images/logo_purple.png" alt="Kinetica Logo"/>
 </h3>
@@ -35,36 +22,31 @@ Real time spatial analytics with Kinetica
 
 This workbook demonstrates a wide range of spatial analytical capabilities, including:
 1. Basic spatial operations for computing attributes like area, indentifying spatial relationship like intersections between spatial objects, and computing new geometries.
-2. Spatial filtering
-3. Spatial joins of data, where two tables are combined based on a spatial relationship
+2. Spatial filtering: How to filter records in a table based on a spatial criteria.
+3. Spatial joins: Combine two tables based on a spatial relationship
 4. Geofencing. Identifying when a particular object enters a specific spatial 'fence'
 5. Entity tracking: Tracks are unique to Kinetica and make it easy to analyze objects in motion.
 6. Binning: Create spatial bins to aggregate data. We use the H3 index developed by Uber for this demonstration.
 
-### About the data
+## Real time data feeds
+All of the analsis is done on real time data feeds that are continuously updated. Once set up, Kinetica will keep all the queries updated automatically.
+
+## About the data
 We will use the following data for this demo.
 
 1. A stream of GPS coordinates that record the movement of seven trucks in Washington, D.C. The data is being streamed in via a Kafka topic.
-2. A set of polygons that outline different landmarks in D.C.
-3. A stream of taxi trips that are occurring in New York City (a few hundred per second)
-
-<div class="row">
-  <div class="column">
-   <h3 align="center" style="margin:0px">
+<h3 align="center" style="margin:0px">
     <img src="assets/truck_tracks.png" alt="Tracks"/>
    </h3>
-  </div>
-  <div class="column">
-   <h3 align="center" style="margin:0px">
+
+2. A set of polygons that outline different landmarks in D.C.
+<h3 align="center" style="margin:0px">
     <img src="assets/dc_fences.png" alt="DC fences"/>
    </h3>
-  </div>
-  <div class="column">
-   <h3 align="center" style="margin:0px">
-    <img src="assets/ny_taxi_pickups.png" alt="taxi pickups"/>
-   </h3>
-  </div>
-</div>
+
+3. A stream of taxi trips that are occurring in New York City (a few hundred per second)
+<h3 align="center" style="margin:0px">    <img src="assets/ny_taxi_pickups.png" alt="taxi pickups"/>
+</h3>
 
 # Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
