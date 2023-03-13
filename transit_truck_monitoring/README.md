@@ -16,6 +16,9 @@
 <h1>
 Real time IoT monitoring system for transit trucks
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="assets/real_time_truck_monitoring.png" alt="Truck monitoring Logo"/>
+</h3>
 
 <h6 align="center">Demo Video 👇🏼</h6>
 <h3 align="center">

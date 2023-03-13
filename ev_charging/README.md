@@ -16,6 +16,9 @@
 <h1>
 Finding optimal routes with an electric vehicle charging stop using Kinetica's graph API
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="assets/optimal_charging_station.png" alt="EV charging banner"/>
+</h3>
 
 <h6 align="center">Demo Video 👇🏼</h6>
 <h3 align="center">

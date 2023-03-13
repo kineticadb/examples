@@ -16,6 +16,9 @@
 <h1>
 Shortest path with Kinetica
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="imgs/graph_shortest_path.png" alt="Shortest path banner"/>
+</h3>
 
 This guide shows how to use Kinetica's graph API to the shortest routes between different points in Seattle. The entire exercise is done using SQL. There are three types of routes that we solve - single source to single destination, a single source to many destinations and many sources to many destinations.
 

@@ -17,7 +17,7 @@
 Real time time series analysis with Kinetica
 </h1>
 <h3 align="center" style="margin:0px">
-    <img width="600" src="assets/spatial_analytics.png" alt="Spatial Logo"/>
+    <img width="600" src="assets/time_series_analysis.png" alt="Time series Logo"/>
 </h3>
 
 This workbook demonstrates a wide range of time series capabilities with Kinetica.

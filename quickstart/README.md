@@ -16,6 +16,9 @@
 <h1>
 Quickstart guide
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="img/quick_start_guide.png" alt="QS banner"/>
+</h3>
 
 This workbook provides a quick overview of some of Kinetica's features.
 

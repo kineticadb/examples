@@ -16,6 +16,9 @@
 <h1>
 Real time financial risk alerting system
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="assets/real_time_financial_risk.png" alt="Fin risk banner"/>
+</h3>
 
 <h6 align="center">Demo Video 👇🏼</h6>
 <h3 align="center">
