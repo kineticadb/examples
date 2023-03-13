@@ -1,9 +1,5 @@
 <h3 align="center" style="margin:0px">
-<<<<<<< Updated upstream
     <img width="200" src="../_assets/images/logo_purple.png" alt="Kinetica Logo"/>
-=======
-   <img width="200" src="../_assets/images/logo_purple.png" alt="Kinetica Logo"/>
->>>>>>> Stashed changes
 </h3>
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
