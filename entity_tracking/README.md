@@ -1,5 +1,9 @@
 <h3 align="center" style="margin:0px">
+<<<<<<< Updated upstream
     <img width="200" src="../_assets/images/logo_purple.png" alt="Kinetica Logo"/>
+=======
+   <img width="200" src="../_assets/images/logo_purple.png" alt="Kinetica Logo"/>
+>>>>>>> Stashed changes
 </h3>
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
@@ -18,24 +22,24 @@ Tracking entities in real-time with Kinetica
 </h1>
 
 <h3 align="center">
-   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/tracks_speed.gif?raw=true" width="600px"></img>
+   <img src="assets/tracks.gif" width="600px"></img>
 </h3>
 This demo uses Tracks - a native geospatial object in Kinetica - along with other geospatial functions and visualizations to detect the following events.
 
 * When an object enters a certain area (geo-fence)
 
 <h3 align="center">
-   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/geofence.gif?raw=true" width="600px"></img>
+   <img src="assets/geofence.gif" width="600px"></img>
 </h3>
 
 * When an object is dwelling or loitering
 
 <h3 align="center">
-   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/dwell_loiter.gif?raw=true" width="600px"></img>
+   <img src="assets/dwell_loiter.gif" width="600px"></img>
 </h3>
 * When two objects come within a certain distance of each other
 <h3 align="center">
-   <img src="https://github.com/kineticadb/examples/blob/master/_imgs/gifs/proximate.gif?raw=true" width="600px"></img>
+   <img src="assets/proximate.gif" width="600px"></img>
 </h3>
 Kinetica’s vectorized engine makes it possible to perform these complex computations in real time as the data streams in. Even on a personal computer.
 

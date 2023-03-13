@@ -162,12 +162,12 @@ The query below find the highest traded price every day for Amazon and Google. T
 /* SQL Block Start */
 SELECT
     symbol,
-    DATE(CONCAT(CONCAT(CONCAT(YEAR(time), '-'), CONCAT(MONTH(time), '-')), CONCAT(DAY(time), ''))) AS trade_date,
+    DATE_TRUNC(DAY, time) AS trade_day,
     MAX(price_high) as price_high
 FROM trades 
-WHERE symbol != 'AAPL'
-GROUP BY trade_date, symbol
-ORDER BY trade_date, symbol;
+WHERE symbol != 'AAPL' AND YEAR(time) = 2023
+GROUP BY trade_day, symbol
+ORDER BY trade_day, symbol;
 /* SQL Block End */
 
 
@@ -200,7 +200,7 @@ FROM trades;
 /*
 IDENTIFY TIME BUCKETS
 A time bucket is useful for establishing an arbitrary interval into which a time (or date) value falls into. This is useful for creating arbitrary groups in data aggregating data based on those groups.
-Let's use this to bucket our data into 5 minute intervals and calculate the total volume of trades within those groups for yesterday. The time bucket functions returns the start of the a particular interval. I have used the SPLIT function to only return the corresponding time part of the interval without the date part. This will make it easier to ready the labels in the bar chart.
+Let's use this to bucket our data into 30 minute intervals and calculate the total volume of trades within those groups for the last 6 hours. The time bucket functions returns the start of the a particular interval. I have used the SPLIT function to only return the corresponding time part of the interval without the date part. This will make it easier to ready the labels in the bar chart.
 👉🏼NOTE:
 The data for this workbook is based on real world data but it is synthetic. The kafka producer that generates this data is constantly producing data irrespective of whether it corresponds to market hours or not. This is so that the queries here will have access to the most recent data regardless of which time zone they are run from.
 */
@@ -215,7 +215,7 @@ SELECT
         2) AS time_bucket,
     SUM(trading_volume) AS total_volume
 FROM trades
-WHERE date(time) = DATE(DATEADD(DAY, -1, NOW()))
+WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 6
 GROUP BY time_bucket
 ORDER BY time_bucket;
 /* SQL Block End */
@@ -265,7 +265,7 @@ Let's use a window function to find the  5 minute moving average of closing pric
 /* SQL Block Start */
 -- Calculate the price gap when compared to a moving average for a 10 minute window
 CREATE OR REPLACE MATERIALIZED VIEW mv_mov_avg_minute
-REFRESH EVERY 5 SECONDS AS
+REFRESH ON CHANGE AS
 SELECT
     time,
     symbol,
@@ -280,7 +280,7 @@ SELECT
         2
     ) AS price_gap
 FROM trades
-WHERE TIMEBOUNDARYDIFF('HOUR', time, NOW()) < 24 --Only keep the last 24 hours
+WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 --Only keep the last 24 hours
 ORDER BY time, symbol;
 
 -- Find the average hourly price gap
@@ -321,7 +321,7 @@ SELECT
     HOUR(time) AS time_hour,
     SUM(trading_volume) AS total_volume
 FROM trades
-WHERE TIMEBOUNDARYDIFF('HOUR', time, NOW()) < 24 --Only keep the last 24 hours
+WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 --Only keep the last 24 hours
 GROUP BY time_hour, symbol;
 
 -- Find the cumulative totals
