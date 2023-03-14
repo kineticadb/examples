@@ -8,6 +8,14 @@
 
 /* TEXT Block Start */
 /*
+👇 NOTE
+The spatial analytics example workbook offers a more comprehensive look at Kinetica's spatial capabilities (including geofencing). Use that for a deeper dive.
+*/
+/* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
 This workbook illustrates the concept of geofencing using Kinetica.
 WHAT IS GEOFENCING?
 Geofencing is the ability to classify an object as being inside a defined geographical boundary.
@@ -34,11 +42,6 @@ Kinetica uses schema's to organize tables. It is good practice to have a schema 
 /* TEXT Block End */
 
 
-/* SQL Block Start */
-CREATE SCHEMA IF NOT EXISTS geofence;
-/* SQL Block End */
-
-
 /* TEXT Block Start */
 /*
 LOAD THE DATA
@@ -51,7 +54,7 @@ We will be using a stream of vehicle locations. The steps for loading this data 
 
 
 /* SQL Block Start */
-CREATE OR REPLACE TABLE geofence.vehicle_locations
+CREATE OR REPLACE TABLE vehicle_locations
 (
     x float,
     y float,
@@ -66,41 +69,38 @@ CREATE OR REPLACE TABLE geofence.vehicle_locations
 
 /* SQL Block Start */
 -- Credentials for the kafka cluster
-CREATE OR REPLACE CREDENTIAL geofence.confluent_creds
+CREATE OR REPLACE CREDENTIAL confluent_creds
 TYPE = 'kafka'
 WITH OPTIONS (
     'security.protocol' = 'SASL_SSL',
     'sasl.mechanism' = 'PLAIN',
-    'sasl.username'='FKHU5OKQSM6J3FZY',
-    'sasl.password'='BT0b0049Q016ncuMUD0Pt5bRPr6YZu9YNioEtGqfuaN1pPmwyPUVMytUWloqtt8o'
+    'sasl.username'='QZN62QB2RBTLW74L',
+    'sasl.password'='iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
-CREATE OR REPLACE DATA SOURCE geofence.vehicle_locations_source
+CREATE OR REPLACE DATA SOURCE vehicle_locations_source
 LOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'
 WITH OPTIONS (
     'kafka_topic_name' =  'vehicle_locations',
-    credential = 'geofence.confluent_creds'
+    credential = 'confluent_creds'
 );
 /* SQL Block End */
 
 
 /* SQL Block Start */
--- Reducing the default batch size for kafka so that tracks appear smooth. Larger batch sizes will render as big jumps when visualizing tracks.
-ALTER SYSTEM SET PROPERTIES ('kafka_batch_size' = '1');
-
 -- Start loading the data into the previously defined table
-LOAD DATA INTO geofence.vehicle_locations
+LOAD DATA INTO vehicle_locations
 FROM FILE PATH ''
 FORMAT JSON
 WITH OPTIONS (
-    DATA SOURCE = 'geofence.vehicle_locations_source',
+    DATA SOURCE = 'vehicle_locations_source',
     KAFKA_GROUP_ID = 'BH_90210',
     SUBSCRIBE = TRUE,
-    TYPE_INFERENCE_MODE = 'speed'
-
+    TYPE_INFERENCE_MODE = 'speed',
+    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
 
@@ -119,11 +119,11 @@ We will be specifically looking at vehicle 5. So we will start by setting up a m
 
 
 /* SQL Block Start */
--- Create a materialized view that refreshes every 5 seconds to register vehicle locations
-CREATE OR REPLACE MATERIALIZED VIEW geofence.vehicle_5
+-- Create a materialized view that refreshes every 5 seconds to register location of truck number 5
+CREATE OR REPLACE MATERIALIZED VIEW vehicle_5
 REFRESH EVERY 5 SECONDS AS
 SELECT * 
-FROM geofence.vehicle_locations
+FROM vehicle_locations
 WHERE TRACKID = '5';
 /* SQL Block End */
 
@@ -138,14 +138,32 @@ ST_MAKEENVELOPE() is a function from Kinetica's geospatial library of functions 
 
 /* SQL Block Start */
 -- A temporary table to show the envelope on the map
-CREATE OR REPLACE TEMP TABLE geofence.temp_envelope AS 
+CREATE OR REPLACE TABLE envelope AS 
 SELECT ST_MAKEENVELOPE(-77.05, 38.90, -77.0, 38.885) AS zone;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-SETUP A STREAM
+CREATE A VIEW THAT RECORDS ALERTS
+The materialized view below records an occurence where a vehicles location coincides with the boundary of the zone of interest in the last 5 minutes.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+CREATE OR REPLACE MATERIALIZED VIEW geofence_alert
+REFRESH EVERY 5 SECONDS AS 
+SELECT * 
+FROM vehicle_5, envelope 
+WHERE STXY_CONTAINS(zone, x, y) AND
+TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+SETUP A STREAM OF ALERTS
 A stream in Kinetica can be used to publish changes on a table to a target destination. This target could be a webhook or a Kafka topic.
 GO TO WEBHOOK.SITE TO TRY THIS EXAMPLE ON YOUR OWN
 The easiest way to test this code out is by using a webhook. You can generate one for free and observe requests coming in via the following website: https://webhook.site/.
@@ -157,47 +175,11 @@ to generate a webhook and paste it in the code below to create the stream. Once 
 
 
 /* SQL Block Start */
-CREATE STREAM geofence.vehicle_inzone
-ON TABLE geofence.vehicle_5
-    REFRESH ON CHANGE
-    WHERE STXY_CONTAINS(
-        ST_MAKEENVELOPE(-77.05, 38.90, -77.0, 38.885), 
-        X, 
-        Y) = 1
+CREATE STREAM vehicle_inzone
+ON TABLE geofence_alert
+REFRESH ON CHANGE
 WITH OPTIONS 
 (
     DESTINATION = 'PASTE THE WEHOOK URL HERE'
 );
-/* SQL Block End */
-
-
-/* Worksheet: 4. Clean up sheet Copy */
-/* Worksheet Description: Description for sheet 2 */
-
-
-/* TEXT Block Start */
-/*
-CLEAN UP
-1. Reset the Kafka ingest batch size back to the default setting.
-2. Drop the schema and associated data objects
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
--- Resetting the batch size back to default
-ALTER SYSTEM SET PROPERTIES ('kafka_batch_size' = '1000');
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-Drop the schema and all the tables inside it.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
--- Drop the schema (and associated data objects)
-DROP SCHEMA IF EXISTS geofence CASCADE;
 /* SQL Block End */

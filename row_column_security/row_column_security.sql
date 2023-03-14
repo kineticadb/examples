@@ -8,6 +8,14 @@
 
 /* TEXT Block Start */
 /*
+NOTE: THIS ONLY WORKS ON DEVELOPER EDITION
+This workbook showcases quereis that only an cluster admin can execute it therefore will not work on Kinetica's cloud offerings.
+*/
+/* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
 Create the schema
 Schemas are logical containers for most database objects (tables, views, etc.). In order to place an object in a schema, the schema must be created first--schemas will not be automatically created when specified in CREATE TABLE or similar calls.
 We will be using the schema OurCo to store all the employee and salary tables. The code below drops any existing occurrences of the OurCo schema. A schema can only be dropped if there are no tables in it. Setting the cascade option to true will drop the tables in a schema first and then drop the schema as well.

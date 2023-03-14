@@ -11,7 +11,7 @@
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>
 <p align = "center">
- <img src="https://img.shields.io/badge/tested-%3E=v7.7.2-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
+ <img src="https://img.shields.io/badge/tested-%3E=v7.1.8-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
 </p>
 <h1>
 A simple illustration of Geofencing with Kinetica

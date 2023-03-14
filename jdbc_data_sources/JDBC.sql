@@ -8,6 +8,14 @@
 
 /* TEXT Block Start */
 /*
+✎ NOTE
+This workbook showcases certian admin features that will only work in developers edition and not on Kinetica cloud.
+*/
+/* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
 JDBC DATA SOURCES
 Java DataBase Connectivity (JDBC) is a standardized API for interacting with databases using Java programs. Kinetica offers a data source that can be used to connect to other databases and applications using a JDBC driver. We can then issue remote queries to this data source to load and export data to and from Kinetica into this data source.
 CDATA
