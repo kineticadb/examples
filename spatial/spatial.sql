@@ -30,6 +30,8 @@ WITH OPTIONS (
 );
 
 -- Credentials for Kafka cluster
+DROP TABLE IF EXISTS truck_locations;
+DROP TABLE IF EXISTS taxi_trips;
 CREATE OR REPLACE CREDENTIAL truck_creds
 TYPE = 'kafka'
 WITH OPTIONS (
@@ -91,12 +93,12 @@ WITH OPTIONS (
     kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 
--- Create a view to represent the last hour of data
+-- Create a view to represent the last 2 hours of data
 CREATE OR REPLACE MATERIALIZED VIEW recent_locations
 REFRESH EVERY 5 SECONDS AS 
 SELECT * 
 FROM truck_locations 
-WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1;
+WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 2;
 /* SQL Block End */
 
 
@@ -319,6 +321,40 @@ WHERE
     TIMEBOUNDARYDIFF('MINUTE', TIMESTAMP, NOW()) < 5;
 
 SELECT * FROM fence_events;
+/* SQL Block End */
+
+
+/* Worksheet: Stream events */
+/* Worksheet Description: Description for sheet 9 */
+
+
+/* TEXT Block Start */
+/*
+EVENT STREAMING
+Let's say we want to trigger an event alert anytime there is a geofence event we saw in the previous worksheet. We can does using a stream. A stream can send records from Kinetica into other data sinks like Kafka or a simple webhook.
+SEE EVENTS BEING STREAMED IN REAL TIME
+For this illustration, we will use the latter to send records to a pipedream webhook and then hook that up to the following google spreadsheet: https://bit.ly/3JxJRO9
+Copy the link above and paste in your browsers address bar to see geofence events being detected in real time by Kinetica.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+CREATE OR REPLACE MATERIALIZED VIEW alert_text
+REFRESH ON CHANGE AS 
+SELECT 
+    TRACKID,
+    event_text
+FROM fence_events;
+
+-- CREATE A STREAM 
+CREATE STREAM fence_alerts ON 
+alert_text
+REFRESH ON CHANGE 
+WITH OPTIONS 
+(
+    DESTINATION = 'https://eolylaanwtts64t.m.pipedream.net' 
+);
 /* SQL Block End */
 
 
