@@ -203,7 +203,7 @@ SELECT * FROM TABLE
            SELECT 
                 id AS EDGE_ID,                                 
                 traffic_cost AS VALUESPECIFIED
-            FROM hsubhash_kinetica.weights_mapped
+            FROM weights_mapped
         )
     )
 
