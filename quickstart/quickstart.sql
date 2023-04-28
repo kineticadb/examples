@@ -98,7 +98,7 @@ CREATE OR REPLACE DATA SOURCE quickstart
 LOCATION = 'S3'
 WITH OPTIONS (
     ANONYMOUS = 'true',
-    BUCKET NAME = 'quickstartpublic',
+    BUCKET NAME = 'kinetica-examples-data-public',
     REGION = 'us-east-1'
 );
 /* SQL Block End */
@@ -126,11 +126,11 @@ WITH OPTIONS (
 
 
 /* SQL Block Start */
-DROP TABLE IF EXISTS nyct2010;
+DROP TABLE IF EXISTS nyct2020;
 
 -- Load the NYC neighborhood map into Kinetica
-LOAD DATA INTO nyct2010 
-FROM FILE PATHS 'nyct2010.csv'
+LOAD DATA INTO nyct2020 
+FROM FILE PATHS 'quickstart/nyct2020.csv'
 FORMAT TEXT 
 WITH OPTIONS (
     DATA SOURCE = 'quickstart'
@@ -267,10 +267,10 @@ SELECT TOP 10
     DECIMAL(AVG(fare_amount)) AS Average_Fare
 FROM
     taxi_data_historical t
-    JOIN nyct2010 n_pickup
+    JOIN nyct2020 n_pickup
         ON STXY_Intersects(t.pickup_longitude, t.pickup_latitude, n_pickup.geom) = 1
-        AND n_pickup.NTAName = 'Airport'
-    JOIN nyct2010 n_dropoff
+        AND n_pickup.NTAName = 'John F. Kennedy International Airport'
+    JOIN nyct2020 n_dropoff
         ON STXY_Intersects(t.dropoff_longitude, t.dropoff_latitude, n_dropoff.geom) = 1
 GROUP BY Neighborhood
 ORDER BY Total_Trips DESC;
@@ -299,7 +299,7 @@ FROM
         DECIMAL(SUM(IF(HOUR(pickup_datetime) BETWEEN 5 AND 19, 0, 1))) / COUNT(*) * 100 AS night_pickup_percentage
     FROM
         taxi_data_historical t
-        JOIN nyct2010 n
+        JOIN nyct2020 n
             ON STXY_Intersects(t.pickup_longitude, t.pickup_latitude, n.geom) = 1
     WHERE pickup_datetime < '2019-01-01'
     GROUP BY
@@ -331,10 +331,10 @@ SELECT
     COUNT(*) AS "Total_Pickups"
 FROM
     taxi_data_historical t
-    JOIN nyct2010 n
+    JOIN nyct2020 n
     ON STXY_Intersects(t.pickup_longitude, t.pickup_latitude, n.geom) = 1
 WHERE
-    NTAName = 'Airport' AND
+    NTAName = 'John F. Kennedy International Airport' AND
     pickup_datetime < '2019-01-01'
 GROUP BY
     HOUR(t.pickup_datetime)
@@ -433,3 +433,99 @@ DASHBOARDS USING REVEAL
 Kinetica also offers a dashboarding tool called Reveal (see below) that is really useful for exploring your data. However, Reveal is not available on the free SaaS and developer edition of Kinetica.
 */
 /* TEXT Block End */
+
+
+/* Worksheet: Chat GPT */
+/* Worksheet Description: Description for sheet 7 */
+
+
+/* TEXT Block Start */
+/*
+START A CONVERSATION WITH YOUR DATA
+Kinetica's GPT integration allows you to write analytical questions in English to generate the corresponding SQL query. Your results depend on the type of prompts and the context that you provide GPT.  Here are a few sample prompts (see expected results below) to get you started. Paste these into the chat input (without --) above and click send. The query will be added below for you to execute ▶️. You will need to create a copy of this workbook to edit the queries (the button next to Share on the top right). Once you are ready, try out a few prompts of your own. Also play around with the context (using the configure button) to see how that alters the resutls.
+-- How many trips did each taxi vendor make to JFK airport?
+-- Which were the top 5 origin neighborhoods for trips to JFK airport?
+-- Use HOUR() and then summarize to find the total number of people who were dropped off at JFK for 1:00, 2:00, 3:00 and so on till 23:00
+-- Which neighborhoods did people travel between the most in taxies? Don't include trips within the same neighborhood.
+-- On average which neighborhoods tip taxi drivers the most in NYC? calculate tips as a percentage of the total fare amount.
+🧪 Note
+: This is an experimental feature. While chatGPT will often return the correct query the quality of the output depends on the prompt and context you provide. We have preconfigured the context so that it has information about the tables used in this workbook but you might have to refine the prompt and/or the output query occasionally to get the results you expect.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+-- EXPECTED RESULT FOR: How many trips did each taxi vendor make to JFK airport?
+SELECT "vendor_id", COUNT(*) AS num_trips
+FROM "taxi_data_historical"
+WHERE ST_CONTAINS(
+    (SELECT "geom" FROM "nyct2020" WHERE "NTAName" = 'John F. Kennedy International Airport'),
+    ST_MAKEPOINT("dropoff_longitude", "dropoff_latitude")
+)
+GROUP BY "vendor_id";
+/* SQL Block End */
+
+
+/* SQL Block Start */
+-- EXPECTED RESULT FOR: Which were the top 5 origin neighborhoods for trips to JFK airport?
+SELECT 
+    nta."NTAName" AS origin_neighborhood, 
+    COUNT(*) AS trip_count 
+FROM 
+    "taxi_data_historical" AS taxi 
+    JOIN "nyct2020" AS nta ON ST_CONTAINS(nta."geom", ST_MAKEPOINT(taxi."pickup_longitude", taxi."pickup_latitude")) 
+WHERE 
+    ST_CONTAINS((SELECT "geom" FROM "nyct2020" WHERE "NTAName" = 'John F. Kennedy International Airport'), ST_MAKEPOINT(taxi."dropoff_longitude", taxi."dropoff_latitude")) 
+GROUP BY 
+    origin_neighborhood 
+ORDER BY 
+    trip_count DESC 
+LIMIT 5;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+-- EXPECTED RESULT FOR: Use HOUR() and then summarize to find the total number of people who were dropped off at JFK for 1:00, 2:00, 3:00 and so on till 24:00
+SELECT HOUR(dropoff_datetime) AS hour, SUM(passenger_count) AS total_passengers
+FROM taxi_data_historical
+WHERE ST_CONTAINS((SELECT geom FROM nyct2020 WHERE NTAName = 'Jamaica'), ST_MAKEPOINT(dropoff_longitude, dropoff_latitude))
+GROUP BY hour
+ORDER BY hour;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+-- EXPECTED RESULT FOR: Which neighborhoods did people travel between the most in taxies? Don't include trips within the same neighborhood.
+SELECT 
+    n1."NTAName" AS starting_neighborhood, 
+    n2."NTAName" AS ending_neighborhood, 
+    COUNT(*) AS trip_count
+FROM 
+    "taxi_data_historical" t
+    JOIN "nyct2020" n1 ON ST_CONTAINS(n1."geom", ST_MAKEPOINT(t."pickup_longitude", t."pickup_latitude"))
+    JOIN "nyct2020" n2 ON ST_CONTAINS(n2."geom", ST_MAKEPOINT(t."dropoff_longitude", t."dropoff_latitude"))
+WHERE 
+    n1."NTAName" <> n2."NTAName"
+GROUP BY 
+    n1."NTAName", n2."NTAName"
+ORDER BY 
+    trip_count DESC;
+/* SQL Block End */
+
+
+/* SQL Block Start */
+-- EXPECTED RESULT FOR: On average which neighborhoods tip taxi drivers the most in NYC? calculate tips as a percentage of the total fare amount.
+SELECT 
+    n."NTAName" AS neighborhood, 
+    AVG(t."tip_amount" / t."total_amount") * 100 AS avg_tip_percentage
+FROM 
+    "taxi_data_historical" t 
+JOIN 
+    "nyct2020" n 
+ON 
+    ST_CONTAINS(n."geom", ST_MAKEPOINT(t."dropoff_longitude", t."dropoff_latitude")) 
+GROUP BY 
+    neighborhood 
+ORDER BY 
+    avg_tip_percentage DESC;
+/* SQL Block End */
