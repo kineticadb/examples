@@ -16,6 +16,9 @@
 <h1>
 SQL GPT Guide
 </h1>
+<h3 align="center" style="margin:0px">
+    <img width="600" src="https://kinetica-workbench.s3.amazonaws.com/workbooks/examples/sql_gpt_guide.png" alt="GPT Logo"/>
+</h3>
 
 This workbook demonstrates Kinetica's integration with ChatGPT. You can use the chat prompt on Kinetica to ask analytical questions in English. This returns a SQL query block that can be executed in Kinetica. 
 
