@@ -1,0 +1,536 @@
+{
+  "workbook": {
+    "metadata": {},
+    "config": {
+      "chatgpt_context": [
+        {
+          "table": "dc_landmarks",
+          "description": "This table contains the WKT outlines of different landmarks in Washington DC.",
+          "rules": ""
+        },
+        {
+          "table": "recent_locations",
+          "description": "This table contains up to date information on the location of different delivery trucks identified by TRACKID over the last one hour.",
+          "rules": ""
+        },
+        {
+          "table": "quotes",
+          "description": "This table contains ask and bid prices along with the ask and bid sizes for Amazon (AMZN), Google (GOOG) and Apple (AAPL) stocks.",
+          "rules": ""
+        },
+        {
+          "table": "trades",
+          "description": "This table provides the open, close, low and high prices along with the trading volumes at one minute intervals for Amazon, Google and Apple stocks",
+          "rules": "The correct way to specify an INTERVAL expression is as follows INTERVAL '0' MINUTE you can change the '0' to any other real number within single quotes and the unit can be SECOND MINUTE HOUR or DAY"
+        },
+        {
+          "table": "kgraph_table",
+          "description": "Describes how people are associated to each other with nodes and edges",
+          "rules": "EDGE_NODE1_NAME and EDGE_NODE2_NAME represents an association, Ignore EDGE_DIRECTION, Only include columns EDGE_NODE1_NAME and EDGE_NODE2_NAME in results"
+        }
+      ]
+    },
+    "id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+    "name": "SQL GPT Guide",
+    "description": "A workbook with different datasets and sample prompts",
+    "user_id": "fc57c850-59fe-11ed-9510-eb2ad113aef8",
+    "warehouse_id": "1ae82840-0950-11ee-b69a-57dc82b3b334",
+    "is_example": true,
+    "is_shared": false,
+    "created_at": "2023-05-31T17:28:51.244Z",
+    "updated_at": "2023-06-14T14:57:38.120Z",
+    "userId": "fc57c850-59fe-11ed-9510-eb2ad113aef8"
+  },
+  "worksheets": [
+    {
+      "config": {},
+      "id": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+      "name": "START HERE",
+      "description": "Description for Sheet 1",
+      "previous_worksheet_id": null,
+      "next_worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+      "workbook_id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+      "created_at": "2023-05-31T17:28:51.528Z",
+      "updated_at": "2023-05-31T18:29:40.596Z",
+      "workbookId": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7"
+    },
+    {
+      "config": {},
+      "id": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+      "name": "Spatial",
+      "description": "Description for sheet 2",
+      "previous_worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+      "next_worksheet_id": "d65adb40-ffdc-11ed-b899-a5b2228b80e7",
+      "workbook_id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+      "created_at": "2023-05-31T17:36:26.166Z",
+      "updated_at": "2023-05-31T18:29:40.625Z",
+      "workbookId": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7"
+    },
+    {
+      "config": {},
+      "id": "d65adb40-ffdc-11ed-b899-a5b2228b80e7",
+      "name": "Time Series",
+      "description": "Description for sheet 3",
+      "previous_worksheet_id": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+      "next_worksheet_id": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+      "workbook_id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+      "created_at": "2023-05-31T17:59:07.252Z",
+      "updated_at": "2023-06-06T18:46:30.716Z",
+      "workbookId": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7"
+    },
+    {
+      "config": {},
+      "id": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+      "name": "Graph",
+      "description": "Description for sheet 5",
+      "previous_worksheet_id": "d65adb40-ffdc-11ed-b899-a5b2228b80e7",
+      "next_worksheet_id": null,
+      "workbook_id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+      "created_at": "2023-05-31T17:59:26.875Z",
+      "updated_at": "2023-06-07T16:39:50.123Z",
+      "workbookId": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7"
+    },
+    {
+      "config": {},
+      "id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+      "name": "Data Set Up (RUN ME)",
+      "description": "Queries to load all the data required for the rest of the sheets",
+      "previous_worksheet_id": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+      "next_worksheet_id": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+      "workbook_id": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7",
+      "created_at": "2023-05-31T18:29:35.182Z",
+      "updated_at": "2023-05-31T19:53:20.499Z",
+      "workbookId": "9beddfb0-ffd8-11ed-b899-a5b2228b80e7"
+    }
+  ],
+  "blockMap": {
+    "9c195c80-ffd8-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {},
+        "id": "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "{}",
+        "previous_block_id": null,
+        "next_block_id": "c81f0b90-ffd8-11ed-b899-a5b2228b80e7",
+        "block_type_id": "d7d34b22-2aa2-484f-9e8e-106f62612caf",
+        "worksheet_id": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T17:29:44.821Z",
+        "updated_at": "2023-05-31T17:30:05.537Z",
+        "worksheetId": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "d7d34b22-2aa2-484f-9e8e-106f62612caf"
+      },
+      {
+        "config": {},
+        "id": "c81f0b90-ffd8-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🚀 WHAT IS KINETICA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Kinetica is a really fast, easy to use relational database for real-time analytics on massive amounts of streaming data.  Kinetica enables simultaneous ingestion and analysis with integrated geospatial, graph, OLAP SQL, and AI/ML capabilities. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"You can use us for many things but we excel at enabling query workloads that require insights from streaming and historical data in seconds rather than minutes or hours.\"}]}]",
+        "previous_block_id": "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7",
+        "next_block_id": "aed78760-ffd9-11ed-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T17:30:05.385Z",
+        "updated_at": "2023-05-31T17:36:32.644Z",
+        "worksheetId": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "aed78760-ffd9-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"🤖 WHAT IS SQL GPT?\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"SQL GPT is an interface for asking analytical questions in English that return a SQL query block that can be executed in Kinetica. You can find the input box for questions at the top of each worksheet. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"📖 HOW DOES SQL GPT KNOW ABOUT MY DATA?\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"You can provide contextual information about the tables inside Kinetica using the configure button next to the question input box. You can use it to specify the names of the tables, provide a description using English and detail any rules that you would like SQL GPT to follow. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"This example workbook is pre-configured so that you don't have to do it yourself. You can clone this workbook to update the configuration and observe how that changes the input. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"🤔 WHY DID THE QUERY NOT EXECUTE?\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"SQL GPT will generate queries regardless of whether you provide it with contextual information. So the first reason why a query might not execute is because it is referencing data objects that don't exist inside Kinetica. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The second reason is because there is some variability in the responses that we get from SQL GPT. The same prompts with the same context could yield different results. Similarly, prompts with slightly altered wording can change the SQL query that is returned. Always check the queries to make sure they make sense. \"}]},{\"type\":\"paragraph\",\"children\":[{\"bold\":true,\"text\":\"🤝 HOW DOES THIS EXAMPLE WORK?\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"This workbook is set up to make it easy for you to experience SQL GPT. We provide all of the data so that you don't have to bring your own. Run the queries in the next sheet to load all the data you need into Kinetica. We have also pre-configured the SQL GPT context so that you can simply ask \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+        "previous_block_id": "c81f0b90-ffd8-11ed-b899-a5b2228b80e7",
+        "next_block_id": null,
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T17:36:32.470Z",
+        "updated_at": "2023-05-31T18:40:49.148Z",
+        "worksheetId": "9c195c80-ffd8-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ],
+    "ab159d60-ffd9-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {},
+        "id": "bb39a120-fff5-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"SPATIAL PROMPTS\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Kinetica offers an extensive library of spatial functions. The prompts below are designed to generate queries that showcase these functions.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Which landmark has the greatest area in Washington DC?\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Which two landmarks are the furthest away from each other?\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Which trucks came within 200 meters of a landmark in Washington DC in the last 5 mins? Keep all the columns and create a materialized view called landmark_trucks that refreshes every 10 seconds to store the results.\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": "5034d1f0-fff6-11ed-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T20:57:19.154Z",
+        "updated_at": "2023-06-12T17:47:57.111Z",
+        "worksheetId": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "5034d1f0-fff6-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"table_schema\":\"\",\"table_name\":\"landmark_trucks\",\"geometry_type\":\"lon_lat\",\"longitude\":\"x\",\"latitude\":\"y\",\"renderType\":\"track\",\"trackHeadColor\":\"2bcaafff\",\"trackHeadShape\":\"circle\",\"trackHeadSize\":4,\"trackMarkerColor\":\"ca2c92\",\"trackMarkerShape\":\"none\",\"trackMarkerSize\":0,\"trackLineColor\":\"3700b3\",\"trackLineWidth\":2,\"symbolRotation\":\"\",\"center_longitude\":-77.0346,\"center_latitude\":38.8904,\"zoom_level\":12.473637428999272,\"opacity\":100,\"title\":\"Map preconfigured for the third prompt (refreshes every 5 seconds)\",\"block_height\":599,\"auto_refresh_interval\":5,\"basemap_style\":\"grayscale\",\"overrides\":\"\"},{\"table_schema\":\"\",\"table_name\":\"landmark_trucks\",\"geometry_type\":\"wkt\",\"wkt\":\"wkt\",\"renderType\":\"raster\",\"fillColor\":\"ca2c92\",\"borderColor\":\"3700b3\",\"pointSize\":0,\"lineWidth\":2,\"opacity\":50,\"auto_refresh_interval\":5,\"overrides\":\"\"}]",
+        "previous_block_id": "bb39a120-fff5-11ed-b899-a5b2228b80e7",
+        "next_block_id": null,
+        "block_type_id": "e8ccc4e2-793f-47ed-9af2-f0a58a840006",
+        "worksheet_id": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T21:01:29.103Z",
+        "updated_at": "2023-06-14T14:59:22.526Z",
+        "worksheetId": "ab159d60-ffd9-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "e8ccc4e2-793f-47ed-9af2-f0a58a840006"
+      }
+    ],
+    "d65adb40-ffdc-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {},
+        "id": "775c9a30-016b-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"TIME SERIES PROMPTS\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- What is the difference between the closing price and the moving average of the closing price for Apple over the hour? Use 5 observations for the window frame. Keep all columns.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- For each trade of the Apple stock find a corresponding quote that is less than 5 seconds after the trade occurred?\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- What is total volume of trades for each of Amazon, Google and Apple stocks in 30 minute intervals over the last 6 hours?\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": null,
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "d65adb40-ffdc-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-02T17:32:37.075Z",
+        "updated_at": "2023-06-12T18:51:16.792Z",
+        "worksheetId": "d65adb40-ffdc-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ],
+    "e20d16b0-ffdc-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {},
+        "id": "d6256010-0481-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"GRAPH PROMPTS\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Show me all associations\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Show me all associations with pat?\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"-- Show me all associations with either pat or joe?\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": null,
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-06T15:50:18.513Z",
+        "updated_at": "2023-06-12T18:51:31.981Z",
+        "worksheetId": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "3f16c1f0-094a-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Show me all associations with pat?\\nSELECT EDGE_NODE1_NAME, EDGE_NODE2_NAME\\nFROM hsubhash_kinetica.kgraph_table\\nWHERE EDGE_NODE1_NAME = 'pat' OR EDGE_NODE2_NAME = 'pat'\"",
+        "previous_block_id": "37142100-094a-11ee-b899-a5b2228b80e7",
+        "next_block_id": "4c5b5d30-094a-11ee-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-12T17:54:58.575Z",
+        "updated_at": "2023-06-12T17:55:21.117Z",
+        "worksheetId": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "4c5b5d30-094a-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Show me all associations with either pat or joe?\\nSELECT EDGE_NODE1_NAME, EDGE_NODE2_NAME\\nFROM hsubhash_kinetica.kgraph_table\\nWHERE EDGE_NODE1_NAME = 'pat' OR EDGE_NODE2_NAME = 'joe'\"",
+        "previous_block_id": "3f16c1f0-094a-11ee-b899-a5b2228b80e7",
+        "next_block_id": null,
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-12T17:55:20.835Z",
+        "updated_at": "2023-06-12T17:55:21.114Z",
+        "worksheetId": "e20d16b0-ffdc-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      }
+    ],
+    "17e2afd0-ffe1-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {},
+        "id": "17fc5250-ffe1-11ed-b899-a5b2228b80e7",
+        "name": "Block 1",
+        "description": "Description for Block 1",
+        "content": "\"-- Drop any existing tables that use the credential or data sources\\nDROP TABLE IF EXISTS truck_locations; \\nDROP TABLE IF EXISTS dc_landmarks;\\nDROP TABLE IF EXISTS taxi_trips;\\nDROP TABLE IF EXISTS quotes;\\nDROP TABLE IF EXISTS trades;\\n\\n-- Create the AWS S3 bucket data source\\nCREATE OR REPLACE DATA SOURCE examples_data\\nLOCATION = 'S3'\\nWITH OPTIONS (\\n    ANONYMOUS = 'true',\\n    BUCKET NAME = 'kinetica-examples-data-public',\\n    REGION = 'us-east-1'\\n);\\n\\n-- Credentials for Kafka cluster\\nCREATE OR REPLACE CREDENTIAL gpt_creds\\nTYPE = 'kafka'\\nWITH OPTIONS (\\n    'security.protocol' = 'SASL_SSL',\\n    'sasl.mechanism' = 'PLAIN',\\n    'sasl.username'='QZN62QB2RBTLW74L',\\n    'sasl.password'='iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'\\n);\\n\\n-- Create the data source for vehicle locations\\nCREATE OR REPLACE DATA SOURCE truck_locations_source\\nLOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'\\nWITH OPTIONS (\\n    'kafka_topic_name' =  'vehicle_locations',\\n    credential = 'gpt_creds'\\n);\\n\\n-- Create the quote source\\nCREATE OR REPLACE DATA SOURCE quote_stream\\nLOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'\\nWITH OPTIONS \\n(\\n    kafka_topic_name =  'quotes',\\n    credential = 'gpt_creds'\\n);\\n\\n-- Create the trade stream\\nCREATE OR REPLACE DATA SOURCE trade_stream\\nLOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'\\nWITH OPTIONS \\n(\\n    kafka_topic_name =  'trades',\\n    credential = 'gpt_creds'\\n);\"",
+        "previous_block_id": "759a9370-ffed-11ed-b899-a5b2228b80e7",
+        "next_block_id": "3f0fe8e0-ffee-11ed-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T18:29:35.349Z",
+        "updated_at": "2023-06-01T18:45:06.139Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "a120a7b0-ffec-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- A table to store the position of trucks over time.\\nCREATE OR REPLACE TABLE truck_locations\\n(\\n    x float,\\n    y float,\\n    TRACKID varchar(64),\\n    DEPOT_ID integer,\\n    sids integer,\\n    TIMESTAMP timestamp,\\n    shard_key(TRACKID)\\n);\\n\\n-- Load data\\nLOAD DATA INTO truck_locations\\nFROM FILE PATH ''\\nFORMAT JSON\\nWITH OPTIONS (\\n    DATA SOURCE = 'truck_locations_source',\\n    SUBSCRIBE = TRUE,\\n    TYPE_INFERENCE_MODE = 'speed',\\n    ERROR_HANDLING = 'permissive',\\n    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes\\n);\\n\\n-- Create a view to represent the last hour of data\\nCREATE OR REPLACE MATERIALIZED VIEW recent_locations\\nREFRESH EVERY 5 SECONDS AS \\nSELECT * \\nFROM truck_locations \\nWHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1\"",
+        "previous_block_id": "3f0fe8e0-ffee-11ed-b899-a5b2228b80e7",
+        "next_block_id": "54c628a0-fff0-11ed-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T19:52:09.899Z",
+        "updated_at": "2023-06-02T15:08:21.765Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "e7bc1060-ffec-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"table_schema\":\"\",\"table_name\":\"recent_locations\",\"geometry_type\":\"lon_lat\",\"longitude\":\"x\",\"latitude\":\"y\",\"renderType\":\"track\",\"trackHeadColor\":\"2bcaafff\",\"trackHeadShape\":\"circle\",\"trackHeadSize\":4,\"trackMarkerColor\":\"ca2c92\",\"trackMarkerShape\":\"none\",\"trackMarkerSize\":0,\"trackLineColor\":\"3700b3\",\"trackLineWidth\":2,\"symbolRotation\":\"\",\"center_longitude\":-77.0042,\"center_latitude\":38.9044,\"zoom_level\":11.49,\"opacity\":70,\"title\":\"Truck locations over the past hour along with DC landmarks (auto refresh every 5 seconds)\",\"block_height\":535,\"auto_refresh_interval\":5,\"basemap_style\":\"grayscale\",\"overrides\":\"\"},{\"table_schema\":\"\",\"table_name\":\"dc_landmarks\",\"geometry_type\":\"wkt\",\"wkt\":\"wkt\",\"renderType\":\"raster\",\"fillColor\":\"ca2c92\",\"borderColor\":\"3700b3\",\"pointSize\":2,\"lineWidth\":2,\"opacity\":50,\"auto_refresh_interval\":5,\"overrides\":\"\"}]",
+        "previous_block_id": "4cec9380-fff0-11ed-b899-a5b2228b80e7",
+        "next_block_id": "a920ad50-00ac-11ee-b899-a5b2228b80e7",
+        "block_type_id": "e8ccc4e2-793f-47ed-9af2-f0a58a840006",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T19:54:08.358Z",
+        "updated_at": "2023-06-02T15:09:37.885Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "e8ccc4e2-793f-47ed-9af2-f0a58a840006"
+      },
+      {
+        "config": {},
+        "id": "759a9370-ffed-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"You can use the Run All button (top right) to run all the code blocks here. Scroll to see the data depicted in maps and charts.\"}]},{\"type\":\"paragraph\",\"children\":[{\"bold\":true,\"text\":\"CREATE AWS S3 AND KAFKA DATA SOURCES\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Kinetica offers native connectors for AWS S3, Azure Blob Store, HDFS, and Kafka along with generic JDBC connectivity to 100s of different data sources including Kinetica. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The SQL block below creates 4 data sources. One for an public AWS bucket and three for different Kafka topics. Since the Kafka topic requires authentication we create a credential object to store this information. The AWS bucket is public so it doesn't require any credentials. Once created, Kinetica can load data from these sources.\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": "17fc5250-ffe1-11ed-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T19:58:06.375Z",
+        "updated_at": "2023-06-01T18:49:54.098Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "3f0fe8e0-ffee-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"TRUCK LOCATION DATA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The Kafka topic receives messages that include GPS data from 5 different trucks in Washington DC. We have generated this data to mimic real world routes that delivery trucks might take around Washington DC. The messages in the topic are set to be deleted every 2 hours. The\"}]}]",
+        "previous_block_id": "17fc5250-ffe1-11ed-b899-a5b2228b80e7",
+        "next_block_id": "a120a7b0-ffec-11ed-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T20:03:44.366Z",
+        "updated_at": "2023-05-31T20:17:59.940Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "4cec9380-fff0-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Create the fences table\\nCREATE OR REPLACE TABLE dc_landmarks \\n(\\n    fence_id int,\\n    wkt geometry,\\n    fence_label varchar(32)\\n);\\n\\n-- Load data into the fences table from S3\\nLOAD DATA INTO dc_landmarks\\nFROM FILE PATHS 'landmark_fences.csv'\\nFORMAT TEXT \\nWITH OPTIONS (\\n    DATA SOURCE = 'examples_data'\\n);\"",
+        "previous_block_id": "54c628a0-fff0-11ed-b899-a5b2228b80e7",
+        "next_block_id": "e7bc1060-ffec-11ed-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T20:18:26.617Z",
+        "updated_at": "2023-06-02T15:08:24.974Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "54c628a0-fff0-11ed-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"LANDMARKS DATA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The dc_landmarks table contains the outlines of different landmarks in DC. The data for this table is loaded from AWS S3. We will use it to identify different spatial events of interest.\"}]}]",
+        "previous_block_id": "a120a7b0-ffec-11ed-b899-a5b2228b80e7",
+        "next_block_id": "4cec9380-fff0-11ed-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-05-31T20:18:39.786Z",
+        "updated_at": "2023-06-02T15:08:24.971Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "46db5be0-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Show a chart with google and amazon prices\\nSELECT\\n    symbol,\\n    DATE_TRUNC(DAY, time) AS trade_day,\\n    MAX(price_high) as price_high\\nFROM trades \\nWHERE symbol != 'AAPL' AND YEAR(time) = 2023\\nGROUP BY trade_day, symbol\\nORDER BY trade_day, symbol\"",
+        "previous_block_id": "889783b0-00ac-11ee-b899-a5b2228b80e7",
+        "next_block_id": "f012f800-0951-11ee-b69a-57dc82b3b334",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-01T18:44:01.822Z",
+        "updated_at": "2023-06-12T18:50:02.175Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "5db14e60-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"CREATE OR REPLACE TABLE quotes\\n(\\n timestamp timestamp,\\n ask_price float,\\n ask_size float,\\n bid_price float,\\n bid_size float,\\n symbol char(4)\\n);\\n\\nLOAD DATA INTO quotes\\nFORMAT JSON \\nWITH OPTIONS (\\n    DATA SOURCE = 'quote_stream',\\n    SUBSCRIBE = TRUE,\\n    TYPE_INFERENCE_MODE = 'speed',\\n    ERROR_HANDLING = 'permissive',\\n    kafka_offset_reset_policy = 'latest', -- load the latest qoutes data\\n    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes\\n);\"",
+        "previous_block_id": "a920ad50-00ac-11ee-b899-a5b2228b80e7",
+        "next_block_id": "c2d6b550-00ac-11ee-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-01T18:44:40.134Z",
+        "updated_at": "2023-06-01T18:47:30.026Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "889783b0-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"CREATE OR REPLACE TABLE trades \\n(\\n    time timestamp,\\n    symbol char(4),\\n    price_open float,\\n    price_close float,\\n    price_low float,\\n    price_high float,\\n    trading_volume int\\n);\\n\\nLOAD DATA INTO trades\\nFORMAT JSON \\nWITH OPTIONS (\\n    DATA SOURCE = 'trade_stream',\\n    SUBSCRIBE = TRUE,\\n    TYPE_INFERENCE_MODE = 'speed',\\n    ERROR_HANDLING = 'permissive',\\n    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes\\n);\"",
+        "previous_block_id": "c2d6b550-00ac-11ee-b899-a5b2228b80e7",
+        "next_block_id": "46db5be0-00ac-11ee-b899-a5b2228b80e7",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-01T18:45:52.107Z",
+        "updated_at": "2023-06-01T18:47:30.081Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "a920ad50-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"QUOTES DATA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The quotes table contains information on the ask and bid prices on a millisecond basis for three stocks - Apple (AAPL), Amazon (AMZN) and Google (GOOG).\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"✎Note\",\"bold\":true},{\"text\":\": We are loading only the latest quotes from kafka unlike trades, where we load from the earliest available data.\"}]}]",
+        "previous_block_id": "e7bc1060-ffec-11ed-b899-a5b2228b80e7",
+        "next_block_id": "5db14e60-00ac-11ee-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-01T18:46:46.693Z",
+        "updated_at": "2023-06-02T15:08:32.083Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "c2d6b550-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"INTRADAY TRADES\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The trades table contains information on the open, close, low, and high prices, and trading volumes for AAPL, AMZN and GOOG. The trades data is recorded on a minute by minute basis.\"}]}]",
+        "previous_block_id": "5db14e60-00ac-11ee-b899-a5b2228b80e7",
+        "next_block_id": "889783b0-00ac-11ee-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-01T18:47:29.829Z",
+        "updated_at": "2023-06-01T18:47:37.172Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "3c93c3e0-0555-11ee-b899-a5b2228b80e7",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"CREATE or REPLACE directed GRAPH kgraph (\\n    NODES => INPUT_TABLES(\\n        (select 'kerry' AS NAME, 'ORIGINATOR:ZONEA' AS LABEL),\\n        (select 'cathy' AS NAME, 'SUSPECT:ZONEA' AS LABEL),\\n        (select 'pat' AS NAME, 'SUSPECT:ZONEB' AS LABEL)\\n    ),\\n    EDGES => INPUT_TABLES(\\n        (select 'kerry' AS NODE1_NAME, 'kevin' AS NODE2_NAME),\\n        (select 'kevin' AS NODE1_NAME, 'martin' AS NODE2_NAME),\\n        (select 'martin' AS NODE1_NAME, 'joe' AS NODE2_NAME),\\n        (select 'joe' AS NODE1_NAME, 'john' AS NODE2_NAME),\\n        (select 'john' AS NODE1_NAME, 'kevin' AS NODE2_NAME),\\n        (select 'john' AS NODE1_NAME, 'martha' AS NODE2_NAME),\\n        (select 'martha' AS NODE1_NAME, 'matt' AS NODE2_NAME),\\n        (select 'tom' AS NODE1_NAME, 'bill' AS NODE2_NAME),\\n        (select 'tom' AS NODE1_NAME, 'pat' AS NODE2_NAME),\\n        (select 'pat' AS NODE1_NAME, 'joe' AS NODE2_NAME),\\n        (select 'pat' AS NODE1_NAME, 'mary' AS NODE2_NAME),\\n        (select 'mary' AS NODE1_NAME, 'kerry' AS NODE2_NAME),\\n        (select 'mary' AS NODE1_NAME, 'cathy' AS NODE2_NAME),\\n        (select 'josh' AS NODE1_NAME, 'cathy' AS NODE2_NAME),\\n        (select 'josh' AS NODE1_NAME, 'matt' AS NODE2_NAME),\\n        (select 'bill' AS NODE1_NAME, 'josh' AS NODE2_NAME),\\n        (select 'matt' AS NODE1_NAME, 'tom' AS NODE2_NAME)),\\n    OPTIONS => KV_PAIRS(graph_table = 'kgraph_table', label_delimiter = ':')\\n    );\"",
+        "previous_block_id": "f012f800-0951-11ee-b69a-57dc82b3b334",
+        "next_block_id": null,
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-07T17:03:34.175Z",
+        "updated_at": "2023-06-12T18:50:02.199Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "f012f800-0951-11ee-b69a-57dc82b3b334",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"A SOCIAL GRAPH\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The query below a sample social graph between people. We will use this to show off some sample graph query prompts.\"}]}]",
+        "previous_block_id": "46db5be0-00ac-11ee-b899-a5b2228b80e7",
+        "next_block_id": "3c93c3e0-0555-11ee-b899-a5b2228b80e7",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "created_at": "2023-06-12T18:50:01.984Z",
+        "updated_at": "2023-06-12T18:50:55.093Z",
+        "worksheetId": "17e2afd0-ffe1-11ed-b899-a5b2228b80e7",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ]
+  },
+  "vizMap": {
+    "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7": [
+      {
+        "config": {
+          "html_source": "<h3 align=\"center\">\n    <img width=\"300\" src=\"https://github.com/kineticadb/examples/blob/master/_assets/images/logo_purple.png?raw=true\" alt=\"Kinetica Logo\"/>\n</h3>\n<h2 align=\"center\">The database for time and space</h2>\n<h3 align=\"center\">\n    <a href=\"https://www.kinetica.com/\" target=\"_blank\">Website</a> | <a href=\"https://docs.kinetica.com/7.1/\" target=\"_blank\">Docs</a> | <a href=\"https://docs.kinetica.com/7.1/api/\" target=\"_blank\">API Docs</a> | <a href=\"https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg\" target=\"_blank\">Community Slack</a>   \n</h3>\n"
+        },
+        "id": "bbe80fc0-ffd8-11ed-b899-a5b2228b80e7",
+        "name": "HTML Visualization",
+        "description": "Description for html visualization",
+        "block_id": "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7",
+        "visualization_type_id": "757cd7cb-6f08-4416-9e9a-291cd651246f",
+        "created_at": "2023-05-31T17:29:44.892Z",
+        "updated_at": "2023-05-31T17:29:48.801Z",
+        "blockId": "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7",
+        "visualizationTypeId": "757cd7cb-6f08-4416-9e9a-291cd651246f"
+      }
+    ],
+    "c81f0b90-ffd8-11ed-b899-a5b2228b80e7": [],
+    "aed78760-ffd9-11ed-b899-a5b2228b80e7": [],
+    "bb39a120-fff5-11ed-b899-a5b2228b80e7": [],
+    "5034d1f0-fff6-11ed-b899-a5b2228b80e7": [],
+    "775c9a30-016b-11ee-b899-a5b2228b80e7": [],
+    "d6256010-0481-11ee-b899-a5b2228b80e7": [],
+    "3f16c1f0-094a-11ee-b899-a5b2228b80e7": [
+      {
+        "config": { "type": "graph" },
+        "id": "430c1800-094a-11ee-b899-a5b2228b80e7",
+        "name": "Graph Visualization",
+        "description": "Description for graph visualization",
+        "block_id": "3f16c1f0-094a-11ee-b899-a5b2228b80e7",
+        "visualization_type_id": "278540bd-cd50-4f78-871b-65b94001dfee",
+        "created_at": "2023-06-12T17:55:05.216Z",
+        "updated_at": "2023-06-12T17:55:05.216Z",
+        "blockId": "3f16c1f0-094a-11ee-b899-a5b2228b80e7",
+        "visualizationTypeId": "278540bd-cd50-4f78-871b-65b94001dfee"
+      }
+    ],
+    "4c5b5d30-094a-11ee-b899-a5b2228b80e7": [],
+    "17fc5250-ffe1-11ed-b899-a5b2228b80e7": [],
+    "a120a7b0-ffec-11ed-b899-a5b2228b80e7": [],
+    "e7bc1060-ffec-11ed-b899-a5b2228b80e7": [],
+    "759a9370-ffed-11ed-b899-a5b2228b80e7": [],
+    "3f0fe8e0-ffee-11ed-b899-a5b2228b80e7": [],
+    "4cec9380-fff0-11ed-b899-a5b2228b80e7": [],
+    "54c628a0-fff0-11ed-b899-a5b2228b80e7": [],
+    "46db5be0-00ac-11ee-b899-a5b2228b80e7": [
+      {
+        "config": {
+          "x_axis_column": "trade_day",
+          "y_axis_column": "price_high",
+          "series_column": "symbol",
+          "x_axis_label": "trade_day",
+          "y_axis_label": "price_high",
+          "color_scheme": "spectral"
+        },
+        "id": "97e75840-00ac-11ee-b899-a5b2228b80e7",
+        "name": "Line Chart Visualization",
+        "description": "Description for line chart visualization",
+        "block_id": "46db5be0-00ac-11ee-b899-a5b2228b80e7",
+        "visualization_type_id": "b565ab86-0964-4e75-aed9-a11ba79fae43",
+        "created_at": "2023-06-01T18:46:17.796Z",
+        "updated_at": "2023-06-01T18:46:31.018Z",
+        "blockId": "46db5be0-00ac-11ee-b899-a5b2228b80e7",
+        "visualizationTypeId": "b565ab86-0964-4e75-aed9-a11ba79fae43"
+      }
+    ],
+    "5db14e60-00ac-11ee-b899-a5b2228b80e7": [],
+    "889783b0-00ac-11ee-b899-a5b2228b80e7": [],
+    "a920ad50-00ac-11ee-b899-a5b2228b80e7": [],
+    "c2d6b550-00ac-11ee-b899-a5b2228b80e7": [],
+    "3c93c3e0-0555-11ee-b899-a5b2228b80e7": [],
+    "f012f800-0951-11ee-b69a-57dc82b3b334": []
+  }
+}
