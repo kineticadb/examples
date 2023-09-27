@@ -14,15 +14,10 @@
  <img src="https://img.shields.io/badge/tested-%3E=v7.9.6-green"></img>  <img src="https://img.shields.io/badge/time-10 mins-blue"></img>
 </p>
 <h1>
-SQL GPT Guide
+Spatial GPT Webinar Workbook
 </h1>
-<h3 align="center" style="margin:0px">
-    <img width="600" src="https://kinetica-workbench.s3.amazonaws.com/workbooks/examples/sql_gpt_guide.png" alt="GPT Logo"/>
-</h3>
 
-This workbook demonstrates Kinetica's integration with ChatGPT. You can use the chat prompt on Kinetica to ask analytical questions in English. This returns a SQL query block that can be executed in Kinetica. 
-
-We have set up the data and pre-configured the rules and context required. Along with a few sample prompts.
+This workbook contains the data setup and configuration required for the spatial + GPT webinar
 
 # Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
