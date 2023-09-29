@@ -19,13 +19,13 @@ Multiple Supply Demand Chain Optimization (MSDO) Real-Time Tracking
 </h1>
 
 This workbook demonstrates the application of Kinetica's Multiple Supply Demand Chain Optimization (MSDO) solver with using a Kafka server to create <b>real-time tracking</b> scenario.
-In this project phase, we will commence the tracking of GPS signals emitted by a fleet, subsequently conducting comprehensive data analysis based on the information received from the trucks.
+In this project commences the tracking of GPS signals emitted by a fleet, subsequently conducting comprehensive data analysis based on the information received from the trucks.
 
 ## Background
 
 Matching supply chain logistics to demand-based routing is a daily and non-trivial task, crucial for numerous companies like Amazon and Uber. The overarching goal is to optimize routing within specific industry constraints. Kinetica's MSDO solver offers a versatile solution applicable across various industries. Optimization objectives can range from distributing power by transformers to consumers with varying needs, transporting tons of gasoline to different stations, or delivering packets of goods from depots to multiple locations. What remains consistent in all these transport challenges is that both supply and demand quantities are not constant.
 
-In this project phase, we initiate the tracking of GPS signals emitted by a fleet, followed by comprehensive data analysis based on the information received from the trucks. The project has been developed to emulate signals originating from a fleet of ten trucks, all adhering to routes defined by the optimal route solver's output. The signals are produced via the Kafka server and stream data into the workbook. The workbook introduces random delays to each truck's data when presenting real-time information about truck locations.
+This project initiates the tracking of GPS signals emitted by a fleet, followed by comprehensive data analysis based on the information received from the trucks. The project has been developed to emulate signals originating from a fleet of ten trucks, all adhering to routes defined by the optimal route solver's output. The signals are produced via the Kafka server and stream data into the workbook. The workbook introduces random delays to each truck's data when presenting real-time information about truck locations.
 
 ## Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
