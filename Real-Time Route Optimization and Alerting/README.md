@@ -27,7 +27,9 @@ Matching supply chain logistics to demand-based routing is a daily and non-trivi
 
 In this project phase, we initiate the tracking of GPS signals emitted by a fleet, followed by comprehensive data analysis based on the information received from the trucks. The project has been developed to emulate signals originating from a fleet of ten trucks, all adhering to routes defined by the optimal route solver's output. The signals are produced via the Kafka server and stream data into the workbook. The workbook introduces random delays to each truck's data when presenting real-time information about truck locations.
 
-<img width="200" src="../_assets/images/Real-Time_Route_Optimization.jpg" alt="Real-Time_Route_Optimization Picture"/>
+<div align="center">
+<img width="600" src="../_assets/images/Real-Time_Route_Optimization.jpg" alt="Real-Time_Route_Optimization Picture"/>
+</div>
 
 This SQL workbook showcases how to leverage Kinetica’s Multiple Supply Demand Optimization (MSDO) Graph Solver, a powerful tool designed for complex, real-time routing optimization. The workbook walks you through a scenario involving 30 customers and 21 trucks, originating from 13 supply depots in the Washington DC area. Unlike traditional solvers, the MSDO solver considers a multitude of constraints, such as package volume, truck capacity, and even real-time conditions, to find the optimal route for each truck. Real-time GPS data for simulated routes for each truck is streamed into Kinetica via Kafka, enabling immediate comparison and alerting for any significant deviations from the optimal routes.
 The workbook is divided into three main sections:
