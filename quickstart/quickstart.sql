@@ -24,6 +24,8 @@ HOW TO USE WORKBOOKS
 Workbooks are organized into worksheets. Worksheets are handy for organizing your work by separating the different sections of your analysis. Each worksheet contains blocks of code, text and media content. You can either execute all the code in a sheet by clicking on the "Run All" button or by running each individual block on it own.
 RUN WORKSHEETS SEQUENTIALLY
 All example workbooks use worksheets to sequentially order the code. This means that some of the code in later worksheets will rely on tables or views that may have been created in previous worksheets.
+CREATE YOUR WORKBOOK
+Use the Copy and Edit button on the top right to create a local copy of this workbook to work through the exercises. You can rename the workbook and edit it once copied. Your workbook can be found in the Expore section on the top. Select it now to continue this workbook.
 */
 /* TEXT Block End */
 
@@ -35,7 +37,7 @@ All example workbooks use worksheets to sequentially order the code. This means 
 /* TEXT Block Start */
 /*
 LOAD DATA INTO KINETICA
-Kinetica can load data from 100s of data sources using native connectors (Azure, GCS, HDFS, S3, Kafka) or JDBC. Kinetica has partnered with CData - a data connectivity platform that provides  and maintains JDBC drivers for 100s of databases and applications. You can use these drivers for free to connect to popular databases like PostGres and applications like Salesforce and Google Drive.
+Kinetica can load data from 100s of data sources using native connectors (Azure, GCS, HDFS, S3, Kafka) or JDBC. Kinetica has partnered with CData - a data connectivity platform that provides and maintains JDBC drivers for 100s of databases and applications. You can use these drivers for free to connect to popular databases like PostGres and applications like Salesforce and Google Drive.
 Try out our data ingest guide for a full introduction to loading data into Kinetica.
 ✌🏽2 STEPS TO CONNECT
 For most cases, loading data into Kinetica involves just two queries.
@@ -153,7 +155,7 @@ WITH OPTIONS (
 
 /* TEXT Block Start */
 /*
-The type inferencing system is pretty conservative in how it infers a specific type. In some cases, it might be necessary to tweak the DDL based on the type of data. For instance, both the vendor id and payment type columns have a a max of either 4 or 16 characters. But the types are infered as unrestricted strings, which take more disk space to store than strings with a predefined length. We can update this using the ALTER TABLE command.
+The type inferencing system is pretty conservative in how it infers a specific type. In some cases, it might be necessary to tweak the DDL based on the type of data. For instance, both the vendor id and payment type columns have a max of either 4 or 16 characters. But the types are infered as unrestricted strings, which take more disk space to store than strings with a predefined length. We can update this using the ALTER TABLE command.
 */
 /* TEXT Block End */
 
@@ -177,9 +179,9 @@ THE DATA
 Typically, the first thing we want to do after loading data is to inspect the table. You can use either a SELECT statement or use the preview option on the context menu when you click on a data object.
 To preview using the UI: Go to the Data tab, the tables that were created in the previous worksheet are placed in your default schema (either ki_home or your username if you are using our SaaS version), click on them to bring up the context menu. The preview option will show the table while the WMS preview option (availabe for tables with Geospatial data) will show an option to configure a map. All the data is typically pre-filled for the map so you can click update to bring up a visual representation of the data as well.
 We will use three tables in this workbook
-1. nyct2010: This table contains geospatial boundaries of neighborhoods in New York City (NYC) along with additional meta data about each of them.
+1. nyct2010: This table contains geospatial boundaries of neighborhoods in New York City (NYC) along with additional metadata about each of them.
 2. taxi_data_historical: This is historical information on the taxi trips in NYC. This includes information on pickup and dropoff points, trip time, fare etc.
-3. taxi_data_streaming: This contains the same schema as the historical data but it is contains (synthetic) information on taxi trips that are happening right now in NYC. New trips are added to the table as they occur.
+3. taxi_data_streaming: This contains the same schema as the historical data but instead contains (synthetic) information on taxi trips that are happening right now in NYC. New trips are added to the table as they occur.
 */
 /* TEXT Block End */
 
@@ -355,7 +357,7 @@ Let's see this in action below.
 THE PROBLEM
 Say you own a restaurant close to Union Square in NYC. You are interested in marketing your menu and restaurant to people who are getting dropped off via cabs near your restaurant. But right now, you have no way of finding out when someone is dropped off next your restaurant (unless you happen to see them as they are being dropped off).
 THE SOLUTION
-We can use Kinetica to set up an alert whenever a particular drop off location is within a certain distance of your store. When such as an event is detected, Kinetica will automatically send out an alert that includes information on the drop off point to your phone. You or one of your marketing agents can use this information to immediately step out an chat with the potential customer.
+We can use Kinetica to set up an alert whenever a particular drop off location is within a certain distance of your store. When such as an event is detected, Kinetica will automatically send out an alert that includes information on the drop off point to your phone. You or one of your marketing agents can use this information to immediately step out and chat with the potential customer.
 */
 /* TEXT Block End */
 
@@ -365,7 +367,7 @@ We can use Kinetica to set up an alert whenever a particular drop off location i
 MATERIALIZED VIEWS
 Materialized views can be kept up to date using 4 modes - manual, on change, on query, or periodic. Here we will use the periodic option to select all the drop offs that are within 200 meters of your restaurant in the last 10 minutes. This query is refreshed every 5 seconds, so you will recieve an alert if there was a new dropoff in the last 5 seconds.
 ✎ NOTE
-: There is an element of chance for the query below, since it is not necessary that there are any dropoffs happening around the store at a given point time. So you might not see new dropoffs appear immediately
+: There is an element of chance for the query below, since it is not necessary that there are any dropoffs happening around the store at a given point time. So you might not see new dropoffs appear immediately.
 */
 /* TEXT Block End */
 
@@ -380,7 +382,7 @@ SELECT
     dropoff_longitude, 
     vendor_id
 FROM taxi_data_streaming
-WHERE GEODIST(-73.992975, 40.736562, dropoff_longitude, dropoff_latitude) <  200 AND 
+WHERE GEODIST(-73.992975, 40.736562, dropoff_longitude, dropoff_latitude) < 200 AND 
 TIMEBOUNDARYDIFF('MINUTE', dropoff_datetime, NOW()) < 10
 ;
 /* SQL Block End */

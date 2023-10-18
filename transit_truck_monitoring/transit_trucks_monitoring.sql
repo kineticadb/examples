@@ -11,7 +11,7 @@
 COLD TRANSIT TRUCK MONITORING SYSTEM WITH KINETICA
 Interrupted or incorrect temperature control during transit is the cause of over one-third of the world’s food spoilage. This represents billions of dollars in losses every year. Maintaining the correct temperature in transit is THE challenge in cold chain logistics.
 The temperature inside a delivery truck can vary a lot based on the number of times it is opened for deliveries, the weather outside or due to malfunctioning equipment. It is therefore important to monitor the conditions inside the truck at all times so that any shift from ideal storage conditions can be immediately flagged and corrected.
-A real time monitoring system for cold transit requires you to combine different streaming data sources that record things like GPS, pressure, temperature etc. But the challenge  is that this information is often coming from different sensors which record and send this information out at different points in time.  So combining them is not a straightforward task.
+A real time monitoring system for cold transit requires you to combine different streaming data sources that record things like GPS, pressure, temperature etc. But the challenge is that this information is often coming from different sensors which record and send this information out at different points in time. So combining them is not a straightforward task.
 In this demo, we use Kinetica's ASOF join and materialized view capabilities to perform an inexact join between vehicle location data and metrics that is continuously updated as new data streams in.
 So let's get started!
 */
@@ -243,9 +243,9 @@ ORDER BY ts_min;
 /* TEXT Block Start */
 /*
 A SIMPLE JOIN DOES NOT WORK
-The vehicle location and metrics data share an id column and timestamp. A simple inner join will try to match the records from both tables by id and timestamp. But this will not work. This is because the vehicle metrics are being recorded at a different timestamp than the vehicle locations. So joining them together will not yield as many hits because the timestamps don't align  (see animation below).
+The vehicle location and metrics data share an id column and timestamp. A simple inner join will try to match the records from both tables by id and timestamp. But this will not work. This is because the vehicle metrics are being recorded at a different timestamp than the vehicle locations. So joining them together will not yield as many hits because the timestamps don't align (see animation below).
 ✎ Note
-: Wait till both the tables have records to run the queries.
+: Wait until both the tables have records to run the queries.
 */
 /* TEXT Block End */
 

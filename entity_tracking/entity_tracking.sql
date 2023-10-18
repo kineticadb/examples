@@ -115,9 +115,9 @@ A track is a
 native
 geospatial object in Kinetica that is used to represent the path an object takes over time and space. A track is defined using an ID, x and y coordinates and timestamps.
 WHY ARE TRACKS USEFUL?
-Pretty much any object that moves can be represented and studied using tracks. This has a wide range of application in almost all sectors of the economy including supply chain management, ride sharing, IoT devices.
+Pretty much any object that moves can be represented and studied using tracks. This has a wide range of application in almost all sectors of the economy including supply chain management, ride sharing, and IoT devices.
 WHAT SETS KINETICA APART?
-Tracks are unique to Kinetica and they are represented as a native geospatial object in the database. There are several advantages to this.
+Tracks are unique to Kinetica and they are represented as a native geospatial object in the database. There are several advantages to this:
 -- When a track is defined, Kinetica, automatically interpolates between the points to construct the path that constitutes the track.
 -- This interpolation to a path allows Kinetica to perform geospatial operations that detect intersections, collisions, proximity with other geospatial objects and measure track features such as its length and duration.
 All of this out of the box functionality makes it easier and more performant to use Kinetica to analyze the behaviour of tracks without having to write any custom code yourself.
@@ -186,7 +186,7 @@ WHERE TRACKID = (SELECT TRACKID FROM long_tracks ORDER BY RAND() LIMIT 1);
 /* TEXT Block Start */
 /*
 GEOFENCING ALERTS
-We are expecting bad weather around New Orleans. You have been tasked with setting up a way to alert ships that are traveling too fast in this area. The threshold is set as  ships that have traveled more than two kilometers over the last 5 minutes.
+We are expecting bad weather around New Orleans. You have been tasked with setting up a way to alert ships that are traveling too fast in this area. The threshold is set as ships that have traveled more than two kilometers over the last 5 minutes.
 The zone around New Orleans is shown below.
 */
 /* TEXT Block End */
@@ -229,7 +229,7 @@ SELECT TRACKID FROM track_length_5mins WHERE track_length > 2;
 ST_TRACKINTERSECTS
 Kinetica interpolates the path that a track will take based on the ordering of the points. The ST_TRACKINTERSECTS function takes this interpolation into account when determining whether a track intersects with a fence.
 The output from the function contains the TRACKID, the entire track linestring and information about the geofence that it intersected with.
-The code below uses a materialized view that is refreshed every 5 seconds to identify tracks as they intersect with the fence that we defined above. We are only looking for tracks that intersected the fence over the last 2 hours.
+The code below uses a materialized view that is refreshed every 5 seconds to identify tracks as they intersect with the fence that we defined above. We are only looking for tracks that intersected the fence over the last 4 hours.
 */
 /* TEXT Block End */
 
@@ -308,7 +308,7 @@ WITH OPTIONS
 /* TEXT Block Start */
 /*
 ALERT BASED ON DWELL AND/OR LOITERING
-As a port manager you also want to know when a vessel is spending more time than usual without moving or circling around the same spots. We are interested in just the last 4 hours of activity. So let's start by identifying tracks that have timestamps in the last 4 hours and calculating the area of the bounds of that track and the length.
+As a port manager you also want to know when a vessel is spending more time than usual without moving or circling around the same spots. We are interested in just the last 4 hours of activity. So let's start by identifying tracks that have timestamps in the last 4 hours and calculating the area of the bounds of that track and length.
 */
 /* TEXT Block End */
 
@@ -319,7 +319,7 @@ CREATE OR REPLACE MATERIALIZED VIEW recent_tracks
 REFRESH EVERY 5 MINUTES AS
 SELECT * 
 FROM ship_tracks 
-WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 1;
+WHERE TIMEBOUNDARYDIFF('HOUR', TIMESTAMP, NOW()) < 4;
 
 -- Identify the track length and the bounds of the tracks that have recordings for the last 4 hours.
 CREATE OR REPLACE MATERIALIZED VIEW track_area_length_4hr
@@ -342,7 +342,7 @@ SELECT * FROM track_area_length_4hr;
 /*
 DWELLING VS LOITERING
 Dwelling is when a object is almost entirely stationary. For instance, a ship that has dropped anchor will barely move until it lifts its anchor. So we'd expect the track length and the area that it covers to be pretty small for the period that it is dwelling.
-Loitering on the other hand is when an  is constantly moving but within a small area. So in the case of dwelling, we'd expect the track length to be significantly greater than zero but the area that it covers (based on the bounds) to be pretty small. Loitering in this context could mean a ship which is performing a particular kind of activity like fishing.
+Loitering on the other hand is when an object is constantly moving but within a small area. So in the case of dwelling, we'd expect the track length to be significantly greater than zero but the area that it covers (based on the bounds) to be pretty small. Loitering in this context could mean a ship which is performing a particular kind of activity like fishing.
 Let's start by finding all the ships that are dwelling. Our threshold for dwelling is an bounds area less than 100 metre squared and a track length less than 100 metres total over the last 4 hours.
 */
 /* TEXT Block End */
@@ -356,7 +356,7 @@ SELECT * FROM recent_tracks
 WHERE TRACKID IN 
 (
     SELECT TRACKID FROM track_area_length_4hr
-    WHERE (x_dist < 0.01 AND y_dist < 0.01) AND track_length < 50
+    WHERE (x_dist < 0.01 AND y_dist < 0.01) AND track_length < 100
 );
 /* SQL Block End */
 
@@ -371,7 +371,7 @@ WHERE TRACKID IN
 
 /* TEXT Block Start */
 /*
-Next, lets calculate loitering. The threshold for loitering is that a ship has a total track length between 1 to 5 kms within a 400 metre square area.
+Next, lets calculate loitering. The threshold for loitering is that a ship has a total track length greater than 1 km within a 400 metre square area.
 */
 /* TEXT Block End */
 
@@ -461,7 +461,7 @@ SELECT * FROM proximate_tracks
 ORDER BY RAND()
 LIMIT 1;
 
--- Create a view of proxiamte tracks to show on map (one at a time)
+-- Create a view of proximate tracks to show on map (one at a time)
 CREATE OR REPLACE MATERIALIZED VIEW map_proximates 
 REFRESH EVERY 5 SECONDS AS
 SELECT * from ship_tracks
