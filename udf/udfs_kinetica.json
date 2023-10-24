@@ -1,0 +1,299 @@
+{
+  "workbook": {
+    "metadata": {
+      "revision": 20230621,
+      "example_id": "2c687afa-3c56-4191-af6e-3c8a966f3d94",
+      "features": [
+        "SQL GPT",
+        "Spatial",
+        "Time Series",
+        "Graph"
+      ],
+      "approx_time": "10 mins",
+      "thumbnail": "https://kinetica-workbench.s3.amazonaws.com/workbooks/examples/sql_gpt_guide.png"
+    },
+    "config": {
+      "chatgpt_context": [
+        {
+          "table": "dc_landmarks",
+          "description": "This table contains the WKT outlines of different landmarks in Washington DC.",
+          "rules": ""
+        },
+        {
+          "table": "recent_locations",
+          "description": "This table contains up to date information on the location of different delivery trucks identified by TRACKID over the last one hour.",
+          "rules": ""
+        },
+        {
+          "table": "quotes",
+          "description": "This table contains ask and bid prices along with the ask and bid sizes for Amazon (AMZN), Google (GOOG) and Apple (AAPL) stocks.",
+          "rules": ""
+        },
+        {
+          "table": "trades",
+          "description": "This table provides the open, close, low and high prices along with the trading volumes at one minute intervals for Amazon, Google and Apple stocks",
+          "rules": "The correct way to specify an INTERVAL expression is as follows INTERVAL '0' MINUTE you can change the '0' to any other real number within single quotes and the unit can be SECOND MINUTE HOUR or DAY"
+        },
+        {
+          "table": "kgraph_table",
+          "description": "Describes how people are associated to each other with nodes and edges",
+          "rules": "EDGE_NODE1_NAME and EDGE_NODE2_NAME represents an association, Ignore EDGE_DIRECTION, Only include columns EDGE_NODE1_NAME and EDGE_NODE2_NAME in results"
+        }
+      ]
+    },
+    "id": "da7f8950-71d8-11ee-83b6-1f5963aa4516",
+    "name": "UDFs in Kinetica",
+    "description": "A simple illustration of how to set up, manage and execute UDFs in Kinetica.",
+    "user_id": "0ca07e80-c91e-11ed-ab93-53a7b6615b98",
+    "warehouse_id": "1ae82840-0950-11ee-b69a-57dc82b3b334",
+    "is_example": false,
+    "is_shared": false,
+    "created_at": "2023-05-31T17:28:51.244Z",
+    "updated_at": "2023-10-24T13:19:41.365Z",
+    "userId": "0ca07e80-c91e-11ed-ab93-53a7b6615b98"
+  },
+  "worksheets": [
+    {
+      "config": {},
+      "id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+      "name": "UDFs",
+      "description": "Description for sheet 7",
+      "previous_worksheet_id": "09829da0-724c-11ee-83b6-1f5963aa4516",
+      "next_worksheet_id": null,
+      "workbook_id": "da7f8950-71d8-11ee-83b6-1f5963aa4516",
+      "created_at": "2023-10-11T06:10:09.328Z",
+      "updated_at": "2023-10-24T13:19:19.916Z",
+      "workbookId": "da7f8950-71d8-11ee-83b6-1f5963aa4516"
+    },
+    {
+      "config": {},
+      "id": "09829da0-724c-11ee-83b6-1f5963aa4516",
+      "name": "Introduction",
+      "description": "Description for sheet 2",
+      "previous_worksheet_id": null,
+      "next_worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+      "workbook_id": "da7f8950-71d8-11ee-83b6-1f5963aa4516",
+      "created_at": "2023-10-24T09:02:19.770Z",
+      "updated_at": "2023-10-24T09:16:43.801Z",
+      "workbookId": "da7f8950-71d8-11ee-83b6-1f5963aa4516"
+    }
+  ],
+  "blockMap": {
+    "da846b50-71d8-11ee-83b6-1f5963aa4516": [
+      {
+        "config": {},
+        "id": "da88d820-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block 1",
+        "description": "Description for Block 1",
+        "content": "\"-- Make a simple input table\\nCREATE OR REPLACE TABLE sos_input (\\n    x1 int,\\n    y1 float  \\n);\\n\\n-- Insert a few values into the table\\nINSERT INTO sos_input \\n    (x1, y1) \\nVALUES \\n    (1, 1.0), \\n    (2, 2.0), \\n    (3, 3.0), \\n    (4, 4.0), \\n    (5, 5.0);\\n\\n\"",
+        "previous_block_id": "308d28f0-7258-11ee-83b6-1f5963aa4516",
+        "next_block_id": "4e0eb7e0-7258-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T06:10:09.422Z",
+        "updated_at": "2023-10-24T10:30:11.511Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da8ccfc0-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Execute function defining output table just by name to be created or appened to\\nEXECUTE FUNCTION udf_sos_py_proc /* KI_HINT_SAVE_UDF_STATS */\\n(\\n    INPUT_TABLE_NAMES => INPUT_TABLE(SELECT * FROM sos_input),\\n    OUTPUT_TABLE_NAMES => OUTPUT_TABLES('sos_output')\\n);\\n\\nSELECT * FROM sos_output;\"",
+        "previous_block_id": "04465560-725c-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da929c20-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T06:18:01.824Z",
+        "updated_at": "2023-10-24T11:06:28.324Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da900410-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Create the function\\nCREATE OR REPLACE FUNCTION udf_sos_py_proc\\nRETURNS TABLE (id SMALLINT NOT NULL, y FLOAT)\\nMODE = 'distributed'\\nRUN_COMMAND = 'python'\\nRUN_COMMAND_ARGS = 'udf/udf_sos_proc.py'\\nFILE PATHS 'kifs://udf/udf_sos_proc.py'\\nWITH OPTIONS (SET_ENVIRONMENT = 'sos_py_environment');\\n\"",
+        "previous_block_id": "4e0eb7e0-7258-11ee-83b6-1f5963aa4516",
+        "next_block_id": "04465560-725c-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T06:18:03.482Z",
+        "updated_at": "2023-10-24T10:56:43.226Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da929c20-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Execute as a table function within a SELECT\\nSELECT * FROM TABLE \\n(\\n    udf_sos_py_proc /* KI_HINT_SAVE_UDF_STATS */\\n    (\\n        INPUT_TABLE_NAMES => INPUT_TABLE(SELECT * FROM sos_input),\\n        OPTIONS => KV_PAIRS(run_tag = 'sum_of_squares')\\n\\n    )   \\n);\"",
+        "previous_block_id": "da8ccfc0-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da981a60-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T06:30:18.651Z",
+        "updated_at": "2023-10-24T11:11:34.225Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da958250-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"CREATE AND ALTER FUNCTION ENVIRONMENT\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"This query creates the function environment for the python script. We can DESCRIBE the environment to see all the installed packages. ALTER FUNCTION ENVIRONMENT can be used to add new packages to the environment.\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": "da9ab270-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T06:34:23.248Z",
+        "updated_at": "2023-10-24T11:08:28.023Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da981a60-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"SHOW FUNCTION STATUS;\"",
+        "previous_block_id": "da929c20-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da9e5bf0-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T07:50:22.606Z",
+        "updated_at": "2023-10-24T11:03:19.805Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {
+          "isSqlVisible": false
+        },
+        "id": "da9ab270-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"/*Altering your environment with SQL */\\nCREATE FUNCTION ENVIRONMENT sos_py_environment;\\n\\n-- Describe the environment to see the packages\\nDESCRIBE FUNCTION ENVIRONMENT sos_py_environment;\"",
+        "previous_block_id": "da958250-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "daa49d80-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T08:05:42.816Z",
+        "updated_at": "2023-10-24T10:26:20.439Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "da9e5bf0-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"DROP FUNCTION udf_sos_py_proc;\\nDROP FUNCTION ENVIRONMENT sos_py_environment;\"",
+        "previous_block_id": "da981a60-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": null,
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T17:03:08.202Z",
+        "updated_at": "2023-10-24T11:03:03.495Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "daa49d80-71d8-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Install the numpy package to the environment\\nALTER FUNCTION ENVIRONMENT sos_py_environment INSTALL PYTHON PACKAGE 'numpy';\\n\\n-- See the description with numpy added\\nDESCRIBE FUNCTION ENVIRONMENT sos_py_environment;\"",
+        "previous_block_id": "da9ab270-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "308d28f0-7258-11ee-83b6-1f5963aa4516",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-11T17:05:02.345Z",
+        "updated_at": "2023-10-24T10:54:02.439Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "308d28f0-7258-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"CREATE AN INPUT TABLE \",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"This is the table that we will use as the input to the UDF for calculating the sum of squares for the y1 column.\"}]}]",
+        "previous_block_id": "daa49d80-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da88d820-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-24T10:29:19.231Z",
+        "updated_at": "2023-10-24T11:09:01.868Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "4e0eb7e0-7258-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"CREATE THE FUNCTION\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"The CREATE FUNCTION is defined as a UDTF - a UDF that returns a single output table. The RETURN TABLE clause specifies the DDL for this output tabke.  The mode is set as distributed. A distributed UDF procedure will be invoked within the database, executing in parallel against each data shard of the specified tables. When distributed, there will be one OS process per processing node in Kinetica.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"For this to work, you will need to have the udf_sos_proc.py script in the 'udf' folder in kifs. See the Introduction tab for more instructions.\"}]}]",
+        "previous_block_id": "da88d820-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da900410-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-24T10:30:08.734Z",
+        "updated_at": "2023-10-24T11:10:10.867Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "04465560-725c-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"EXECUTE THE FUNCTION\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"An existing UDF/UDTF can be executed using the EXECUTE FUNCTION command. Additionally, a UDTF can be executed as a table function within a SELECT statement. Any user with the SYSTEM ADMIN permission or the EXECUTE FUNCTION permission on a specific UDF/UDTF (or across all UDFs/UDTFs) is allowed to execute it.\"}]}]",
+        "previous_block_id": "da900410-71d8-11ee-83b6-1f5963aa4516",
+        "next_block_id": "da8ccfc0-71d8-11ee-83b6-1f5963aa4516",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-24T10:56:42.934Z",
+        "updated_at": "2023-10-24T11:11:05.610Z",
+        "worksheetId": "da846b50-71d8-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ],
+    "09829da0-724c-11ee-83b6-1f5963aa4516": [
+      {
+        "config": {},
+        "id": "0c0e78a0-724c-11ee-83b6-1f5963aa4516",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"In this workbook we will set up and execute a UDF that takes an input table and computes the sum of the squares of a column and returns an output table with the result.\"}]},{\"type\":\"paragraph\",\"children\":[{\"bold\":true,\"text\":\"SETUP (MUST COMPLETE BEFORE RUNNING THE REST OF THE CODE)\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"1. Go to the Files tab (left side explorer) and make a directory on kifs called 'udf' for the purposes of this example.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"2. Download the file located here to the 'udf' directory in KIFS:  https://docs.kinetica.com/7.1/udf/python/examples/dist_noncuda_sum_of_squares/udf_sos_proc.py\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\" \"},{\"bold\":true,\"text\":\"USER DEFINED FUNCTIONS\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"User-Defined Functions (UDFs) are custom functions created by users to perform operations that aren't covered by built-in functions within a database management system or programming environment. UDFs can serve to extend the functionality of SQL queries or to encapsulate complex logic into simpler function calls. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"UDFS IN KINETICA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Kinetica provides support for User-Defined Function (UDF) creation and management in SQL. Unlike conventional UDFs, Kinetica UDFs are external programs that can be managed via SQL and may be run in distributed fashion across the cluster. This workbook will cover these features. The overall steps are as follows.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"1. CREATE FUNCTION ENVIRONMENT: This creates a function environment for the UDF. \"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"2. CREATE FUNCTION: Create the function by specifying the run command (python or java), its arguments, the location of the script, and optional parameters like the function environment.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"3. EXECUTE FUNCTION: Execute the function by providing it input and output tables.\"}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"4. EXECUTE TABLE FUNCTION: This executes a UDTF (User Defined Table Function). A UDTF is simply a UDF defined to return a single table as its output\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": null,
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "09829da0-724c-11ee-83b6-1f5963aa4516",
+        "created_at": "2023-10-24T09:02:24.042Z",
+        "updated_at": "2023-10-24T13:19:41.324Z",
+        "worksheetId": "09829da0-724c-11ee-83b6-1f5963aa4516",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ]
+  },
+  "vizMap": {
+    "da88d820-71d8-11ee-83b6-1f5963aa4516": [],
+    "da8ccfc0-71d8-11ee-83b6-1f5963aa4516": [],
+    "da900410-71d8-11ee-83b6-1f5963aa4516": [],
+    "da929c20-71d8-11ee-83b6-1f5963aa4516": [],
+    "da958250-71d8-11ee-83b6-1f5963aa4516": [],
+    "da981a60-71d8-11ee-83b6-1f5963aa4516": [],
+    "da9ab270-71d8-11ee-83b6-1f5963aa4516": [],
+    "da9e5bf0-71d8-11ee-83b6-1f5963aa4516": [],
+    "daa49d80-71d8-11ee-83b6-1f5963aa4516": [],
+    "308d28f0-7258-11ee-83b6-1f5963aa4516": [],
+    "4e0eb7e0-7258-11ee-83b6-1f5963aa4516": [],
+    "04465560-725c-11ee-83b6-1f5963aa4516": [],
+    "0c0e78a0-724c-11ee-83b6-1f5963aa4516": []
+  }
+}
