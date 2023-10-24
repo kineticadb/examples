@@ -11,7 +11,7 @@
 SET UP THE KAFKA DATA SOURCE
 There are two kafka topics that we will use for this example. The first contains data on quotes and the second on trades. The queries below register both these data sources.
 ✎ Note
-: Both the data streams are synthetic i.e. made up data. They don't correspond to actual prices and they are always on i.e. they don't follow market hours. This is to ensure that anyone accessing these feeds will have access to a running feed regardless of timezone. However, both the streams are similar intraday trade and quote streams in terms of values and number of observations.
+: Both the data streams are synthetic i.e. made up data. They don't correspond to actual prices and they are always on i.e. they don't follow market hours. This is to ensure that anyone accessing these feeds will have access to a running feed regardless of timezone. However, both the streams are similar to intraday trades and quote streams in terms of values and number of observations.
 */
 /* TEXT Block End */
 
@@ -56,7 +56,7 @@ WITH OPTIONS
 /* TEXT Block Start */
 /*
 QUOTES DATA
-The quotes table contains information on the ask and bid prices on a millisecond basis for three stocks - Apple (AAPL), Amazon (AMZN) and Google (GOOG).
+The quotes table contains information on the ask and bid prices on a millisecond basis for three stocks - Apple (AAPL), Amazon (AMZN), and Google (GOOG).
 ✎Note
 : We are loading only the latest quotes from kafka unlike trades, where we load from the earliest available data.
 */
@@ -81,7 +81,7 @@ WITH OPTIONS (
     SUBSCRIBE = TRUE,
     TYPE_INFERENCE_MODE = 'speed',
     ERROR_HANDLING = 'permissive',
-    kafka_offset_reset_policy = 'latest', -- load the latest qoutes data
+    kafka_offset_reset_policy = 'latest', -- load the latest quotes data
     kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes
 );
 /* SQL Block End */
@@ -90,7 +90,7 @@ WITH OPTIONS (
 /* TEXT Block Start */
 /*
 INTRADAY TRADES
-The trades table contains information on the open, close, low, and high prices, and trading volumes for AAPL, AMZN and GOOG. The trades data is recorded on a minute by minute basis.
+The trades table contains information on the open, close, low, and high prices, and trading volumes for AAPL, AMZN, and GOOG. The trades data is recorded on a minute by minute basis.
 */
 /* TEXT Block End */
 
@@ -165,7 +165,7 @@ SELECT
     DATE_TRUNC(DAY, time) AS trade_day,
     MAX(price_high) as price_high
 FROM trades 
-WHERE symbol != 'AAPL' AND YEAR(time) = 2023
+WHERE symbol != 'AAPL' AND YEAR(time) = YEAR(NOW())
 GROUP BY trade_day, symbol
 ORDER BY trade_day, symbol;
 /* SQL Block End */
@@ -280,13 +280,13 @@ SELECT
         2
     ) AS price_gap
 FROM trades
-WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 --Only keep the last 24 hours
+WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 -- Only keep the last 24 hours
 ORDER BY time, symbol;
 
 -- Find the average hourly price gap
 CREATE OR REPLACE MATERIALIZED VIEW price_gap_hourly 
 REFRESH ON CHANGE AS 
-SELECT 
+SELECT
     symbol,
     HOUR(time) as time_hour,
     ROUND(AVG(price_gap), 2) AS price_gap
@@ -299,7 +299,7 @@ SELECT * FROM price_gap_hourly;
 /* SQL Block End */
 
 
-/* Worksheet: Cumu. Sum */
+/* Worksheet: Cumulative Sum */
 /* Worksheet Description: Description for sheet 5 */
 
 
@@ -321,7 +321,7 @@ SELECT
     HOUR(time) AS time_hour,
     SUM(trading_volume) AS total_volume
 FROM trades
-WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 --Only keep the last 24 hours
+WHERE TIMESTAMPDIFF(HOUR, time, NOW()) < 24 -- Only keep the last 24 hours
 GROUP BY time_hour, symbol;
 
 -- Find the cumulative totals
@@ -405,7 +405,7 @@ SELECT * FROM top_changes;
 HIGH CARDINALITY JOINS ON STREAMING DATA USING ASOF
 An ASOF join is used in time series analysis when combining data from two different sources (e.g., two different databases or two different time periods) that have slightly different time stamps. This type of join is used to match up entries with similar values, but that have slightly different time stamps, by pairing them with the closest corresponding value in the other dataset. This allows for data points to be accurately matched and combined, even if the timing of the events is slightly off.
 TRIGGER SELL WHEN BID PRICE HIGHER THAN HIGHEST TRADED PRICE
-Kinetica allows you to perform high cardinality ASOF joins on streaming data to maintain an always updated view. Let's use that to combine the trades data with quotes to trigger buy events if the bid price is higher than the highest traded price in the last minute.
+Kinetica allows you to perform high cardinality ASOF joins on streaming data to maintain an always updated view. Let's use that to combine the trades data with quotes to trigger buy events if the bid price is higher than the highest traded price in the last second.
 */
 /* TEXT Block End */
 
