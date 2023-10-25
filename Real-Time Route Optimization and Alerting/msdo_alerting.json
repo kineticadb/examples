@@ -10,7 +10,7 @@
     "is_example": false,
     "is_shared": false,
     "created_at": "2023-09-16T23:11:30.269Z",
-    "updated_at": "2023-10-25T13:50:10.311Z",
+    "updated_at": "2023-10-25T14:47:31.151Z",
     "userId": "0ca07e80-c91e-11ed-ab93-53a7b6615b98"
   },
   "worksheets": [
@@ -406,13 +406,13 @@
         "id": "442c25c0-733c-11ee-9ff9-75479ed964fa",
         "name": "Block",
         "description": "Description for Block",
-        "content": "\"--An example query for alert creation\\nCREATE STREAM alert_trucks \\nON TABLE route_compare\\nWHERE distance_gap > 2000\\nWITH OPTIONS \\n(\\n    DESTINATION = 'https://webhook.site/5ce5b088-b02d-448c-983a-8d7380b27311'\\n)\"",
+        "content": "\"--An example query for alert creation\\nCREATE STREAM alert_trucks \\nON TABLE route_compare\\nWHERE ABS(distance_gap) > 2000\\nWITH OPTIONS \\n(\\n    DESTINATION = 'https://webhook.site/5ce5b088-b02d-448c-983a-8d7380b27311'\\n)\"",
         "previous_block_id": "4454e370-733c-11ee-9ff9-75479ed964fa",
         "next_block_id": null,
         "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
         "worksheet_id": "442261c0-733c-11ee-9ff9-75479ed964fa",
         "created_at": "2023-09-16T23:26:43.322Z",
-        "updated_at": "2023-10-25T13:41:57.762Z",
+        "updated_at": "2023-10-25T14:47:31.117Z",
         "worksheetId": "442261c0-733c-11ee-9ff9-75479ed964fa",
         "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
       },
