@@ -120,10 +120,10 @@ CREATE OR REPLACE DIRECTED GRAPH dc_area
             wkt AS WKTLINE,
             dir AS DIRECTION,
             time AS WEIGHT_VALUESPECIFIED
-        FROM ki_home.dc_shape),
+        FROM dc_shape),
         OPTIONS => KV_PAIRS
         (
-            graph_table = 'ki_home.dc_area_table',
+            graph_table = 'dc_area_table',
             add_turns = 'true'
         )
     );
@@ -349,6 +349,11 @@ ON s.trackid = st.trackid;
 /* SQL Block End */
 
 
+/* SQL Block Start */
+SELECT * FROM solver_route;
+/* SQL Block End */
+
+
 /* TEXT Block Start */
 /*
 RECORD ALL THE STOPS FOR A SUPPLIER
@@ -360,9 +365,9 @@ A supplier truck can have two types of stops - either a customer location or a s
 /* SQL Block Start */
 --Combining Customer and Truck Tables
 CREATE OR REPLACE TABLE next_stop AS
-(SELECT DISTINCT CONCAT(region_id, truck_id) AS destination_id, 'depot' AS destination_label, location as location FROM ki_home.truck)
+(SELECT DISTINCT CONCAT(region_id, truck_id) AS destination_id, 'depot' AS destination_label, location as location FROM truck)
 UNION
-(SELECT DISTINCT ID AS destination_id,'customer' AS destination_label, location as location  FROM ki_home.customer);
+(SELECT DISTINCT ID AS destination_id,'customer' AS destination_label, location as location  FROM customer);
 /* SQL Block End */
 
 
@@ -432,14 +437,6 @@ ON k.destination_id = d.destination_id;
 /* SQL Block End */
 
 
-/* TEXT Block Start */
-/*
-COMPARE THE ACTUAL AND SOLVER ROUTES FOR A SINGLE TRUCK
-The chart below shows the distance to the next stop on the y axis and the time on the y axis.
-*/
-/* TEXT Block End */
-
-
 /* SQL Block Start */
 SELECT * FROM
 (
@@ -459,17 +456,17 @@ UNION
         'SOLVER' AS TYPE,
         destination_id
     FROM solver_distances 
-    WHERE TRACKID = '1001_101' AND TIMESTAMP BETWEEN (SELECT MIN(timestamp) FROM ki_home.actual_distances) AND (SELECT MAX(timestamp) FROM ki_home.actual_distances)
+    WHERE TRACKID = '1001_101' AND TIMESTAMP BETWEEN (SELECT MIN(timestamp) FROM actual_distances) AND (SELECT MAX(timestamp) FROM actual_distances)
 );
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-COMPARING TRUCK LOCATIONS ON A MAP
-In addition to comparing distances to the next stop for each truck, we can also analyze the real-time locations of the trucks. We can compare the solver's predefined route, which adheres to the expected schedule, with the actual trucks that may be operating on a delayed route. This comparison allows us to assess whether the actual trucks are moving at a faster pace than the optimal route or to observe any delays in their progress.
-In the code block below, we filter and retain only the data for the past 10 minutes for the solver and actual routes. This data is then used to compare the real-time GPS signals of the trucks with their expected locations based on the results from the optimal route table.
-The blue truck signals indicate real-time GPS locations, while the orange truck signals represent the positions of solver trucks.
+COMPARING TRUCK LOCATIONS
+In addition to comparing distances to the next stop for each truck, we are also analyzing the real-time locations of the trucks. We can compare the solver's predefined route, which adheres to the expected schedule, with the actual trucks that may be operating on a delayed route. This comparison allows us to assess whether the actual trucks are moving at a faster pace than the optimal route or to observe any delays in their progress.
+In the code block below, we filter and retain only the data from the Kafka server for the past 10 minutes. This data is then used to compare the real-time GPS signals of the trucks with their expected locations based on the results from the optimal route table. It's important to note that since we are only keeping the last 10 minutes, some trucks may not appear on the map below. This occurs because certain trucks have longer routes than others, and the Kafka server resets itself to simulate new routes when the longest route is completed.
+The green truck signals indicate real-time GPS locations, while the blue truck signals represent the positions of solver trucks.
 */
 /* TEXT Block End */
 
@@ -493,12 +490,14 @@ ON act.TRACKID = s.TRACKID AND ASOF(act.TIMESTAMP, s.TIMESTAMP, INTERVAL '-10' S
 
 /* TEXT Block Start */
 /*
-🚨 ALERTS
-Now, that we have all the analytics set up we can stream alerts out from Kinetica based on certain triggers.
-For this particular scenario, we will trigger alerts when the distance gap between the actual truck position and the optimal route prediction exceeds 2000 meters. The simplest configuration for an alert is to send it to a webhook. For this demo, we will use the following site to generate a webhook that we can send alerts to: https://webhook.site/.
+🚨 Alerts
+Alerts can be generated under various circumstances, including when a truck is approaching its next location.
+In this particular scenario, we will trigger alerts when the time gap between the actual truck position and the optimal route prediction exceeds 2000 seconds.
+These alerts can easily be directed to various tools, such as Slack, for effective monitoring and notification.
+While, for the purposes of this demo, the alerts are not currently routed to any specific tools, they can be accessed through the destination link provided below.
 ❗️
 Note:
-Make sure to generate a new webhook via webhook.site and paste in the DESTINATION field below. This will send alerts to that webhook and you can monitor it using webhook.site.
+The link might be expired, and if so, there will be an error message saying '404 Token not found.' Please click the 'Back to Webhook.site' button, and you will be able to see the alerts on the page. Also, you can update the destination link by copying and pasting the URL on the website.
 */
 /* TEXT Block End */
 
@@ -507,7 +506,7 @@ Make sure to generate a new webhook via webhook.site and paste in the DESTINATIO
 --An example query for alert creation
 CREATE STREAM alert_trucks 
 ON TABLE route_compare
-WHERE ABS(distance_gap) > 2000
+WHERE distance_gap > 2000
 WITH OPTIONS 
 (
     DESTINATION = 'https://webhook.site/5ce5b088-b02d-448c-983a-8d7380b27311'

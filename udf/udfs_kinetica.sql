@@ -10,10 +10,11 @@
 /*
 In this workbook we will set up and execute a UDF that takes an input table and computes the sum of the squares of a column and returns an output table with the result.
 SETUP (MUST COMPLETE BEFORE RUNNING THE REST OF THE CODE)
+👉🏻 This workbook can only be run on Kinetica's Developer Edition or other on-premise deployments since it requires an update to the database configuration.
+1. 'enable_procs': To allow UDFs to be executed, we need to turn the 'enable_procs' option in the configuration parameters for the database. You can access these via GAdmin (http://localhost:8080/gadmin). The login credentials are the same as that for workbench (the tool you are in right now). In GAdmin go to Config -> Advanced. Search for enable_procs (CTRL/CMD + F) and set it to true. Click on Update. The will prompt you to restart the database. Choose this option. Once the database is back up, you can come back here to Workbench and complete the rest of the steps below.
 1. Go to the Files tab (left side explorer) and make a directory on kifs called 'udf' for the purposes of this example.
 2. Download the file located here:  https://github.com/kineticadb/examples/blob/master/udf/udf_sos_proc.py
 3. Upload the file above the 'udf' directory in KIFS
-
 USER DEFINED FUNCTIONS
 User-Defined Functions (UDFs) are custom functions created by users to perform operations that aren't covered by built-in functions within a database management system or programming environment. UDFs can serve to extend the functionality of SQL queries or to encapsulate complex logic into simpler function calls.
 UDFS IN KINETICA
