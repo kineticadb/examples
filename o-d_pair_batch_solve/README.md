@@ -18,7 +18,7 @@ Origin-Destination Pair Batch Solver
 </h1>
 
 <h3 align="center" style="margin:0px">
-<img width="600" src="_assets/images/Origin-Destination_PaiAr_Batch_Solver.png" alt="QS banner"/>
+<img width="600" src="../_assets/images/Origin-Destination_PaiAr_Batch_Solver.png" alt="o-d banner"/>
 </h3>
 
 This SQL workbook showcases how to leverage Kinetica’s "match_batch" graph solver, a powerful tool designed for, optimal Origin-Destination(O-D) path calculation. This workbook walks you through a scenario involving 2 supply locations and 5 demand locations in the Washington DC area. The solver will calculate the most optimal O-D path between all supply and demand locations and provide the optimal path for each pair.
