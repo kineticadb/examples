@@ -1,4 +1,4 @@
-/* Workbook: Materialized views in Kinetica */
+/* Workbook: Materialized Views in Kinetica */
 /* Workbook Description: Description for Materialized views in Kinetica */
 
 
