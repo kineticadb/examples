@@ -1,0 +1,246 @@
+{
+  "workbook": {
+    "metadata": {},
+    "config": {},
+    "id": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5",
+    "name": "Kinetica + Confluent",
+    "description": "Description for Kinetica + Confluent",
+    "user_id": "0ca07e80-c91e-11ed-ab93-53a7b6615b98",
+    "warehouse_id": null,
+    "is_example": true,
+    "is_shared": false,
+    "created_at": "2024-01-10T02:16:43.379Z",
+    "updated_at": "2024-01-16T20:33:36.983Z",
+    "userId": "0ca07e80-c91e-11ed-ab93-53a7b6615b98"
+  },
+  "worksheets": [
+    {
+      "config": {
+        "chat_messages": []
+      },
+      "id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+      "name": "Load data",
+      "description": "Description for Sheet 1",
+      "previous_worksheet_id": null,
+      "next_worksheet_id": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+      "workbook_id": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5",
+      "created_at": "2024-01-10T02:16:43.479Z",
+      "updated_at": "2024-01-16T20:32:56.111Z",
+      "workbookId": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5"
+    },
+    {
+      "config": {
+        "chat_messages": []
+      },
+      "id": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+      "name": "Geofencing events",
+      "description": "Description for sheet 2",
+      "previous_worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+      "next_worksheet_id": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+      "workbook_id": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5",
+      "created_at": "2024-01-10T02:23:34.700Z",
+      "updated_at": "2024-01-16T20:33:07.479Z",
+      "workbookId": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5"
+    },
+    {
+      "config": {
+        "chat_messages": []
+      },
+      "id": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+      "name": "Stream events",
+      "description": "Description for sheet 3",
+      "previous_worksheet_id": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+      "next_worksheet_id": null,
+      "workbook_id": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5",
+      "created_at": "2024-01-10T02:27:35.697Z",
+      "updated_at": "2024-01-16T20:33:21.838Z",
+      "workbookId": "4c1c8c30-af5e-11ee-bc58-c34be43e68b5"
+    }
+  ],
+  "blockMap": {
+    "4c2bce70-af5e-11ee-bc58-c34be43e68b5": [
+      {
+        "config": {},
+        "id": "7dee2610-af5e-11ee-bc58-c34be43e68b5",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- The AWS S3 bucket\\nCREATE OR REPLACE DATA SOURCE examples_data\\nLOCATION = 'S3'\\nWITH OPTIONS (\\n    ANONYMOUS = 'true',\\n    BUCKET NAME = 'kinetica-examples-data-public',\\n    REGION = 'us-east-1'\\n);\\n\\n-- Load the fences data into Kinetica\\nDROP TABLE IF EXISTS dc_fences;\\nCREATE OR REPLACE TABLE dc_fences \\n(\\n    fence_id int,\\n    wkt geometry,\\n    fence_label varchar(32)\\n);\\nLOAD DATA INTO dc_fences\\nFROM FILE PATHS 'landmark_fences.csv'\\nFORMAT TEXT \\nWITH OPTIONS (\\n    DATA SOURCE = 'examples_data'\\n);\"",
+        "previous_block_id": "2555f630-afeb-11ee-a482-3d17c2bcdfc2",
+        "next_block_id": "d3a5a380-afea-11ee-a482-3d17c2bcdfc2",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:18:06.961Z",
+        "updated_at": "2024-01-16T20:32:05.688Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "a3f149f0-af5e-11ee-bc58-c34be43e68b5",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"DROP TABLE IF EXISTS vehicle_locations;\\n-- Load data\\nLOAD DATA INTO vehicle_locations\\nFROM FILE PATH ''\\nFORMAT JSON\\nWITH OPTIONS (\\n    DATA SOURCE = 'vehicle_locations_source',\\n    SUBSCRIBE = TRUE,\\n    TYPE_INFERENCE_MODE = 'speed',\\n    ERROR_HANDLING = 'permissive',\\n    kafka_subscription_cancel_after = 120 -- cancels the stream after 120 minutes\\n);\"",
+        "previous_block_id": "0a11deb0-afec-11ee-a482-3d17c2bcdfc2",
+        "next_block_id": "2555f630-afeb-11ee-a482-3d17c2bcdfc2",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:19:10.735Z",
+        "updated_at": "2024-01-16T20:31:53.341Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "d3a5a380-afea-11ee-a482-3d17c2bcdfc2",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"table_schema\":\"\",\"table_name\":\"dc_fences\",\"geometry_type\":\"wkt\",\"wkt\":\"wkt\",\"renderType\":\"raster\",\"fillColor\":\"ca2c92\",\"borderColor\":\"3700b3\",\"pointSize\":2,\"lineWidth\":1,\"center_longitude\":-77.0376,\"center_latitude\":38.9066,\"zoom_level\":12.94,\"opacity\":70,\"title\":\"\",\"block_height\":535,\"auto_refresh_interval\":\"\",\"basemap_style\":\"grayscale\",\"overrides\":\"\"}]",
+        "previous_block_id": "7dee2610-af5e-11ee-bc58-c34be43e68b5",
+        "next_block_id": null,
+        "block_type_id": "e8ccc4e2-793f-47ed-9af2-f0a58a840006",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T19:02:40.312Z",
+        "updated_at": "2024-01-16T20:33:05.264Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "e8ccc4e2-793f-47ed-9af2-f0a58a840006"
+      },
+      {
+        "config": {},
+        "id": "2555f630-afeb-11ee-a482-3d17c2bcdfc2",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"LOAD THE FENCES DATA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"This data is hosted as a CSV file in an S3 bucket. The queries below register the data source and load the data from the csv file.\"}]}]",
+        "previous_block_id": "a3f149f0-af5e-11ee-bc58-c34be43e68b5",
+        "next_block_id": "7dee2610-af5e-11ee-bc58-c34be43e68b5",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T19:04:57.363Z",
+        "updated_at": "2024-01-10T19:05:43.144Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "5e2962d0-afeb-11ee-a482-3d17c2bcdfc2",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Credentials for Kafka cluster\\nCREATE OR REPLACE CREDENTIAL confluent_creds\\nTYPE = 'kafka'\\nWITH OPTIONS (\\n    'security.protocol' = 'SASL_SSL',\\n    'sasl.mechanism' = 'PLAIN',\\n    'sasl.username'='QZN62QB2RBTLW74L',\\n    'sasl.password'='iiJDdKeBzf5ms5EInLvpRslW1zwsTYx9tjZ1pQyVoS+gPGkyNms6eMXPaR6y+GST'\\n);\\n\\n-- Create the data source for vehicle locations\\nCREATE OR REPLACE DATA SOURCE vehicle_locations_source\\nLOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'\\nWITH OPTIONS (\\n    'kafka_topic_name' =  'vehicle_locations',\\n    credential = 'confluent_creds'\\n);\\n\"",
+        "previous_block_id": "609336e0-afeb-11ee-a482-3d17c2bcdfc2",
+        "next_block_id": "0a11deb0-afec-11ee-a482-3d17c2bcdfc2",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T19:06:32.701Z",
+        "updated_at": "2024-01-16T20:31:19.480Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "609336e0-afeb-11ee-a482-3d17c2bcdfc2",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"CREATE THE DATA SOURCE\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Use the API key name and secret to create the credentials required to access the Confluent cluster. Use the credentials along with the location of the confluent cluster and the topic name to create the data source.\"}]}]",
+        "previous_block_id": null,
+        "next_block_id": "5e2962d0-afeb-11ee-a482-3d17c2bcdfc2",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T19:06:36.750Z",
+        "updated_at": "2024-01-16T20:30:31.654Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "0a11deb0-afec-11ee-a482-3d17c2bcdfc2",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"LOAD THE DATA INTO A TABLE IN KINETICA\",\"bold\":true}]},{\"type\":\"paragraph\",\"children\":[{\"text\":\"Now that the data source is set up we can load data from it into a table in Kinetica.\"}]}]",
+        "previous_block_id": "5e2962d0-afeb-11ee-a482-3d17c2bcdfc2",
+        "next_block_id": "a3f149f0-af5e-11ee-bc58-c34be43e68b5",
+        "block_type_id": "a9949a1a-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T19:11:21.115Z",
+        "updated_at": "2024-01-10T19:11:47.415Z",
+        "worksheetId": "4c2bce70-af5e-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "a9949a1a-14e3-11eb-adc1-0242ac120002"
+      }
+    ],
+    "4146ffb0-af5f-11ee-bc58-c34be43e68b5": [
+      {
+        "config": {},
+        "id": "414970b0-af5f-11ee-bc58-c34be43e68b5",
+        "name": "Block 1",
+        "description": "Description for Block 1",
+        "content": "\"CREATE OR REPLACE MATERIALIZED VIEW fence_events \\nREFRESH ON CHANGE AS \\nSELECT \\n    TRACKID, \\n    wkt, \\n    x, \\n    y, \\n    TIMESTAMP, \\n    CONCAT(CHAR16(TRACKID), CONCAT(' is at ', fence_label)) as event_text \\nFROM vehicle_locations, dc_fences\\nWHERE \\n    STXY_DWITHIN(x, y, wkt, 200, 1) = 1 AND \\n    TIMESTAMP > NOW() - INTERVAL '10' MINUTE;\"",
+        "previous_block_id": null,
+        "next_block_id": "7c5e1ac0-af5f-11ee-bc58-c34be43e68b5",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:23:34.715Z",
+        "updated_at": "2024-01-16T20:32:47.099Z",
+        "worksheetId": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "7c5e1ac0-af5f-11ee-bc58-c34be43e68b5",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "[{\"table_schema\":\"\",\"table_name\":\"fence_events\",\"geometry_type\":\"wkt\",\"wkt\":\"wkt\",\"renderType\":\"raster\",\"fillColor\":\"ca2c92\",\"borderColor\":\"3700b3\",\"pointSize\":2,\"lineWidth\":1,\"center_longitude\":-77.0463,\"center_latitude\":38.8887,\"zoom_level\":15.34,\"opacity\":52,\"title\":\"\",\"block_height\":535,\"auto_refresh_interval\":2,\"basemap_style\":\"grayscale\",\"overrides\":\"\"},{\"table_schema\":\"confluent_kinetica\",\"table_name\":\"fence_events\",\"geometry_type\":\"lon_lat\",\"longitude\":\"x\",\"latitude\":\"y\",\"renderType\":\"track\",\"trackHeadColor\":\"2c6fcaff\",\"trackHeadShape\":\"diamond\",\"trackHeadSize\":6,\"trackMarkerColor\":\"ca2c92\",\"trackMarkerShape\":\"none\",\"trackMarkerSize\":2,\"trackLineColor\":\"3700b3\",\"trackLineWidth\":3,\"symbolRotation\":\"\",\"opacity\":100,\"auto_refresh_interval\":\"\",\"overrides\":\"\"}]",
+        "previous_block_id": "414970b0-af5f-11ee-bc58-c34be43e68b5",
+        "next_block_id": null,
+        "block_type_id": "e8ccc4e2-793f-47ed-9af2-f0a58a840006",
+        "worksheet_id": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:25:13.836Z",
+        "updated_at": "2024-01-16T20:32:56.416Z",
+        "worksheetId": "4146ffb0-af5f-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "e8ccc4e2-793f-47ed-9af2-f0a58a840006"
+      }
+    ],
+    "d0ec6010-af5f-11ee-bc58-c34be43e68b5": [
+      {
+        "config": {},
+        "id": "d0ee82f0-af5f-11ee-bc58-c34be43e68b5",
+        "name": "Block 1",
+        "description": "Description for Block 1",
+        "content": "\"-- CREATE A STREAM \\nCREATE STREAM fence_events ON fence_events  \\nREFRESH ON CHANGE\\nWITH OPTIONS \\n(\\n    DATASINK_NAME = 'confluent_sink'\\n) \"",
+        "previous_block_id": "7a92b420-af60-11ee-bc58-c34be43e68b5",
+        "next_block_id": null,
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:27:35.711Z",
+        "updated_at": "2024-01-16T20:33:36.941Z",
+        "worksheetId": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "7a92b420-af60-11ee-bc58-c34be43e68b5",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"CREATE OR REPLACE DATA SINKconfluent_sink\\nLOCATION = 'kafka://pkc-ep9mm.us-east-2.aws.confluent.cloud:9092'\\nWITH OPTIONS (\\n    'kafka_topic_name' =  'fence_events',\\n    credential = 'confluent_creds'\\n);\"",
+        "previous_block_id": null,
+        "next_block_id": "d0ee82f0-af5f-11ee-bc58-c34be43e68b5",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+        "created_at": "2024-01-10T02:32:20.322Z",
+        "updated_at": "2024-01-16T20:33:31.736Z",
+        "worksheetId": "d0ec6010-af5f-11ee-bc58-c34be43e68b5",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      }
+    ]
+  },
+  "vizMap": {
+    "7dee2610-af5e-11ee-bc58-c34be43e68b5": [],
+    "a3f149f0-af5e-11ee-bc58-c34be43e68b5": [],
+    "d3a5a380-afea-11ee-a482-3d17c2bcdfc2": [],
+    "2555f630-afeb-11ee-a482-3d17c2bcdfc2": [],
+    "5e2962d0-afeb-11ee-a482-3d17c2bcdfc2": [],
+    "609336e0-afeb-11ee-a482-3d17c2bcdfc2": [],
+    "0a11deb0-afec-11ee-a482-3d17c2bcdfc2": [],
+    "414970b0-af5f-11ee-bc58-c34be43e68b5": [],
+    "7c5e1ac0-af5f-11ee-bc58-c34be43e68b5": [],
+    "d0ee82f0-af5f-11ee-bc58-c34be43e68b5": [],
+    "7a92b420-af60-11ee-bc58-c34be43e68b5": []
+  }
+}
