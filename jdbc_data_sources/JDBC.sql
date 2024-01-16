@@ -8,22 +8,22 @@
 
 /* TEXT Block Start */
 /*
-✎ NOTE
-This workbook showcases certian admin features that will only work in developers edition and not on Kinetica cloud.
+❗️NOTE: THIS ONLY WORKS ON DEVELOPER EDITION.
+This workbook showcases certain admin features that will only work in the Developer's Edition and not on the Kinetica Cloud.
 */
 /* TEXT Block End */
 
 
 /* TEXT Block Start */
 /*
-JDBC DATA SOURCES
-Java DataBase Connectivity (JDBC) is a standardized API for interacting with databases using Java programs. Kinetica offers a data source that can be used to connect to other databases and applications using a JDBC driver. We can then issue remote queries to this data source to load and export data to and from Kinetica into this data source.
+WHAT IS JDBC?
+Java Database Connectivity (JDBC) is a standardized API for interacting with databases using Java programs. Kinetica offers a data source that can be used to connect to other databases and applications using a JDBC driver. We can then issue remote queries to this data source to load and export data to and from Kinetica into this data source.
 CDATA
-Kinetica has also partnered with CData, which is a data connectivity platform that offers jdbc drivers for 100s of different databases and applications.
+Kinetica has also partnered with CData, a data connectivity platform that offers JDBC drivers for hundreds of different databases and applications.
 TWO ROUTES
-There are two ways to register a JDBC data source. You can either Bring Your Own Driver (BYOD) or you can use a driver provided by CData.
+There are two ways to register a JDBC data source. You can either Bring Your Own Driver (BYOD), or you can use a driver provided by CData.
 THIS DEMO
-In this demo, we explore both the BYOD and CData route. First we will use a CData driver to load data from googlesheets into Kinetica and then we will bring our own JDBC driver to connect to a Postgres database.
+In this demo, we explore both the BYOD and CData routes. First, we will use a CData driver to load data from Google Sheets into Kinetica, and then we will bring our own JDBC driver to connect to a Postgres database.
 */
 /* TEXT Block End */
 
@@ -34,8 +34,10 @@ In this demo, we explore both the BYOD and CData route. First we will use a CDat
 
 /* TEXT Block Start */
 /*
-CREATE SCHEMA
-Tables in Kinetica are organized using schema. We will use the 'jdbc' schema to organize the tables and data objects for this example.
+WHAT IS A SCHEMA?
+Schemas are logical containers for most database objects (tables, views, indexes, etc.), grouped together under a common name. In order to place an object in a schema, the schema must be created first—schemas will not be automatically created when specified in CREATE TABLE or similar calls.
+CREATE A NEW SCHEMA
+We will use the 'jdbc' schema to organize the tables and data objects for this example.
 */
 /* TEXT Block End */
 
@@ -58,7 +60,7 @@ Note
 
 
 /* SQL Block Start */
--- Create the JDBC data source that points to the nyct2010 google spreadsheet
+-- Create the JDBC data source that points to the 'nyct2010' Google Spreadsheet
 CREATE OR REPLACE DATA SOURCE jdbc.gsheets
 LOCATION = 'jdbc:cdata:googlesheets:OAuthVerifier=PASTE YOUR AUTH CODE HERE;InitiateOAuth=REFRESH;Spreadsheet=nyct2010';
 /* SQL Block End */
@@ -98,7 +100,7 @@ CREATE MATERIALIZED EXTERNAL TABLE "jdbc"."nyct2010"
 LOAD THE DATA
 Data is loaded by issuing a query to the remote data source.
 ✎ Note:
-The googlesheets API uses the syntax spreadsheet_sheetName to identify the sheet from which to load the data.
+The googlesheets API uses the syntax 'spreadsheet_sheetName' to identify the sheet from which to load the data.
 */
 /* TEXT Block End */
 
@@ -120,8 +122,8 @@ WITH OPTIONS
 
 /* TEXT Block Start */
 /*
-POSTGRES DATABASE
-Postgres is a very popular open source relational database management system. The worksheets shows how to connect to an instance of Postgres using JDBC.
+WHAR IS POSTGRES DATABASE
+Postgres is a very popular open-source relational database management system. The worksheets shows how to connect to an instance of Postgres using JDBC.
 */
 /* TEXT Block End */
 
@@ -129,9 +131,9 @@ Postgres is a very popular open source relational database management system. Th
 /* TEXT Block Start */
 /*
 CREATE THE DATA SOURCE
-The credential for accessing the postgres database (if using the docker version in pre-reqs) is postgres. Make sure the postgres database is up and running before registering the data source.
+The credential for accessing the PostgreSQL database (if using the docker version in pre-reqs) is 'postgres'. Make sure the PostgreSQL database is up and running before registering the data source.
 ✎ Note
-: The data source is registered for dellstore. You can try replacing it with other datasets.
+: The data source is registered for 'dellstore'. You can try replacing it with other datasets.
 */
 /* TEXT Block End */
 
@@ -143,7 +145,7 @@ USER = 'postgres'
 PASSWORD = 'postgres'
 WITH OPTIONS
 (
-  JDBC_DRIVER_JAR_PATH = 'kifs://drivers/postgresql-42.4.0.jar',
+  JDBC_DRIVER_JAR_PATH = 'kifs://drivers/postgresql-42.7.1.jar',
   JDBC_DRIVER_CLASS_NAME = 'org.postgresql.Driver'
 );
 /* SQL Block End */
@@ -152,7 +154,7 @@ WITH OPTIONS
 /* TEXT Block Start */
 /*
 LOAD DATA
-In the query below, we use Kinetica's type inferencing system to directly load the data from postgres into a table without having created the table in Kinetica first.
+In the query below, we use Kinetica's type inferencing system to directly load the data from PostgreSQL into a table without having created the table in Kinetica first.
 */
 /* TEXT Block End */
 

@@ -303,6 +303,7 @@ The only thing to update in our solver function is the name of the solution tabl
 
 
 /* SQL Block Start */
+DROP TABLE IF EXISTS GRAPH_S_MANY_MANY_SOLVED;
 EXECUTE FUNCTION SOLVE_GRAPH(
     GRAPH => 'GRAPH_S',
     SOLVER_TYPE => 'SHORTEST_PATH',

@@ -39,7 +39,7 @@ The final dataset is a 24-7 real-time stream of real exchange prices that simula
 
 /* TEXT Block Start */
 /*
-The steps for loading data
+THE STEPS FOR LOADING DATA
 The process for ingesting data from remote data sources is listed below. The first two steps are optional but recommended.
 1. Create a Schema (Optional): Schemas are containers for tables and other database objects that provide a unique namespace within them. Tables that are created without a schema specified will be placed in the default schema
 ki_home
@@ -211,7 +211,7 @@ WITH OPTIONS (
 
 /* TEXT Block Start */
 /*
-Filter the most recent quarterly filing
+FILTER THE MOST RECENT QUARTERLY FILING
 The 13F quarterly filing data has filings from several quarters and includes information on derivatives as well as stock holdings. We however, only need stock holdings data from the most recent quarter, which is for Q1 - 2021. Kinetica supports the creation of materialized views. We can use that to create a view with the data we need.
 */
 /* TEXT Block End */
@@ -229,14 +229,14 @@ SELECT *
 
 /* TEXT Block Start */
 /*
-The traditional approach to risk management
+THE TRADITIONAL APPROACH TO RISK MANAGEMENT
 Combine portfolio holdings with share prices at the end of the day to get an estimate of the overall values. This would then be fed into some downstream estimate for risk.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE or REPLACE MATERIALIZED VIEW holdings_eod
+CREATE OR REPLACE MATERIALIZED VIEW holdings_eod
 REFRESH ON QUERY AS 
 SELECT company, SUM(fq.Shares_Held*p.High) as Total_Current_Value
 FROM recent_filing fq, px_eod p
@@ -249,16 +249,16 @@ SELECT * FROM holdings_eod;
 
 /* TEXT Block Start */
 /*
-The real time approach to risk management
+THE REAL TIME APPROACH TO RISK MANAGEMENT
 Combines a streaming second by milli-second view on portfolio holdings. Kinetica offers materialized views that can be used to set up queries that are continuously refreshed when new data is received via a streaming ingest. The code below computes a measure of change in overall portfolio value from the earliest price values in a day with the most recent.
-Note
+NOTE
 : Even though we are looking at a static representation of portfolio holdings that is being combined with a streaming prices data, Kinetica can easily combine two different streaming data sources as well. This is possible even when the two data streams are being recorded on different timestamps (using ASOF joins).
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE or REPLACE MATERIALIZED VIEW holdings_streaming_scaled
+CREATE OR REPLACE MATERIALIZED VIEW holdings_streaming_scaled
 REFRESH EVERY 5 SECONDS AS 
 SELECT 
     company, 
@@ -283,7 +283,7 @@ SELECT
 
 /* TEXT Block Start */
 /*
-Portfolio Alerts
+PORTFOLIO ALERTS
 The table calculates a materialized view of the change in portfolio value that refreshes itself every 5 seconds. We can use that to create another alert table that records whenever the change in portfolio value crosses a certain threshold.
 */
 /* TEXT Block End */
@@ -309,26 +309,27 @@ SELECT * FROM portfolio_alert;
 
 /* TEXT Block Start */
 /*
-Set up automated alerts
+SET UP AUTOMATED ALERTS
 Now that we have the views created, we can set up alerts based on certain triggers. There are a few different ways to do it. We could set up a Kafka data sink that receives all new records from the portfolio alert table that we created in the previous sheet. We can use webhooks to setup alerts on applications like Slack etc.
-For this demo, we recommend using the website: https://webhook.site/ to generate a webhook URL. Copy the webhook URL and paste it as the destination in the stream below. This will send alerts to that URL.
+CLONE, UNCOMMENT AND UPDATE
+For this demo, we recommend using the website: https://webhook.site/ to generate a webhook URL. Clone this workbook to add the webhook URL as the destination in the stream below. This will send alerts to that URL any time the temperature value is greater than 60 for a particular truck. Uncomment the code below to try this on your own.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE STREAM alert_webhook_fin_risk
-ON TABLE portfolio_alert
-WITH OPTIONS 
-(
-    DESTINATION = 'WEBHOOK_URL' -- 'Paste your Webhook URL (see above)'
-);
+-- CREATE STREAM alert_webhook_fin_risk
+-- ON TABLE portfolio_alert
+-- WITH OPTIONS 
+-- (
+--     DESTINATION = 'WEBHOOK_URL' 
+-- );
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-Slack alerts
+SLACK ALERTS
 The pattern above can be used to setup slack alerts as well. You can follow the instructions here: https://api.slack.com/messaging/webhooks, if you would like to implement this on your own.
 */
 /* TEXT Block End */
@@ -346,7 +347,7 @@ The pattern above can be used to setup slack alerts as well. You can follow the 
 
 /* TEXT Block Start */
 /*
-Kafka sink
+KAFKA SINK
 You can also send the alerts to a Kafka topic. Uncomment the code below and update the details for your Kafka cluster to point the alerts to a Kafka topic, which can then be used in downstream analytics or triggers.
 */
 /* TEXT Block End */

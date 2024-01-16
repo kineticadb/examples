@@ -14,18 +14,28 @@
  <img src="https://img.shields.io/badge/tested-%3E=v7.7.1-green"></img>  <img src="https://img.shields.io/badge/time-15 mins-blue"></img>
 </p>
 <h1>
-Modeling and solving the traveling salesman problem as an MSDO
+Origin-Destination Pair Batch Solver
 </h1>
 
-This workbook demonstrates how to run the travelling salesmen problem in batches - using the MSDO solver. In order to cast the problem into MSDO context, we need to assume each salesmen as a supply side with one truck each and the capacity of the truck equal to the number of deliveries. Likewise, the stop locations will be assumed to be the demand site with a demand size of exactly one. Steps involved:
+<h3 align="center" style="margin:0px">
+<img width="600" src="../_assets/images/Origin-Destination_Pair_Batch_Solver.png" alt="o-d banner"/>
+</h3>
 
-1. Read Graph Road Network raw data from S3 bucket
-2. Create Supply and Demand tables with the note above in mind s.t., the total supplies matches total demand size exactly.
-3. Run match/graph with MSDO solver.
-4. Class Break Visualization of the salesmen routes on the output table by breaking on the salesmen id (SUPPLY ID).
-5. Re-run match graph with animation options, i.e., svg options, by generating the tracks - option is 'output_tracks' (see below).
-6. Flip the goal to a batch od shortest path runs; from supply location to every other stop (demand) location, create od matrix by the cross join of supply/demand tables and assign od id as the sum of the two
-7. Run 'match_batch_solves' of /match/graph and see the result as animated svg paths.
+This SQL workbook showcases how to leverage Kinetica’s "match_batch" graph solver, a powerful tool designed for, optimal Origin-Destination(O-D) path calculation. This workbook walks you through a scenario involving 2 supply locations and 5 demand locations in the Washington DC area. The solver will calculate the most optimal O-D path between all supply and demand locations and provide the optimal path for each pair.
+
+This analysis has the following steps:
+Data Sheet:
+ - Load data sources
+ - Create and populate tables
+ - Create a graph representation of the Washington DC road network.
+Batch Solve Sheet:
+ - Create OD pairs
+ - Run the "match_batch" solver
+ - Find the optimal path for each supply and demand location pairs. 
+ - Understand the output of "match_batch" solver
+
+
+
 
 ### Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 

@@ -19,11 +19,22 @@ Multiple Supply Demand Chain Optimization (MSDO) Graph Solver
 
 This workbook demonstrates the application of Kinetica's Multiple Supply Demand Chain Optimization (MSDO) solver to optimize a scenario with two supply depots with 12 trucks that need to service multiple demand destination that are spread around Washington DC.
 
+<h3 align="center" style="margin:0px">
+<img width="600" src="../_assets/images/MSDO.png" alt="MSDO banner"/>
+</h3>
+
 ## Background
 
 Matching supply chain logistics to demand based routing is a daily, non-trivial task essential to several companies like Amazon and Uber. The common objective is to optimize routing under domain specific constraints to the needs of a particular industry. Kinetica's MSDO solver provides a generic and uniformly applicable solution to the needs of different industries. The optimization quantity could be the power transported by the transformers to multiple consumers with different power needs, or tons of gasoline transported by tankers to various stations, or simply the packets of goods delivered from multiple depots to multiple geographical locations. The main point in all of these transport problems is that neither the supply, nor the demand side transport quantity is a constant.
 
 For instance, a depot can have  many vehicles with a variety of truck capacities to deliver varying amounts of  goods at each customer location spread across a vast geography as seen below. The ultimate goal is to find the ‘optimal’ routing and scheduling for each truck individually such that the total transportation cost is minimized.
+
+This SQL workbook showcases how to leverage Kinetica’s Multiple Supply Demand Optimization (MSDO) Graph Solver, a powerful tool designed for complex, routing optimization. The workbook walks you through a scenario involving 18 customers and 12 trucks with variable capacities, originating from 2 supply depots in the Washington DC area. Unlike traditional solvers, the MSDO solver considers a multitude of constraints, such as package volume, truck capacity, and even time penalties, to find the optimal route for each truck. 
+The workbook is divided into three main sections:
+- Data setup, where we prepare the data sources, tables, and a graph representation of the Washington DC road network.
+- Optimal route calculation using the MSDO solver and expalnation of options that can be used in a MSDO solver.
+- Optimal route calculation using the MSDO solver's TSM(Travelling salesman mode) option.
+
 
 ## Try it yourself
 All the steps and instructions are provided within the workbook itself. All you need to do is follow the instructions [here](https://github.com/kineticadb/examples#how-to-run-these-examples) to load the workbook into Kinetica and try this out on your own. 
