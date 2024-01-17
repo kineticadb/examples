@@ -36,7 +36,7 @@ A majority of the examples in this repo use interactive SQL workbooks. The easie
 
 2. Import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
 <h3 align="center">
-    <img src="_assets/images/workbook_import.png"></img>
+    <img src="_assets/gifs/load_workbook.gif"></img>
 </h3>
 
 
