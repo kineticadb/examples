@@ -20,10 +20,6 @@ Kinetica is a database, purpose built for real-time analytics at scale. It lever
 
 This project contains **fully reproducible examples** of using Kinetica. Most of the examples feature workbench, an interactive SQL notebook wtih built in features to import/export, explore and visualize your data. Workbench is available for free via [Kinetica cloud](https://cloud.kinetica.com/trynow/) and the [developer edition](https://www.kinetica.com/developer-edition/). You can also deploy it as a managed service on [Azure and AWS](https://www.kinetica.com/platform/cloud/).
 
-<h3 align="center">
-<img src="_assets/images/workbench.png"></img>
-</h3>
-
 # How to run these examples
 Each folder in this repo contains a fully reproducible example that uses either SQL or other supported languages (Python, Java, Javascript etc.).
 
