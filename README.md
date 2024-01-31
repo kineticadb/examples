@@ -38,15 +38,17 @@ Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different la
 # Install Kinetica
 The easiest way to get started is with the free developer edition of Kinetica.
 
+### [Try Kinetica for free on the cloud](https://cloud.kinetica.com/trynow/)
+This is the easiest way to get started. It takes 5 minutes to set up and you get access to a free shared cluster with 10 GB of space.
+
 ### [Install the free developer edition](https://www.kinetica.com/try/)
-Kinetica offers a free developer edition that can be installed on Windows or Mac/Linux operating systems. Dev edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions [here](https://www.kinetica.com/try/) to download and install the developer edition.
+Kinetica offers a free forever personal developer edition that can be installed on Windows or Mac/Linux operating systems. Developer edition of Kinetica requires Docker with at least 8GB of RAM allocated. You can follow the instructions [here](https://www.kinetica.com/try/) to download and install it on your system.
 
 ### [Launch Kinetica as a service on the cloud](https://www.kinetica.com/platform/cloud/)
 There are free versions of Kinetica that can be provisioned as a managed service on Azure or AWS. You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://www.kinetica.com/platform/cloud/) on the cloud.
 
-
 ### Install the on-premise version of Kinetica
-You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.1/install/installation-options/). 
+You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.1/install/installation-options/).
 
 # Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
