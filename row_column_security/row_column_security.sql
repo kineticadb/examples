@@ -10,6 +10,15 @@
 /*
 ❗️NOTE: THIS ONLY WORKS ON DEVELOPER EDITION.
 This workbook showcases queries that only a cluster admin can execute; therefore, it will not work on Kinetica's cloud offerings.
+❗️NOTE: MAKE SURE AUTHORIZATION IS ENABLED.
+This workbook requires the authorization setting to be set to true to demonstrate the security mechanism in Kinetica. Please follow the steps below to ensure that authorization is enabled.
+- Log in to GAdmin (
+http://localhost:8080/gadmin
+) with your admin credentials.
+- Click 'Admin' on the right-hand side and then click 'Stop' to shut down the database.
+- Click 'Config' on the right-hand side and choose the 'Advanced' tab.
+- Locate the parameter for authorization, which is 'enable_authorization,' and ensure it is set to 'true.'
+- If it is not set to 'true,' update the value to 'true' and click the 'Update' button in the bottom right corner, then click 'Save & Restart.'
 */
 /* TEXT Block End */
 
@@ -21,7 +30,7 @@ This SQL workbook showcases how to provide data security within an organization 
 The workbook is divided into four main sections:
 - Data setup, where we prepare and populate our tables.
 - Creating roles for our organization.
--Creating users and assigning them to their respective roles.
+- Creating users and assigning them to their respective roles.
 - Granting permissions to each roles, guaranteeing controlled and secure data access.
 HOW TO RUN?
 All the steps and instructions are provided within the workbook itself.
@@ -30,23 +39,8 @@ To ensure successful execution of the workbook, it is essential to adhere to the
 /* TEXT Block End */
 
 
-/* Worksheet: 1. Create Schema and Directory */
+/* Worksheet: 1. Create Schema */
 /* Worksheet Description: Description for Sheet 1 */
-
-
-/* TEXT Block Start */
-/*
-WHAT IS A SCHEMA?
-Schemas are logical containers for most database objects (tables, views, indexes, etc.), grouped together under a common name. In order to place an object in a schema, the schema must be created first—schemas will not be automatically created when specified in CREATE TABLE or similar calls.
-CREATE A NEW SCHEMA
-We will be creating a new schema called 'OurCo' to store all the employee and salary tables. Before we start creating the schema, we need to make sure there is no schema in our database with the same name.
-The code below drops any existing occurrences of the OurCo schema. A schema can only be dropped if there are no tables in it. Setting the 'CASCADE' option to true will drop the tables in a schema first and then drop the schema as well.
-❗️ NOTE:
-The drop schema command will remove any previously created tables with in the OurCo schema. You can either rename the schema or move the current tables to a different schema to prevent them from being lost.
-You can read more about Schemas here:
-https://docs.kinetica.com/7.1/sql/ddl/#create-schema
-*/
-/* TEXT Block End */
 
 
 /* SQL Block Start */
@@ -58,7 +52,7 @@ CREATE SCHEMA OurCo;
 /* TEXT Block Start */
 /*
 CREATE THE EMPLOYEES TABLE
-Once we have created 'OurCo' schema, it is time to create the 'employees' table. The 'employees' table will store information about employees who work in our organization.
+Once we have created the 'OurCo' schema, it is time to create the 'employees' table. The 'employees' table will store information about employees who work in our organization.
 */
 /* TEXT Block End */
 
@@ -89,7 +83,7 @@ CREATE OR REPLACE TABLE OurCo.employees (
 /* TEXT Block Start */
 /*
 POPULATE THE EMPLOYEES TABLE
-Once we have created the 'employees' table, it is time to populate the table with employee information. Since we have 7 employees in our organization, we will insert information for all 7 employees.
+After creating the 'employees' table, the next step is to populate it with employee information. Since our organization has seven employees, we will now insert information for each of them.
 */
 /* TEXT Block End */
 
@@ -136,17 +130,13 @@ Once we have created the 'salaries' table, it is time to populate the table with
 /* SQL Block Start */
 INSERT INTO OurCo.salaries (user_id, salary)
 VALUES
-    ('alice.smith', 80000),
-    ('harry.johnson', 85000),
-    ('charlie.williams', 75000),
-    ('diana.davis', 90000),
-    ('bjones.wilson', 95000),
-    ('fiona.miller', 82000),
-    ('george.taylor', 88000);
+    ('asmith', 80000), ('hjohnson', 85000),
+    ('cwilliams', 75000), ('ddavis', 90000),
+    ('bwilson', 95000), ('fmiller', 82000), ('gtaylor', 88000);
 /* SQL Block End */
 
 
-/* Worksheet: 2. Create roles */
+/* Worksheet: 2. Create Roles & Grant Permissions */
 /* Worksheet Description: Create roles and grant them permissions */
 
 
@@ -171,6 +161,9 @@ The first role in our organization will be Human Resources. The following comman
 
 /* SQL Block Start */
 CREATE ROLE human_resources;
+
+-- If the role has already been created, you can run the query below to drop the role.
+-- DROP ROLE human_resources;
 /* SQL Block End */
 
 
@@ -184,10 +177,69 @@ After establishing the 'human_resources' role, proceed to create the second role
 
 /* SQL Block Start */
 CREATE ROLE engineering;
+
+-- If the role has already been created, you can run the query below to drop the role.
+-- DROP ROLE engineering;
 /* SQL Block End */
 
 
-/* Worksheet: 3. Create Users and assign roles */
+/* TEXT Block Start */
+/*
+GRANTING PERMISSIONS TO A ROLE
+Once roles have been created in our organization, it is time to grant permissions to each role based on their associated tasks
+HOW IT WORKS?
+In Kinetica, granting permissions to a role involves assigning specific privileges to the role so that any user assigned to that role inherits those permissions. This simplifies access management, as changes to permissions can be made at the role level rather than for each individual user.
+You can read more about managing permissions (privileges) here:
+https://docs.kinetica.com/7.1/sql/security/#privilege-management
+*/
+/* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
+COLUMN SECURITY FOR HUMAN RESOURCES
+We want the Human Resources team to have full access to the OurCo schema so that they can access all the required information about our employees.
+The following SQL command will grant full permissions to the OurCo schema and all the tables in it to the 'human_resources' role.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+GRANT ALL ON OurCo TO human_resources;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+COLUMN SECURITY FOR ENGINEERING
+We want the Engineering team to only access the first name, last name, a hash of the cell phone, and the last 4 digits of the SSN. To achieve these security goals, we can use 'HASH' and 'MASK' functions. In Kinetica, these functions are a handy way to obfuscate or hide sensitive information.
+WHAT IS HASH FUNCTION?
+In Kinetica, a hash function is a mathematical algorithm that transforms input data into a fixed-size string of characters, typically a hash code.
+WHAT IS MASK FUNCTION?
+In Kinetica, a mask function is a mechanism that helps conceal sensitive data during query results by transforming it into a masked format.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+GRANT SELECT ON TABLE OurCo.Employees (first_name, last_name, HASH(cell_phone), MASK(ssn, 1, 7, '*')) to engineering;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+ROW SECURITY FOR ENGINEERING
+We can also use WHERE clauses to restrict the rows that a user can see. For instance, you can restrict access to salary by setting the user id to who ever is the current user. This would only show the rows where the user id in the salaries table corresponds to the username of the current user.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+GRANT SELECT ON TABLE OurCo.Salaries TO engineering WHERE user_id = CURRENT_USER();
+/* SQL Block End */
+
+
+/* Worksheet: 3. Create Users & Assign Roles */
 /* Worksheet Description: Create users and grant them different roles. */
 
 
@@ -211,7 +263,10 @@ The first step will be creating an account for Harry with a password.
 
 
 /* SQL Block Start */
-CREATE USER harry WITH password 'tempPass123!';
+CREATE USER hjohnson WITH password 'tempPass123!';
+
+-- If the user has already been created, you can run the query below to drop the user.
+-- DROP USER hjohnson;
 /* SQL Block End */
 
 
@@ -224,179 +279,101 @@ Once we have created a user account for Harry, we can now grant a role to him. H
 
 
 /* SQL Block Start */
-GRANT human_resources TO harry;
+GRANT human_resources TO hjohnson;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
-REPEAT SAME STPES
+REPEAT SAME STPES FOR BJONES
 We will follow the same steps as above to create a new user for Bjones and grant him the 'engineering' role.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-CREATE USER bjones IDENTIFIED BY 'Engineer123!';
+CREATE USER bwilson IDENTIFIED BY 'Engineer123!';
+
+-- If the user has already been created, you can run the query below to drop the user.
+-- DROP USER bwilson;
 /* SQL Block End */
 
 
 /* SQL Block Start */
-GRANT engineering TO bjones;
+GRANT engineering TO bwilson;
 /* SQL Block End */
 
 
-/* TEXT Block Start */
-/*
-🎯 TASK - LOGIN AS NEW USERS
-1. Try logging out and logging back in using the newly created users harry.
-2. Once you log in you will notice that the schema OurCo or the HR folder that were created the "Create Schema and Directory" sheet are not present for these two users. This is because we haven't given them access yet. We will do so in the next sheet.
-3. Repeat 1 & 2 for bjones.
-4. Log back in as the admin once you have tested the two users to grant permissions in the next sheet.
-❗️ NOTE:
-To ensure you are logged into the right account, you can run the command below to see which account you are currently accessing.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-SELECT CURRENT_USER() AS whoami;
-/* SQL Block End */
-
-
-/* Worksheet: 4. Column and Row security */
-/* Worksheet Description: Description for sheet 4 */
-
-
-/* TEXT Block Start */
-/*
-GRANTING PERMISSIONS TO A ROLE
-In Kinetica, granting permissions to a role involves assigning specific privileges to the role so that any user assigned to that role inherits those permissions. This simplifies access management, as changes to permissions can be made at the role level rather than for each individual user.
-You can read more about managing permissions (privileges) here:
-https://docs.kinetica.com/7.1/sql/security/#privilege-management
-*/
-/* TEXT Block End */
-
-
-/* TEXT Block Start */
-/*
-GRANT FULL PERMISSIONS TO HUMAN RESOURCES
-We want the Human Resources team to have full access to the OurCo schema so that they can access all the required information about our employees.
-The following SQL command will grant full permissions to the OurCo schema and all the tables in it to the 'human_resources' role.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-GRANT ALL ON OurCo TO human_resources;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-GRANT ACCESS TO THE HR FOLDER
-Next let's grant the 'human_resources' role write access to the HR folder so that they can upload csv files for employees and salaries.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-GRANT WRITE ON HR TO human_resources;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-🎯 TASK: LOG IN AS HARRY AND LOAD THE CSV FILE INTO TABLES IN KINETICA
-1. Log in as harry who belongs to HR.
-2. Load the CSV files into HR folder: Now that you the HR role has full access to the HR folder, you can use that to upload the the employees.csv file and the salaries.csv file. Go ahead and do that.
-3. Once the files are in the HR folder they can be loaded into a OurCo.Employees and OurCo.Salaries tables that were defined in the first sheet. Use the import wizard to do that.
-4. Log back in as admin.
-❗️ NOTE:
-To ensure you are logged into the right account, you can run the command below to see which account you are currently accessing.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-SELECT CURRENT_USER() AS whoami;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-COLUMN SECURITY FOR ENGINEERING
-We want the Engineering team to only access the first name, last name, a hash of the cell phone, and the last 4 digits of the SSN. To achieve these security goals, we can use 'HASH' and 'MASK' functions. In Kinetica, these functions are a handy way to obfuscate or hide sensitive information.
-WHAT IS HASH FUNCTION?
-In Kinetica, a hash function is a mathematical algorithm that transforms input data into a fixed-size string of characters, typically a hash code.
-WHAT IS MASK FUNCTION?
-In Kinetica, a mask function is a mechanism that helps conceal sensitive data during query results by transforming it into a masked format.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-GRANT SELECT ON TABLE OurCo.Employees (first_name, last_name, HASH(cell_phone), MASK(ssn, 1, 7, '*')) to engineering;
-/* SQL Block End */
-
-
-/* TEXT Block Start */
-/*
-ROW SECURITY
-We can also use WHERE clauses to restrict the rows that a user can see. For instance, you can restrict access to salary by setting the user id to who ever is the current user. This would only show the rows where the user id in the salaries table corresponds to the username of the current user.
-*/
-/* TEXT Block End */
-
-
-/* SQL Block Start */
-GRANT SELECT ON TABLE OurCo.Salaries TO engineering WHERE user_id = CURRENT_USER();
-/* SQL Block End */
+/* Worksheet: 4. Test Column & Row Security */
+/* Worksheet Description: Description for sheet 7 */
 
 
 /* TEXT Block Start */
 /*
 CHECK PERMISSIONS
-We can perform a quick gut check using the "SHOW SECURITY" statement to make sure the permissions have been assigned correctly.
+We can perform a quick verification using the 'SHOW SECURITY' statement to ensure that permissions have been assigned correctly.
 */
 /* TEXT Block End */
 
 
 /* SQL Block Start */
-SHOW SECURITY FOR harry;
+SHOW SECURITY FOR hjohnson;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+Since we allowed the 'human resources' role to access all the data in the 'employees' and 'salaries' tables, there should not be any filter for Harry's user account.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+SHOW SECURITY FOR bwilson;
+/* SQL Block End */
+
+
+/* TEXT Block Start */
+/*
+TIME TO TEST
+After verifying permissions and completing all previous steps to implement column and row security for our organization, the next step is to test some security functionalities.
+*/
+/* TEXT Block End */
+
+
+/* TEXT Block Start */
+/*
+🎯 TASK - LOG IN AS HARRY TO TEST COLUMN AND ROW SECURITY
+We should be able to see the employees and salaries tables. Since Harry is working in Human Resources Department, he needs to access all information about employees in the employees and salaries tables.
+Confirm that you are able to see all columns and rows in employees and salaries tables.
+*/
+/* TEXT Block End */
+
+
+/* SQL Block Start */
+SELECT * FROM OurCo.employees;
 /* SQL Block End */
 
 
 /* SQL Block Start */
-SHOW SECURITY FOR bjones;
+SELECT * FROM OurCo.salaries;
 /* SQL Block End */
 
 
 /* TEXT Block Start */
 /*
 🎯 TASK - LOG IN AS BJONES TO TEST COLUMN AND ROW SECURITY
-You should be able to see the employees and salaries tables. Confirm that you only able to see the columns you have permissions for and the salary row that corresponds to you.
+We should be able to access the employees' and salaries' tables. Since Bjones works in the Engineering Department, he should not have visibility into sensitive information about other employees, such as SSN. Additionally, he should only be able to view his own salary and not the salaries of other employees.
+Confirm that you can only see first names, last names, cell phones in hashed format, and only the last 4 digits of SSNs in the employees' table. In the salaries' table, only Bjones's salary should be accessible.
 */
 /* TEXT Block End */
 
 
-/* Worksheet: 5. 🧹 - Clean up */
-/* Worksheet Description: Description for sheet 5 */
-
-
 /* SQL Block Start */
-DROP SCHEMA IF EXISTS OurCo CASCADE;
+SELECT * FROM OurCo.employees;
 /* SQL Block End */
 
 
 /* SQL Block Start */
-DROP DIRECTORY IF EXISTS 'HR'
-WITH OPTIONS ('recursive' = 'true');
-/* SQL Block End */
-
-
-/* SQL Block Start */
-DROP USER bjones;
-DROP USER harry;
-DROP ROLE human_resources;
-DROP ROLE engineering;
+SELECT * FROM OurCo.salaries;
 /* SQL Block End */
