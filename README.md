@@ -25,16 +25,11 @@ Each folder in this repo contains a fully reproducible example that uses either 
 
 ### SQL workbooks
 A majority of the examples in this repo use interactive SQL workbooks. The easiest way to download a workbook (without the entire repo) is as follows. 
-1. Access the raw file and then right click to save as a JSON file on your machine.
-<h3 align="center">
-    <img src="_assets/images/workbook_dl.png"></img>
-</h3>
-
+1. Access the raw file and then copy the URL
 2. Import the workbook to your instance of Kinetica using the plus icon on the workbooks tab.
 <h3 align="center">
     <img src="_assets/gifs/load_workbook.gif"></img>
 </h3>
-
 
 ### Other languages
 
