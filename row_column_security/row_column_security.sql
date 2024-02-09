@@ -160,10 +160,10 @@ The first role in our organization will be Human Resources. The following comman
 
 
 /* SQL Block Start */
-CREATE ROLE human_resources;
-
 -- If the role has already been created, you can run the query below to drop the role.
 -- DROP ROLE human_resources;
+
+CREATE ROLE human_resources;
 /* SQL Block End */
 
 
@@ -176,10 +176,10 @@ After establishing the 'human_resources' role, proceed to create the second role
 
 
 /* SQL Block Start */
-CREATE ROLE engineering;
-
 -- If the role has already been created, you can run the query below to drop the role.
 -- DROP ROLE engineering;
+
+CREATE ROLE engineering;
 /* SQL Block End */
 
 
@@ -263,10 +263,10 @@ The first step will be creating an account for Harry with a password.
 
 
 /* SQL Block Start */
-CREATE USER hjohnson WITH password 'tempPass123!';
-
 -- If the user has already been created, you can run the query below to drop the user.
 -- DROP USER hjohnson;
+
+CREATE USER hjohnson WITH password 'tempPass123!';
 /* SQL Block End */
 
 
@@ -292,10 +292,10 @@ We will follow the same steps as above to create a new user for Bjones and grant
 
 
 /* SQL Block Start */
-CREATE USER bwilson IDENTIFIED BY 'Engineer123!';
-
 -- If the user has already been created, you can run the query below to drop the user.
 -- DROP USER bwilson;
+
+CREATE USER bwilson IDENTIFIED BY 'Engineer123!';
 /* SQL Block End */
 
 
