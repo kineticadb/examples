@@ -38,7 +38,7 @@ Need help getting started with notebooks? You have a number of options and this 
 
 * [Vector Similarity Search Demo](python_vector_search.ipynb): Learn how to use the Kinetica similarity search with the vector column type to make stock predictions. We will finish with a matplotlib visualization of the results.
 
-* [Using GPUdbSqlIterator and GPUdbIngestor](python_iterator_ingestor.ipynb): Learn about using GPUdbSqlIterator for conveniently retrieving large result sets and GPUdbIngestor for multi-head ingest.
+* [Using GPUdbSqlIterator and GPUdbIngestor](python_iterator_ingestor.ipynb): Learn about using `GPUdbSqlIterator` for conveniently retrieving large result sets and `GPUdbIngestor` for multi-head ingest.
 
 
 ## Try it yourself
