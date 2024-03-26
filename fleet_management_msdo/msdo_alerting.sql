@@ -262,6 +262,10 @@ EXECUTE FUNCTION MATCH_GRAPH(
 --Alter an attribute type in "optimal_route" table
 ALTER TABLE optimal_route
 ALTER COLUMN demand_id varchar(4);
+
+-- Create a persisted version of the optimal route so that it can be used in materialized views.
+CREATE OR REPLACE TABLE persisted_route as 
+SELECT * from optimal_route;
 /* SQL Block End */
 
 
@@ -343,7 +347,7 @@ SELECT
     s.supply_id, 
     INT(s.demand_id) AS demand_id,
     TIMESTAMP(LONG(ROUND(s.TIMESTAMP * 1000) + start_time)) AS TIMESTAMP
-FROM optimal_route AS s
+FROM persisted_route AS s
 JOIN start_times AS st
 ON s.trackid = st.trackid;
 /* SQL Block End */
@@ -446,7 +450,7 @@ SELECT * FROM
         'ACTUAL' AS TYPE,
         destination_id
     FROM actual_distances 
-    WHERE TRACKID = '1003_301'
+    WHERE TRACKID = '1001_101'
 )
 UNION
 (
@@ -457,7 +461,8 @@ UNION
         destination_id
     FROM solver_distances 
     WHERE TRACKID = '1001_101' AND TIMESTAMP BETWEEN (SELECT MIN(timestamp) FROM actual_distances) AND (SELECT MAX(timestamp) FROM actual_distances)
-);
+)
+ORDER BY TIMESTAMP;
 /* SQL Block End */
 
 
