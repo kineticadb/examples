@@ -415,7 +415,7 @@ You can also send the alerts to a Kafka topic. Uncomment the code below and upda
 /*
 SETUP A DASHBOARD APP WITH REVEAL OR A THIRD PARTY WEB APP
 Finally, you can also build a dashboard app that provides a comprehensive view of the transit truck metrics. There are two paths for this. You can either use Kinetica's built in dashboard app Reveal or you can use a third party application like Tableau. For information on this please see the links below for more details:
-1. Reveal: https://docs.kinetica.com/7.1/azure/bi/reveal/
-2. Tableau: https://docs.kinetica.com/7.1/azure/bi/tableau/
+1. Reveal: https://docs.kinetica.com/7.2/bi/reveal/
+2. Tableau: https://docs.kinetica.com/7.2/bi/tableau/
 */
 /* TEXT Block End */

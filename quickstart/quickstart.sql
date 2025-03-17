@@ -426,7 +426,7 @@ WITH OPTIONS
 /*
 So far we have just scratched the surface with regard to Kinetica's analytical capabilities. The topics listed below are some of the other capabilities that come with Kinetica.
 GRAPH ANALYTICS
-Kinetica provides a generic and extensible library of graph functions that can be used to create, query, and solve graph network problems. These have applicatoins in areas such as transportation, utility, social, and geospatial. You can learn more about our graph capabilities here: https://docs.kinetica.com/7.1/graph_solver/network_graph_solver/#solvers
+Kinetica provides a generic and extensible library of graph functions that can be used to create, query, and solve graph network problems. These have applicatoins in areas such as transportation, utility, social, and geospatial. You can learn more about our graph capabilities here: https://docs.kinetica.com/7.2/graph_solver/network_graph_solver/#solvers
 TIME ANALYTICS
 Kinetica has several functions that can be used with time series data. These include window operations, ASOF joins and date and time manipulation functions.
 MACHINE LEARNING

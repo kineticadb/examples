@@ -5,9 +5,9 @@
 <h3 align="center">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/">Docs</a>
+    <a href="https://docs.kinetica.com/7.2/">Docs</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
+    <a href="https://docs.kinetica.com/7.2/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h3>
@@ -33,7 +33,7 @@ A majority of the examples in this repo use interactive SQL workbooks. The easie
 
 ### Other languages
 
-Kinetica provides [APIs](https://docs.kinetica.com/7.1/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client. The language specific instructions are included with each example.
+Kinetica provides [APIs](https://docs.kinetica.com/7.2/api/) across different languages (Python, JavaScript, Java etc.) that can be used to connect to and query a Kinetica database server using a third party client. The language specific instructions are included with each example.
 
 # Install Kinetica
 The easiest way to get started is with the free developer edition of Kinetica.
@@ -48,7 +48,7 @@ Kinetica offers a free forever personal developer edition that can be installed 
 There are free versions of Kinetica that can be provisioned as a managed service on Azure or AWS. You will have to pay a small fee for cloud infrastructure (to the cloud provider). Follow the instructions [here to provision Kinetica](https://www.kinetica.com/platform/cloud/) on the cloud.
 
 ### Install the on-premise version of Kinetica
-You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.1/install/installation-options/).
+You can also deploy an on-premise version of Kinetica. You can find more information on the different installation options [here](https://docs.kinetica.com/7.2/install/installation-options/).
 
 # Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
