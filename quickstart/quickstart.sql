@@ -38,7 +38,7 @@ Use the Copy and Edit button on the top right to create a local copy of this wor
 /*
 LOAD DATA INTO KINETICA
 Kinetica can load data from 100s of data sources using native connectors (Azure, GCS, HDFS, S3, Kafka) or JDBC. Kinetica has partnered with CData - a data connectivity platform that provides and maintains JDBC drivers for 100s of databases and applications. You can use these drivers for free to connect to popular databases like PostGres and applications like Salesforce and Google Drive.
-Try out our data ingest guide for a full introduction to loading data into Kinetica.
+Try out our data ingest guide for a full introduction to loading data into Kinetica: https://docs.kinetica.com/latest/load_data/concepts/
 ✌🏽2 STEPS TO CONNECT
 For most cases, loading data into Kinetica involves just two queries.
 1.
@@ -54,7 +54,7 @@ Load Data
 /* TEXT Block Start */
 /*
 REGISTER A STREAMING DATA SOURCE
-This stream contains synthetic taxi pickups and drop-offs from a Kafka queue (up to the past hour). The ability to ingest streaming data and build always on complex analytica pipelines on top of them is one of Kinetica's many differentiating features.
+This stream contains synthetic taxi pickups and drop-offs from a Kafka queue (up to the past hour). The ability to ingest streaming data and build always-on complex analytical pipelines on top of them is one of Kinetica's many differentiating features.
 */
 /* TEXT Block End */
 
@@ -209,7 +209,7 @@ GROUP BY vendor_id;
 /* TEXT Block Start */
 /*
 VISUALIZE DATA
-It is alwasy useful to get a sense of the quality of the data and the type of analytical questions that might be interesting to answer before diver deeper into analyzing it.
+It is always useful to get a sense of the quality of the data and the type of analytical questions that might be interesting to answer before diver deeper into analyzing it.
 Workbooks offer a few different ways to visualize your data. These include map blocks for geospatial data and built in chart types for non-geospatial data.
 MAP BLOCK
 The map block visualizes the stream of taxi drop-offs. It is set to refresh periodically so that we can see new drop-offs as they show up.
@@ -352,7 +352,7 @@ ORDER BY
 /* TEXT Block Start */
 /*
 GENERATE REAL-TIME INSIGHTS WITH KINETICA
-Kinetica's vectorized engine can run complex queries really fast. We can use this speed to build materialized views that can be set to refresh so that we have an always on system that can trigger insights and alerts whenever there is an event of interest.
+Kinetica's vectorized engine can run complex queries really fast. We can use this speed to build materialized views that can be set to refresh so that we have an always-on system that can trigger insights and alerts whenever there is an event of interest.
 Let's see this in action below.
 THE PROBLEM
 Say you own a restaurant close to Union Square in NYC. You are interested in marketing your menu and restaurant to people who are getting dropped off via cabs near your restaurant. But right now, you have no way of finding out when someone is dropped off next your restaurant (unless you happen to see them as they are being dropped off).
