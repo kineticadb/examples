@@ -394,7 +394,7 @@ The path below shows the shortest path between the source and the destination po
 /* TEXT Block Start */
 /*
 PAUSE SUBSCRIPTIONS
-The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.1/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
+The Kafka topic that we are subscribed to is always on. So data will continue to load into the connected Kinetica table unless we pause the subscription. You can follow the instructions here (https://docs.kinetica.com/7.2/sql/ddl/#manage-subscription) to resume your subscription anytime you would like to.
 */
 /* TEXT Block End */
 

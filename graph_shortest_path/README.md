@@ -4,9 +4,9 @@
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/">Docs</a>
+    <a href="https://docs.kinetica.com/7.2/">Docs</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
+    <a href="https://docs.kinetica.com/7.2/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>
@@ -28,7 +28,7 @@ All the steps and instructions are provided within the workbook itself. All you 
 
 Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
-If you are unfamiliar with Kinetica's graph API you can learn more about it [here](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
+If you are unfamiliar with Kinetica's graph API you can learn more about it [here](https://docs.kinetica.com/7.2/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
 
 If you have any questions, you can reach us on [Slack](https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg) and we will get back to you immediately.
 

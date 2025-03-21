@@ -158,7 +158,7 @@ Let's take each one at a time.
 /* TEXT Block Start */
 /*
 ONE TO ONE
-Kinetica supports the creation and execution of User Defined Functions in SQL (https://docs.kinetica.com/7.1/sql/udf/#sql-execute-function). SOLVE_GRAPH is a function that can be executed either within a SELECT statement as a table function or within an EXECUTE FUNCTION call (https://docs.kinetica.com/7.1/sql/graph/#sql-graph-solve).
+Kinetica supports the creation and execution of User Defined Functions in SQL (https://docs.kinetica.com/7.2/sql/udf/#sql-execute-function). SOLVE_GRAPH is a function that can be executed either within a SELECT statement as a table function or within an EXECUTE FUNCTION call (https://docs.kinetica.com/7.2/sql/graph/#sql-graph-solve).
 We will use the latter.
 Our source point is `POINT(-122.1792501 47.2113606)` and our destination point is `POINT(-122.2221 47.5707)`. Let's start by creating two tables - one that stores all the sources and another for the destinations.
 */
@@ -190,7 +190,7 @@ VALUES ('POINT(-122.2221 47.5707)');
 
 /* TEXT Block Start */
 /*
-Kinetica supports the creation and execution of User Defined Functions in SQL.  (see: https://docs.kinetica.com/7.1/sql/udf/#sql-execute-function)
+Kinetica supports the creation and execution of User Defined Functions in SQL.  (see: https://docs.kinetica.com/7.2/sql/udf/#sql-execute-function)
 SOLVE_GRAPH is a function that can be executed either within a SELECT statement as a table function or within an EXECUTE FUNCTION call. We will use the latter.
 */
 /* TEXT Block End */

@@ -464,7 +464,7 @@
     "bbdd3a50-ffd8-11ed-b899-a5b2228b80e7": [
       {
         "config": {
-          "html_source": "<h3 align=\"center\">\n    <img width=\"300\" src=\"https://github.com/kineticadb/examples/blob/master/_assets/images/logo_purple.png?raw=true\" alt=\"Kinetica Logo\"/>\n</h3>\n<h2 align=\"center\">The database for time and space</h2>\n<h3 align=\"center\">\n    <a href=\"https://www.kinetica.com/\" target=\"_blank\">Website</a> | <a href=\"https://docs.kinetica.com/7.1/\" target=\"_blank\">Docs</a> | <a href=\"https://docs.kinetica.com/7.1/api/\" target=\"_blank\">API Docs</a> | <a href=\"https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg\" target=\"_blank\">Community Slack</a>   \n</h3>\n"
+          "html_source": "<h3 align=\"center\">\n    <img width=\"300\" src=\"https://github.com/kineticadb/examples/blob/master/_assets/images/logo_purple.png?raw=true\" alt=\"Kinetica Logo\"/>\n</h3>\n<h2 align=\"center\">The database for time and space</h2>\n<h3 align=\"center\">\n    <a href=\"https://www.kinetica.com/\" target=\"_blank\">Website</a> | <a href=\"https://docs.kinetica.com/7.2/\" target=\"_blank\">Docs</a> | <a href=\"https://docs.kinetica.com/7.2/api/\" target=\"_blank\">API Docs</a> | <a href=\"https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg\" target=\"_blank\">Community Slack</a>   \n</h3>\n"
         },
         "id": "bbe80fc0-ffd8-11ed-b899-a5b2228b80e7",
         "name": "HTML Visualization",

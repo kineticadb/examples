@@ -17,7 +17,7 @@ In this repository you will find notebooks with examples demonstrating Kinetica 
 
 ## Prerequisites
 
-You will need an installation of Kinetica to run these notebooks. Follow the instructions [here](https://www.kinetica.com/try/) to install the free developer edition of Kinetica or those [here](https://www.kinetica.com/platform/azure/) to deploy Kinetica as a managed service in the cloud.
+You will need an installation of Kinetica to run these notebooks. Follow the instructions [here](https://www.kinetica.com/try/) to install the free developer edition of Kinetica or those [here](https://www.kinetica.com/platform/cloud/) to deploy Kinetica as a managed service in the cloud.
 
 Need help getting started with notebooks? You have a number of options and this is far from a complete list:
 
@@ -32,7 +32,7 @@ Need help getting started with notebooks? You have a number of options and this 
 
 ## Summary of Notebook Guides
 
-* [Python Developer Guide](python_dev_guide.ipynb): This guide provides step-by-step instructions to get started writing Python applications using Kinetica. It demonstrates only a small set of the available API. A more detailed description of the complete interface is available under [Python API Reference](https://docs.kinetica.com/7.1/api/python/).
+* [Python Developer Guide](python_dev_guide.ipynb): This guide provides step-by-step instructions to get started writing Python applications using Kinetica. It demonstrates only a small set of the available API. A more detailed description of the complete interface is available under [Python API Reference](https://docs.kinetica.com/7.2/api/python/).
 
 * [Vector Dataframe I/O Demo](python_vector_io.ipynb): We will learn ingress and egress of records with vector columns. This includes loading data a CSV to a dataframe and using a dataframe to create a Kinetica table.
 

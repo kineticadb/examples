@@ -146,7 +146,7 @@ WHAT IS A ROLE?
 A role is a container for permissions. It simplifies the process of managing access control by grouping related permissions together.
 Roles are particularly useful in scenarios where multiple users need similar levels of access to various database objects, such as tables, files and folders within Kinetica.
 You can read more about role management here:
-https://docs.kinetica.com/7.1/sql/security/#role-management
+https://docs.kinetica.com/7.2/sql/security/#role-management
 */
 /* TEXT Block End */
 
@@ -190,7 +190,7 @@ Once roles have been created in our organization, it is time to grant permission
 HOW IT WORKS?
 In Kinetica, granting permissions to a role involves assigning specific privileges to the role so that any user assigned to that role inherits those permissions. This simplifies access management, as changes to permissions can be made at the role level rather than for each individual user.
 You can read more about managing permissions (privileges) here:
-https://docs.kinetica.com/7.1/sql/security/#privilege-management
+https://docs.kinetica.com/7.2/sql/security/#privilege-management
 */
 /* TEXT Block End */
 
@@ -249,7 +249,7 @@ WHAT IS A USER?
 A user is an account that can connect to a database and perform operations, such as querying, modifying data, and executing stored procedures. Users are associated with specific permissions and access rights, defining their level of interaction with the database.
 For now, we will assign only two of our employees to user accounts. These employees are Harry and Bjones. Harry will be assigned to the Human Resources role, and Bjones will be assigned to the Engineering role.
 You can read more about user management here:
-https://docs.kinetica.com/7.1/sql/security/#user-management
+https://docs.kinetica.com/7.2/sql/security/#user-management
 */
 /* TEXT Block End */
 

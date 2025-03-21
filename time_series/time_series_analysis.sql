@@ -177,7 +177,7 @@ ORDER BY trade_day, symbol;
 
 /* TEXT Block Start */
 /*
-Time series analysis often requires the manipulation of data and time values. Kinetica offers a wide range of functions to work with data and time. I will demonstrate a few here, but you can read more about them here: https://docs.kinetica.com/7.1/sql/query/#sql-datetime-functions
+Time series analysis often requires the manipulation of data and time values. Kinetica offers a wide range of functions to work with data and time. I will demonstrate a few here, but you can read more about them here: https://docs.kinetica.com/7.2/sql/query/#sql-datetime-functions
 */
 /* TEXT Block End */
 
@@ -351,7 +351,7 @@ SELECT * FROM hourly_cumu_volumes;
 /*
 RANKING
 Ranking is used to compare data points within a given series or between different series and determin their relative importance. There are several types of ranking functions available.
-https://docs.kinetica.com/7.1/concepts/window/#ranking
+https://docs.kinetica.com/7.2/concepts/window/#ranking
 Let's use the rank function to find the top 5 percent positve changes in closing price over a ten minute window. This will require two different queries. The first will find the percent change in closing price over a moving 10 minute window. The second will rank these and slice the top 5.
 */
 /* TEXT Block End */
