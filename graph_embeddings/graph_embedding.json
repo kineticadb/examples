@@ -1,0 +1,130 @@
+{
+  "workbook": {
+    "metadata": {},
+    "config": {},
+    "id": "6fc067d0-0ff5-11f0-b9f1-41fd1d77f38c",
+    "name": "Graphs with Vector Embeddings",
+    "description": "Demonstrates how vector-based similarity connections can be injected into an existing graph with rich attribute-based edges, enabling far more accurate and expressive queries than using either vector embeddings or traditional graph structures alone.",
+    "user_id": "f52925d0-b1bb-11ef-815c-7d0af97e23f8",
+    "warehouse_id": null,
+    "is_example": false,
+    "is_shared": false,
+    "created_at": "2025-03-27T17:50:44.727Z",
+    "updated_at": "2025-04-02T19:16:40.903Z",
+    "userId": "f52925d0-b1bb-11ef-815c-7d0af97e23f8"
+  },
+  "worksheets": [
+    {
+      "config": {
+        "chat_messages": []
+      },
+      "id": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+      "name": "Sheet 1",
+      "description": "Description for Sheet 1",
+      "previous_worksheet_id": null,
+      "next_worksheet_id": null,
+      "workbook_id": "6fc067d0-0ff5-11f0-b9f1-41fd1d77f38c",
+      "created_at": "2025-03-27T17:50:44.856Z",
+      "updated_at": "2025-04-02T19:05:27.044Z",
+      "workbookId": "6fc067d0-0ff5-11f0-b9f1-41fd1d77f38c"
+    }
+  ],
+  "blockMap": {
+    "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c": [
+      {
+        "config": {},
+        "id": "6fc9ddb0-0ff5-11f0-b9f1-41fd1d77f38c",
+        "name": "Block 1",
+        "description": "Description for Block 1",
+        "content": "\"-- Create a table with graph attributes along with a vector for movie preferences\\nCREATE OR REPLACE TABLE relations(name text, birth text, company text, school text, movie_likes vector(6));\\n\\n-- vector representation for [horror,romantic,action,suspense,comedy,scifi]\\nINSERT INTO RELATIONS VALUES('kaan','turkey','kinetica','rpi','[0.7,0.0,0.5,0.8,0.3,1.0]');\\nINSERT INTO RELATIONS VALUES('tan', 'usa','ft','uva','[0.7,0.2,0.8,0.8,0.5,1.0]');\\nINSERT INTO RELATIONS VALUES('jony','usa','kinetica','penn','[0.3,0.2,0.5,0.6,0.4,0.8]');\\nINSERT INTO RELATIONS VALUES('samy','usa','kinetica','jh','[0.1,1.0,0.3,0.3,0.8,0.4]');\\nINSERT INTO RELATIONS VALUES('rony','india', 'kinetica', 'gm','[0.4,0.6,0.2,0.4,0.7,0.2]');\\nINSERT INTO RELATIONS VALUES('beny','india','simmetrix','rpi','[0.0,0.9,0.1,0.6,0.9,0.5]');\\nINSERT INTO RELATIONS VALUES('jimy','usa','apple','uva','[0.0,0.9,0.1,0.6,0.9,0.5]');\\n\"",
+        "previous_block_id": null,
+        "next_block_id": "6fcd6020-0ff5-11f0-b9f1-41fd1d77f38c",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "created_at": "2025-03-27T17:50:44.933Z",
+        "updated_at": "2025-04-02T19:16:16.228Z",
+        "worksheetId": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "6fcd6020-0ff5-11f0-b9f1-41fd1d77f38c",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Create the graph\\nCREATE OR REPLACE DIRECTED GRAPH netflix\\n(\\n   NODES => INPUT_TABLES(\\n       (SELECT name    AS NODE, 'PERSON'  AS LABEL FROM relations),\\n       (SELECT birth   AS NODE, 'COUNTRY' AS LABEL FROM relations),\\n       (SELECT company AS NODE, 'COMPANY' AS LABEL FROM relations),\\n       (SELECT school  AS NODE, 'SCHOOL'  AS LABEL FROM relations)\\n   ),\\n   EDGES => INPUT_TABLES(\\n       (SELECT name AS NODE1, birth   AS NODE2,  'BORN'      AS LABEL, float(1.0) AS WEIGHT_VALUESPECIFIED FROM relations),\\n       (SELECT name AS NODE1, company AS NODE2,  'WORKS'     AS LABEL, float(1.0) AS WEIGHT_VALUESPECIFIED FROM relations),\\n       (SELECT name AS NODE1, school  AS NODE2,  'GRADUATED' AS LABEL, float(1.0) AS WEIGHT_VALUESPECIFIED FROM relations),\\n       (\\n          SELECT \\n             t1.name AS NODE1, t2.name AS NODE2, 'WATCHED'  AS LABEL,\\n             l2_distance(t1.movie_likes,t2.movie_likes)     AS WEIGHT_VALUESPECIFIED\\n          FROM  relations as t1\\n          CROSS JOIN relations AS t2 \\n          WHERE l2_distance(t1.movie_likes,t2.movie_likes) < 4*float(1.0/7.0) and STRCMP(t1.name, t2.name) = -1\\n       )\\n   ),\\n   OPTIONS => KV_PAIRS( graph_table = 'netflix_graph')\\n);\\n\"",
+        "previous_block_id": "6fc9ddb0-0ff5-11f0-b9f1-41fd1d77f38c",
+        "next_block_id": "6fd5eba0-0ff5-11f0-b9f1-41fd1d77f38c",
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "created_at": "2025-03-27T17:51:05.511Z",
+        "updated_at": "2025-04-02T19:11:19.996Z",
+        "worksheetId": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {
+          "pageSize": 25
+        },
+        "id": "6fd01f40-0ff5-11f0-b9f1-41fd1d77f38c",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "\"-- Find schools related to kinetica's people whose connections are strongly based on other people's movie choices\\n-- MATCH (a:COMPANY { company :'kinetica') <- [:WORKS] <- (:PERSON) <- [:WATCHED] <- (:PERSON) -> [:GRADUATED] -> (d:SCHOOL)\\nDROP TABLE IF EXISTS netflix_query;\\nEXECUTE FUNCTION \\n   QUERY_GRAPH(\\n     GRAPH => 'netflix',\\n     QUERIES => INPUT_TABLES(\\n       (SELECT 'kinetica' AS NODE),\\n       (SELECT -1 AS HOP_ID, 'PERSON'    AS NODE_LABEL),\\n       (SELECT -1 AS HOP_ID, 'WORKS'     AS EDGE_LABEL),\\n       (SELECT -2 AS HOP_ID, 'WATCHED'   AS EDGE_LABEL),\\n       (SELECT -2 AS HOP_ID, 'PERSON'    AS NODE_LABEL),\\n       (SELECT 3  AS HOP_ID, 'GRADUATED' AS EDGE_LABEL),\\n       (SELECT 3  AS HOP_ID, 'SCHOOL'    AS NODE_LABEL)              \\n     ),\\n     RINGS => 3,\\n     ADJACENCY_TABLE => 'netflix_query',\\n     OPTIONS => KV_PAIRS(use_cypher = 'true')\\n   );\\n\"",
+        "previous_block_id": "6fd5eba0-0ff5-11f0-b9f1-41fd1d77f38c",
+        "next_block_id": null,
+        "block_type_id": "84b9233c-14e3-11eb-adc1-0242ac120002",
+        "worksheet_id": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "created_at": "2025-03-27T17:58:56.766Z",
+        "updated_at": "2025-04-02T19:05:42.225Z",
+        "worksheetId": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "blockTypeId": "84b9233c-14e3-11eb-adc1-0242ac120002"
+      },
+      {
+        "config": {},
+        "id": "6fd5eba0-0ff5-11f0-b9f1-41fd1d77f38c",
+        "name": "Block",
+        "description": "Description for Block",
+        "content": "{\"node_table_schema\":\"\",\"node_table_name\":\"netflix_graph_nodes\",\"node_id_column\":\"\",\"node_name_column\":\"NODE_NAME\",\"node_label_column\":\"NODE_LABEL\",\"edge_table_schema\":\"\",\"edge_table_name\":\"netflix_graph\",\"edge_source_column\":\"EDGE_NODE1_NAME\",\"edge_target_column\":\"EDGE_NODE2_NAME\",\"edge_label_column\":\"EDGE_LABEL\",\"limit\":1000,\"title\":\"\"}",
+        "previous_block_id": "6fcd6020-0ff5-11f0-b9f1-41fd1d77f38c",
+        "next_block_id": "6fd01f40-0ff5-11f0-b9f1-41fd1d77f38c",
+        "block_type_id": "dedd5fd0-5a0a-4eb8-b0d5-cdaeb5b07338",
+        "worksheet_id": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "created_at": "2025-03-27T19:58:56.612Z",
+        "updated_at": "2025-04-02T19:05:26.655Z",
+        "worksheetId": "6fc5bf00-0ff5-11f0-b9f1-41fd1d77f38c",
+        "blockTypeId": "dedd5fd0-5a0a-4eb8-b0d5-cdaeb5b07338"
+      }
+    ]
+  },
+  "vizMap": {
+    "6fc9ddb0-0ff5-11f0-b9f1-41fd1d77f38c": [],
+    "6fcd6020-0ff5-11f0-b9f1-41fd1d77f38c": [],
+    "6fd01f40-0ff5-11f0-b9f1-41fd1d77f38c": [
+      {
+        "config": {
+          "node_table_schema": "",
+          "node_table_name": "",
+          "node_id_column": "",
+          "node_name_column": "",
+          "node_label_column": "",
+          "edge_table_schema": "",
+          "edge_table_name": "netflix_query",
+          "edge_source_column": "QUERY_NODE1_NAME",
+          "edge_target_column": "QUERY_NODE2_NAME",
+          "edge_label_column": "EDGE_LABELS",
+          "limit": 1000,
+          "title": ""
+        },
+        "id": "6fd32c80-0ff5-11f0-b9f1-41fd1d77f38c",
+        "name": "Graph Visualization",
+        "description": "Description for graph visualization",
+        "block_id": "6fd01f40-0ff5-11f0-b9f1-41fd1d77f38c",
+        "visualization_type_id": "278540bd-cd50-4f78-871b-65b94001dfee",
+        "created_at": "2025-03-27T18:13:49.886Z",
+        "updated_at": "2025-04-02T19:08:12.867Z",
+        "blockId": "6fd01f40-0ff5-11f0-b9f1-41fd1d77f38c",
+        "visualizationTypeId": "278540bd-cd50-4f78-871b-65b94001dfee"
+      }
+    ],
+    "6fd5eba0-0ff5-11f0-b9f1-41fd1d77f38c": []
+  }
+}
