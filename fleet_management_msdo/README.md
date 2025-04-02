@@ -43,7 +43,7 @@ All the steps and instructions are provided within the workbook itself. All you 
 
 Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
-You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
+You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.2/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
 
 ## Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.

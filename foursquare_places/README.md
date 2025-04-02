@@ -16,9 +16,6 @@
 <h1>
 Analyzing Foursquare OS Places With Kinetica-Graph
 </h1>
-<h3 align="center" style="margin:0px">
-    <img width="600" src="assets/spatial_analytics.png" alt="Spatial Logo"/>
-</h3>
 
 This workbook shows how Kinetica-Graph can be used to efficiently computes batch isochrones (travel time zones) over road networks using a single SQL statement. The key focus is on scalability and competitive coverage analysis for applications like fire station response times and business location optimization.
 

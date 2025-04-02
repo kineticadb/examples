@@ -135,7 +135,7 @@ Suppliers have the flexibility to complete round trips more than once, as needed
 Service Limit:
 Allows for the limitation of a suppliers total service cost, such as distance or time, by specifying a positive value. In this case, the cost limitation will be based on time(Seconds).
 For more information on Kinetica's MSDO solver options please refer to the following link:
-https://docs.kinetica.com/7.1/sql/graph/
+https://docs.kinetica.com/7.2/sql/graph/
 Once the solver is run, an "Animate" button will appear at the end of the block. Note that the "output_tracks" parameter has to be set to "true" for this to work.
 */
 /* TEXT Block End */
@@ -172,15 +172,15 @@ EXECUTE FUNCTION MATCH_GRAPH
         output_tracks = 'true',
         aggregated_output   = 'false',
         svg_width = '400', svg_height = '600',
-        svg_speed = '10',svg_basemap = 'true', 
+        svg_speed = '500',svg_basemap = 'true', 
         timeout= '80',
         left_turn_penalty = '35',
         right_turn_penalty = '15',
         intersection_penalty = '40',
         sharp_turn_penalty = '10',
-        unit_unloading_cost = '60',
-        enable_reuse = 'true',
-        service_limit = '12000'
+        unit_unloading_cost = '60'
+        --enable_reuse = 'true',
+        --service_limit = '12000'
     )
 );
 /* SQL Block End */
@@ -195,7 +195,7 @@ EXECUTE FUNCTION MATCH_GRAPH
 WHAT IS BATCH TSM MODE?
 The "BATCH_TSM_MODE" parameter operates with a specific focus, considering only one size attribute. Additionally, it imposes a constraint where the supplier can deliver only one unit of the package at a time to each customer location. Therefore, if a customer requires 4 units of packages, that customer will need to be visited 4 separate times to fulfill their requirement.
 To illustrate this concept, we have an example in which our suppliers will become salesmen. Our salesmen will still have the same capacity to carry packages but will only be able to deliver one unit of a package to each customer location.
-Our salesmen will be more flexible regarding size constraints, with their primary focus being to find the shortest path between customer locations.
+Our salesmen will be more flexible regarding size constraints, with their primary focus being to find the shortest path between customer locations. In our setup we have a total of 18 customers and 12 trucks in two zones. If we'd like to demo only one truck to do the deliveries in each zone, ie, dropping at each trip one unit (the way we can mimic using MSDO in TSM mode), then we set each customer load as one (could be more but then more trips would be needed), and each truck capaple of making the delivery to all, hence the capacity of 18. This is done just to demo the batch TSM use for MSDO solver.
 */
 /* TEXT Block End */
 
@@ -212,7 +212,7 @@ EXECUTE FUNCTION MATCH_GRAPH
             SELECT 
                 id AS DEMAND_ID,
                 wkt AS DEMAND_WKTPOINT,
-                size AS DEMAND_SIZE,
+                1 AS DEMAND_SIZE,
                 depot AS DEMAND_DEPOT_ID
             FROM customers
         ),
@@ -221,7 +221,7 @@ EXECUTE FUNCTION MATCH_GRAPH
                 depot AS SUPPLY_DEPOT_ID,
                 wkt AS SUPPLY_WKTPOINT,
                 truck_id AS SUPPLY_TRUCK_ID,
-                truck_size AS SUPPLY_TRUCK_SIZE
+                18 AS SUPPLY_TRUCK_SIZE
             FROM suppliers
         )
     ),

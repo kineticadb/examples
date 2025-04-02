@@ -4,9 +4,9 @@
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/">Docs</a>
+    <a href="https://docs.kinetica.com/7.2/">Docs</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
+    <a href="https://docs.kinetica.com/7.2/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>

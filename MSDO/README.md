@@ -4,9 +4,9 @@
 <h5 align="center" style="margin:0px">
     <a href="https://www.kinetica.com/">Website</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/">Docs</a>
+    <a href="https://docs.kinetica.com/7.2/">Docs</a>
     <span> | </span>
-    <a href="https://docs.kinetica.com/7.1/api/">API Docs</a>
+    <a href="https://docs.kinetica.com/7.2/api/">API Docs</a>
     <span> | </span>
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>
@@ -41,7 +41,7 @@ All the steps and instructions are provided within the workbook itself. All you 
 
 Please follow the [Install Kinetica](https://github.com/kineticadb/examples#install-kinetica), if you don't have an instance of Kinetica available.
 
-You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.1/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
+You can learn more about Kinetica's graph API from our [documentation](https://docs.kinetica.com/7.2/graph_solver/network_graph_solver) or this [course playlist](https://www.youtube.com/playlist?list=PLtLChx8K0ZZVkufn1GMvsR3BY2jMP3JXD).
 
 ## Support
 For bugs please submit an [issue on Github](https://github.com/kineticadb/examples/issues). Please reference the example that you are having an issue with in the title.
