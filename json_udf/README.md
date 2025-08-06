@@ -11,7 +11,7 @@
     <a href="https://join.slack.com/t/kinetica-community/shared_invite/zt-1bt9x3mvr-uMKrXlSDXfy3oU~sKi84qg">Community Slack</a>   
 </h5>
 <p align = "center">
- <img src="https://img.shields.io/badge/tested-%3E=v7.2.2.3-green"></img>  <img src="https://img.shields.io/badge/time-20 mins-blue"></img>
+ <img src="https://img.shields.io/badge/tested-%3E=v7.2.2.23-green"></img>  <img src="https://img.shields.io/badge/time-20 mins-blue"></img>
 </p>
 <h1>
 Real‑Time Sensor Alerts with Python + SQL in Kinetica
@@ -26,7 +26,7 @@ This tutorial shows how to pair IoT telemetry with live weather data inside Kine
 
 # Prerequisites
 
-- Kinetica v7.2.3+ with enable_procs = true
+- Kinetica v7.2.23+ with enable_procs = true
 - A Python environment named `` (see notebook for creation)
 - Two scripts uploaded to KIFS under `/udfs/`\
   - simulate_sensor_data.py
