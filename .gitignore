@@ -1,3 +1,7 @@
-/.vscode
+.vscode/
 
 .DS_Store
+
+.venv/
+
+.env
