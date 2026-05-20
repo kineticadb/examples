@@ -40,6 +40,7 @@ Need help getting started with notebooks? You have a number of options and this 
 
 * [Using GPUdbSqlIterator and GPUdbIngestor](python_iterator_ingestor.ipynb): Learn about using `GPUdbSqlIterator` for conveniently retrieving large result sets and `GPUdbIngestor` for multi-head ingest.
 
+* [WMS Visualization Demo](python_wms_visualization.ipynb): Render Kinetica WMS tiles in an interactive `ipyleaflet` map. Demonstrates server-side rendering of points, tracks, and shapes layers via a tiny in-notebook proxy that forwards tile requests through `KDBC.wms()` (keeping credentials out of browser URLs), with parsed `ServiceException` errors surfaced in a per-map status banner.
 
 ## Try it yourself
 
